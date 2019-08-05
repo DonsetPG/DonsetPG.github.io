@@ -16,9 +16,9 @@ sass:
   style:             :compressed
 
 author:
-  name:              Nico Elayda
-  url:               nicoelayda.github.io
-  email:             nico@elayda.com
+  name:              Paul Garnier
+  url:               DonsetPG.github.io
+  email:             paul.garnier@mines-paristech.fr
 
 plugins:
   - jekyll-coffeescript
