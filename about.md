@@ -41,7 +41,7 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
       <td>Codingame</td>
       <td>Global Leaderboard</td>
       <td>515</td>
-      <td></1,250,000td>
+      <td>1,250,000</td>
     </tr>
     <tr>
       <td>Legends of Code and Magic</td>
