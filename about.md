@@ -3,20 +3,23 @@ layout: page
 title: About
 ---
 
-<p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
-</p>
+Coming from Paris & Shanghai, I am now a student at [MINES Paristech](http://www.mines-paristech.fr). I started with Mathematics and Physics, and work now on Machine Learning and Data Science. My main focus are on Deep Reinforcement Learning and its applications : finding solutions to challenging problems is what I love the most.
 
-Celeste is a lightweight Jekyll theme that features a minimalist, content-first design. It places your content center stage and lets your readers view them in a clutter-free environment without visual distractions. It is based on [Poole](https://github.com/poole/poole), the Jekyll butler, by [@mdo](https://twitter.com/mdo).
+You can find below an updated version of my resume (last update: Aug. 2019) :
 
-In addition to using Poole as its foundation, Celeste is also built using the following open-source projects:
+## Education
 
-* [normalize.css](http://necolas.github.io/normalize.css/), a modern, HTML5-ready alternative to CSS resets.
-* [Font Awesome](http://fontawesome.io/), the iconic font and CSS toolkit.
-* [Hover.css](http://ianlunn.github.io/Hover/), a collection of CSS3 powered hover effects.
+* [MINES Paristech - PSL](http://www.mines-paristech.fr) - Paris, France - 2017/2021
+* [Lycée Privé Sainte-Geneviève](https://www.bginette.com/concours/resultats) - Versailles, France - 2015/2017
+* [French high school of Shanghai](http://www.lyceeshanghai.com/?lang=en) - Shanghai, China - 2012/2015
 
-Celeste is <i class="fa fa-code"></i> with <i class="fa fa-heart"></i> by [@nicoelayda](https://github.com/nicoelayda). Learn more and contribute on [GitHub](https://github.com/nicoelayda/celeste).
+## Professional experience
 
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/nicoelayda/celeste/issues/new) or [ask me on Twitter](https://twitter.com/nicoelayda).
+* [CEMEF](http://www.cemef.mines-paristech.fr) - Fluid mechanics and Reinforcement Learning Researcher - Paris & Nice, France - May. 19/Aug. 19
+* [ARMINES](https://www.armines.net/fr) - Machine Learning Consultancy for [H4D](https://www.h-4-d.com) and [IOMA](https://www.ioma-paris.com/fr/?v=11aedd0e4327) - Paris, France - Jun. 19/Aug. 19
+* [Pass Culture](http://www.culture.gouv.fr/Actualites/Le-Pass-Culture-une-innovation-dans-l-univers-de-l-offre-culturelle) - Machine Learning Researcher - Paris, France - Sep. 17/Mar. 19
+* [The Socksbox](https://socksbox.com/en/) - Co-owner; DataSciences and Marketing - Paris, France - Jul. 17/Oct. 18
 
-Thanks for reading!
+## Papers
+
+* [A review on Deep Reinforcement Learning for Fluid Mechanics](a) - Aug. 19
