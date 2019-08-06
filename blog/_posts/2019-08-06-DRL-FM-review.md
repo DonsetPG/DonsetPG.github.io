@@ -1,41 +1,23 @@
 ---
 layout: post
-title: Introducing Celeste
+title: A review on Deep Reinforcement Learning for Fluid Mechanics
 ---
 
-Celeste is a lightweight Jekyll theme that features a minimalist, content-first design. It places your content center stage and lets your readers view them in a clutter-free environment without visual distractions. It is based on [Poole](https://github.com/poole/poole), the Jekyll butler, by [@mdo](https://twitter.com/mdo).
+Deep reinforcement learning (DRL) has recently been adopted in a wide range of
+physics and engineering domains for its ability to solve decision-making
+problems that were previously out of reach due to a combination of
+non-linearity and high dimensionality. In the last few years, it has
+spread in the field of computational mechanics, and particularly in fluid
+dynamics, with recent applications in flow control and shape optimization.
+In this work, we conduct a detailed review of existing DRL applications to fluid
+mechanics problems. In addition, we present recent results that
+further illustrate the potential of DRL in Fluid Mechanics. The coupling
+methods used in each case are covered, detailing their pros and cons. Our review also focuses
+on the comparison with classical methods for optimal control
+and optimization. Finally, several test cases are described that illustrate
+recent progress made in this field. The goal of this publication is
+to provide an understanding of DRL capabilities along with state-of-the-art
+applications in fluid dynamics to researchers wishing to address new
+problems with these methods.
 
-### Built on Poole
-
-Poole is the Jekyll Butler, serving as an upstanding and effective foundation for Jekyll themes by [@mdo](https://twitter.com/mdo). Poole, and all its derivatives (like Celeste) includes the following:
-
-* Complete Jekyll setup included (layouts, config, [404]({{ site.baseurl }}/404.html), [RSS feed]({{ site.baseurl }}/atom.xml), posts, and a [sample page]({{ site.baseurl }}/about/))
-* Mobile friendly design and development
-* Easily scalable text and component sizing with `rem` units in the CSS
-* Support for a wide gamut of HTML elements
-* Syntax highlighting, courtesy of [rouge](https://github.com/jneen/rouge)
-
-### Celeste Features
-
-In addition to the features of Poole, Celeste adds the following:
-
-* A design and structure with customizability in mind
-* A clean, unobstrusive top navigation bar
-* A landing page template for showcasing the most important content on your website
-* Optimized for compatibility with most reading tools such as [Pocket](https://getpocket.com), [Instapaper](https://www.instapaper.com) and [Feedly](https://feedly.com/).
-* Subtle animations on UI elements that give visual feedback when interacting with the page
-* Over 500 scalable vector icons, courtesy of [Font Awesome](http://fontawesome.io/)
-
-<!-- Additional features to follow -->
-<!-- * A blog archives page, to allow easy access to old blog entries -->
-<!-- * Multiple color schemes, accessible via the `@import` directive -->
-
-Check out the [README](https://github.com/nicoelayda/celeste#readme) for more details.
-
-### Browser support
-
-Celeste is by preference a forward-thinking project. In addition to the latest versions of Chrome, Safari (mobile and desktop), and Firefox, it is only compatible with Internet Explorer 9 and above.
-
-### Download
-
-Celeste is developed on and hosted with GitHub. Head to the [GitHub repository](https://github.com/nicoelayda/celeste) for downloads, bug reports, and features requests.
+blah blah à continuer
