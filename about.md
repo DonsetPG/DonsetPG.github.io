@@ -100,6 +100,6 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
 
 * [A review on Deep Reinforcement Learning for Fluid Mechanics](a) - Aug. 19
 
-## Blog :
+## Blog
 
 Celeste is <i class="fa fa-code"></i> with <i class="fa fa-heart"></i> by [@nicoelayda](https://github.com/nicoelayda). Learn more and contribute on [GitHub](https://github.com/nicoelayda/celeste).
