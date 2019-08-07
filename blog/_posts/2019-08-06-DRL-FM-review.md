@@ -142,6 +142,79 @@ class FluidMechanicsEnv_(gym.Env):
         ...
 ```
 
-With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases.
+With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases. They use 3 main class : Channel, Obstacles and Problem :
+
+### Channel :
+
+```python
+class Channel:
+
+    """
+    Object computing where our problem will take place.
+    At the moment, we restraint ourself to the easier domain possible : a rectangle.
+    :min_bounds:    (tuple (x_min,y_min))   The lower corner of the domain
+    :max_bounds:    (tuple (x_max,y_max))   The upper corner of the domain
+    :Channel:       (Channel)               Where the simulation will take place
+    """
+    def __init__(self,
+                min_bounds,
+                max_bounds,
+                type='Rectangle'):
+```
+
+### Obstacles :
+
+```python
+class Obstacles:
+
+    """
+    These are the obstacles we will add to our domain.
+    You can add as much as you want.
+    At the moment, we only take care of squares and circles and polygons
+    :size_obstacles:    (int)           The amount of obstacle you wanna add
+    :coords:            (python list)   List of tuples, according to 'fenics_utils.py : add_obstacle'
+    :Obstacles:         (Obstacles)     An Obstacles object containing every shape we wanna add to our domain
+    """
+
+
+    def __init__(self,
+                size_obstacles=0,
+                coords = []):
+```
+
+### Problem :
+
+```python
+class Problem:
+
+    def __init__(self,
+                min_bounds,
+                max_bounds,
+                import_mesh_path = None,
+                types='Rectangle',
+                size_obstacles=0,
+                coords_obstacle = [],
+                size_mesh = 64,
+                cfl=5,
+                final_time=20,
+                meshname='mesh_',
+                filename='img_',
+                **kwargs):
+
+        """
+        We build here a problem Object, that is to say our simulation.
+        :min_bounds:                (tuple      (x_min,y_min)) The lower corner of the domain
+        :max_bounds:                (tuple      (x_max,y_max)) The upper corner of the domain
+        :import:import_mesh_path:   (String)    If you want to import a problem from a mesh, and not built it with mshr
+        :types:                     (String)    Forced to Rectangle at the moment
+        :size_obstacle:             (int)       The amount of shape you wanna add to your domain
+        :coords_obstacle:           (tuple)     the parameters for the shape creation
+        :size_mesh:                 (int)       Size of the mesh you wanna create
+        :cfl:                       (int)
+        :final_time:                (int)       Length of your simulation
+        :mesh_name:                 (String)    Name of the file you wanna save your mesh in
+        :filename:                  (String)    Name of the file you wanna save the imgs in
+        """
+```
 
 However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.
