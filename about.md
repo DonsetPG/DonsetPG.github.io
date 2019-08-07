@@ -20,9 +20,9 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
 * [Pass Culture](http://www.culture.gouv.fr/Actualites/Le-Pass-Culture-une-innovation-dans-l-univers-de-l-offre-culturelle) - Machine Learning Researcher - Paris, France - Sep. 17/Mar. 19
 * [The Socksbox](https://socksbox.com/en/) - Co-owner; DataSciences and Marketing - Paris, France - Jul. 17/Oct. 18
 
-## Projects
+## Projectsg
 
-* [DeepFluid](a) - Open source library for Deep Reinforcement Learning applied to fluid mechanics - 2019
+* [DeepFluid](https://github.com/DonsetPG/fenics-DRL) - Open source library for Deep Reinforcement Learning applied to fluid mechanics - 2019
 * Mines Paristech Mecatronique - Robotics and Machine learning : creation of a robot to automatically harvest cauliflower - 2018/2019
 * [Oliver Wyman - DataCase 2018](https://github.com/DonsetPG/OWDC) - 3rd/150 - Oct. 18/Dec. 18
 * [Codingame AI Multiplayer Games](https://www.codingame.com) :
