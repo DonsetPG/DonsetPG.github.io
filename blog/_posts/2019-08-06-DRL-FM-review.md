@@ -25,9 +25,9 @@ This agent can perform these tasks at two key moments : (i) when the experiment 
 
 ![test fish]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
 
-![test fish2](imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
+![test fish2]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
-![test fish3](imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
+![test fish3]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
 
 and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI).
 
@@ -49,9 +49,9 @@ However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal
 
 The answer is yes, and the results are shown below for several Reynolds number :
 
-![test fish4](imgs/2019-08-06-DRL-FM-review/meliga_40.png)
+![test fish4]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_40.png)
 
-![test fish5](imgs/2019-08-06-DRL-FM-review/meliga_100.png)
+![test fish5]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_100.png)
 
 Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](http://www.cemef.mines-paristech.fr) and the review I did previously) :
 
@@ -62,13 +62,13 @@ Now, of course solving this case with DRL was interesting, but I wanted to see i
 
 Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.
 
-![test fish6](imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
+![test fish6]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
 
-![test fish7](imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
+![test fish7]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
 
 I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:
 
-![test fish8](imgs/2019-08-06-DRL-FM-review/probes-JR.png)
+![test fish8]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/probes-JR.png)
 
 In total, I trained six agents, as shown below :
 
@@ -131,7 +131,7 @@ At the beginning, my goal was to find out if such a library could be built (in a
 
 For my test case, I based my code on [Fenics](https://fenicsproject.org), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](https://github.com/DonsetPG/fenics-DRL). It is supposed to be as clear and re-usable as possible. It is based on [Gym](https://gym.openai.com) and [stable-baselines](https://stable-baselines.readthedocs.io).
 
-I used Gym to build custom environment, always following the same patern :
+I used Gym to build custom environment, always following the same pattern :
 
 ```python
 class FluidMechanicsEnv_(gym.Env):
