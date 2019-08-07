@@ -47,3 +47,5 @@ Now, of course solving this case with DRL was interesting, but I wanted to see i
 2. Was the use of an Autoencoder possible easy?
 3. Was Transfer Learning possible, and performant?
 4. Could we make a code as clear as possible?
+
+Regarding the first point, 
