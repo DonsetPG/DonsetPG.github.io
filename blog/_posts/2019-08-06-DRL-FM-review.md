@@ -28,7 +28,7 @@ This agent can perform these tasks at two key moments : (i) when the experiment 
 
 # My own test case :
 
-In order to dive deeper into the subject, I wanted to try a test case on my own (and with the help of [Jonathan](GitHub) at the beginning though). We took inspiration from [this paper](meliga) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
+In order to dive deeper into the subject, I wanted to try a test case on my own (and with the help of [Jonathan](https://github.com/jviquerat) at the beginning though). We took inspiration from [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
 
 encadré laminar
 
@@ -36,13 +36,13 @@ encadré drag
 
 encadré Reynolds number
 
-However, the question asked by [this paper](meliga) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
+However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
 
 The answer is yes, and the results are shown below for several Reynolds number :
 
 ad figure Re = 40 and Re = 100
 
-Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](a) and the review I did previously) :
+Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](http://www.cemef.mines-paristech.fr) and the review I did previously) :
 
 1. Was there any difference between direct optimization and continuous control?
 2. Was the use of an autoencoder possible easy?
@@ -116,7 +116,7 @@ As you can see, I used transfer learning and obtained excellent results from it:
 
 At the beginning, my goal was to find out if such a library could be built (in a reasonable amount of time). During the creation of my test case, I realized the biggest issue with such a library was coming from the CFD solver: not only no one is using the same, but they all are pretty different.
 
-For my test case, I based my code on [Fenics](a), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](). It is supposed to be as clear and re-usable as possible. It is based on [Gym](a) and [stable-baselines](a).
+For my test case, I based my code on [Fenics](https://fenicsproject.org), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](https://github.com/DonsetPG/fenics-DRL). It is supposed to be as clear and re-usable as possible. It is based on [Gym](https://gym.openai.com) and [stable-baselines](https://stable-baselines.readthedocs.io).
 
 I used Gym to build custom environment, always following the same patern :
 
@@ -144,4 +144,4 @@ class FluidMechanicsEnv_(gym.Env):
 
 With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases.
 
-However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based. 
+However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.
