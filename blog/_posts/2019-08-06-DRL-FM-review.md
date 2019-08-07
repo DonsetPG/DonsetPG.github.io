@@ -23,7 +23,7 @@ Currently, most of the seen cases always consider an object (a cylinder, a squar
 
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
 
-![test fish](imgs/2019-08-06-DRL-FM-review/fish_article.png)
+![test fish]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
 
 ![test fish2](imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
@@ -242,4 +242,4 @@ However, this is not getting even close to a true DRL-fluid mechanics library, t
 - JR
 - articles review dont images
 - meliga
-- 
+-
