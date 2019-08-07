@@ -3,11 +3,11 @@ layout: post
 title: A review on Deep Reinforcement Learning for Fluid Mechanics
 ---
 When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr), I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane (cf refs), some where even currently working at the [CEMEF](http://www.cemef.mines-paristech.fr) when I arrived. However, I (and my tutor Elie) still had several questions/goals on my mind :
-
+<div class="message">
 * How was DRL applied to Fluid Mechanics?
 * To improve in both subject, I wanted to try a test case on my own;
 * How could we code something as general as possible?
-
+</div>
 The results of these questions are available [here](arxiv link), with the help of a fantastic team.
 
 # Applications of DRL to Fluid mechanics :
@@ -17,11 +17,11 @@ Several Fluid Mechanics problems have already been tackled with the help of DRL.
 -- add graph --
 
 Currently, most of the seen cases always consider an object (a cylinder, a square, a fish, etc.) in a 2D/3D fluid. The DRL agent will then be able to perform several tasks :
-
+<div class="message">
 * Move the object
 * Change the geometry or size of the object
 * Change the fluid directly
-
+</div>
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
 
 -- add examples and videos --
@@ -29,12 +29,15 @@ This agent can perform these tasks at two key moments : (i) when the experiment 
 # My own test case :
 
 In order to dive deeper into the subject, I wanted to try a test case on my own (and with the help of [Jonathan](https://github.com/jviquerat) at the beginning though). We took inspiration from [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
-
+<div class="message">
 encadré laminar
-
+</div>
+<div class="message">
 encadré drag
-
+</div>
+<div class="message">
 encadré Reynolds number
+</div>
 
 However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
 
@@ -43,12 +46,12 @@ The answer is yes, and the results are shown below for several Reynolds number :
 ad figure Re = 40 and Re = 100
 
 Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](http://www.cemef.mines-paristech.fr) and the review I did previously) :
-
+<div class="message">
 1. Was there any difference between direct optimization and continuous control?
 2. Was the use of an autoencoder possible easy?
 3. Was Transfer Learning possible, and performant?
 4. Could we make a code as clear as possible?
-
+</div>
 Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.
 
 add direct optimization from paper
@@ -63,7 +66,7 @@ In total, I trained six agents, as shown below :
   <thead>
     <tr>
       <th>Agent</th>
-      <th>Reynolds Number - \\(Re\\)</th>
+      <th>Reynolds Number - Re</th>
       <th>Goal</th>
       <th>Details</th>
     </tr>
@@ -71,7 +74,7 @@ In total, I trained six agents, as shown below :
   <tfoot>
     <tr>
       <td>Agent 1.1</td>
-      <td>\\(Re=10\\)</td>
+      <td>Re=10</td>
       <td>Continuous control</td>
       <td>Trained from scratch</td>
     </tr>
@@ -79,31 +82,31 @@ In total, I trained six agents, as shown below :
   <tbody>
     <tr>
       <td>Agent 1.2</td>
-      <td>\\(Re=10\\)</td>
+      <td>Re=10</td>
       <td>Direct optimization</td>
       <td>Trained from scratch</td>
     </tr>
     <tr>
       <td>Agent 2.1</td>
-      <td>\\(Re=40\\)</td>
+      <td>Re=40</td>
       <td>Continuous control</td>
       <td>Transfer learning from Agent 1.1</td>
     </tr>
     <tr>
       <td>Agent 2.2</td>
-      <td>\\(Re=40\\)</td>
+      <td>Re=40</td>
       <td>Direct optimization</td>
       <td>Transfer learning from Agent 1.2</td>
     </tr>
 <tr>
       <td>Agent 3.1</td>
-      <td>\\(Re=100\\)</td>
+      <td>Re=100</td>
       <td>Continuous control</td>
       <td>Transfer learning from Agent 1.1</td>
     </tr>
 <tr>
       <td>Agent 3.2</td>
-      <td>\\(Re=100\\)</td>
+      <td>Re=100</td>
       <td>Direct optimization</td>
       <td>Transfer learning from Agent 1.2</td>
     </tr>
@@ -219,4 +222,4 @@ class Problem:
 
 However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.
 
-# Conlusion 
+# Conlusion
