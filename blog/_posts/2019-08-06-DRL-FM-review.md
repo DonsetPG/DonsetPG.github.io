@@ -115,3 +115,5 @@ As you can see, I used transfer learning and obtained excellent results from it:
 # A DRL-fluid mechanics library?
 
 At the beginning, my goal was to find out if such a library could be built (in a reasonable amount of time). During the creation of my test case, I realized the biggest issue with such a library was coming from the CFD solver : not only no one is really using the same, but they all are pretty different.
+
+For my test case, I based my code on [Fenics](a), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](). It is suppose to be as clear and re-usable as possible. It is based on [Gym](a) and [stable-baselines](a).
