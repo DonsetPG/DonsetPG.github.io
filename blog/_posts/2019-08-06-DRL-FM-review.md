@@ -239,4 +239,7 @@ However, this is not getting even close to a true DRL-fluid mechanics library, t
 
 # References
 
--
+- JR
+- articles review dont images
+- meliga
+- 
