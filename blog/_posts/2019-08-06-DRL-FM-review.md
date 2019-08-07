@@ -55,7 +55,7 @@ add direct optimization from paper
 
 add 2 giff (40 and 100)
 
-I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be extremely vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do: add ref JR probes.
+I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do: add ref JR probes.
 
 In total, I trained six agents, as shown below :
 
@@ -114,6 +114,34 @@ As you can see, I used transfer learning and obtained excellent results from it:
 
 # A DRL-fluid mechanics library?
 
-At the beginning, my goal was to find out if such a library could be built (in a reasonable amount of time). During the creation of my test case, I realized the biggest issue with such a library was coming from the CFD solver : not only no one is really using the same, but they all are pretty different.
+At the beginning, my goal was to find out if such a library could be built (in a reasonable amount of time). During the creation of my test case, I realized the biggest issue with such a library was coming from the CFD solver: not only no one is using the same, but they all are pretty different.
 
-For my test case, I based my code on [Fenics](a), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](). It is suppose to be as clear and re-usable as possible. It is based on [Gym](a) and [stable-baselines](a).
+For my test case, I based my code on [Fenics](a), an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available [here](). It is supposed to be as clear and re-usable as possible. It is based on [Gym](a) and [stable-baselines](a).
+
+I used Gym to build custom environment, always following the same patern :
+
+```python
+class FluidMechanicsEnv_(gym.Env):
+    metadata = {'render.modes': ['human']}
+    def __init__(self,
+                    **kwargs):
+        ...
+        self.problem = self._build_problem()
+        self.reward_range = (-1,1)
+        self.observation_space = spaces.Box(low=np.array([]), high=np.array([]), dtype=np.float16)
+        self.action_space = spaces.Box(low=np.array([]), high=np.array([]), dtype=np.float16)     
+    def _build_problem(self,main_drag):
+        ...
+        return problem                
+    def _next_observation(self):
+        ...      
+    def step(self, action):
+        ...
+        return obs, reward, done, {}   
+    def reset(self):
+        ...
+```
+
+With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases.
+
+However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based. 
