@@ -63,7 +63,7 @@ In total, I trained six agents, as shown below :
   <thead>
     <tr>
       <th>Agent</th>
-      <th>Reynolds Number - $$Re$$</th>
+      <th>Reynolds Number - \\(Re\\)</th>
       <th>Goal</th>
       <th>Details</th>
     </tr>
@@ -71,7 +71,7 @@ In total, I trained six agents, as shown below :
   <tfoot>
     <tr>
       <td>Agent 1.1</td>
-      <td>$$Re=10$$</td>
+      <td>\\(Re=10\\)</td>
       <td>Continuous control</td>
       <td>Trained from scratch</td>
     </tr>
@@ -79,31 +79,31 @@ In total, I trained six agents, as shown below :
   <tbody>
     <tr>
       <td>Agent 1.2</td>
-      <td>$$Re=10$$</td>
+      <td>\\(Re=10\\)</td>
       <td>Direct optimization</td>
       <td>Trained from scratch</td>
     </tr>
     <tr>
       <td>Agent 2.1</td>
-      <td>$$Re=40$$</td>
+      <td>\\(Re=40\\)</td>
       <td>Continuous control</td>
       <td>Transfer learning from Agent 1.1</td>
     </tr>
     <tr>
       <td>Agent 2.2</td>
-      <td>$$Re=40$$</td>
+      <td>\\(Re=40\\)</td>
       <td>Direct optimization</td>
       <td>Transfer learning from Agent 1.2</td>
     </tr>
 <tr>
       <td>Agent 3.1</td>
-      <td>$$Re=100$$</td>
+      <td>\\(Re=100\\)</td>
       <td>Continuous control</td>
       <td>Transfer learning from Agent 1.1</td>
     </tr>
 <tr>
       <td>Agent 3.2</td>
-      <td>$$Re=100$$</td>
+      <td>\\(Re=100\\)</td>
       <td>Direct optimization</td>
       <td>Transfer learning from Agent 1.2</td>
     </tr>
