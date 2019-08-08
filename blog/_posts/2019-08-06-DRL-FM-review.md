@@ -56,16 +56,6 @@ and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI). (that is pre
 
 In order to dive deeper into the subject, I wanted to try a test case on my own (and with the help of [Jonathan](https://github.com/jviquerat) at the beginning though). We took inspiration from [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
 
-<div class="message">
-encadré laminar
-</div>
-<div class="message">
-encadré drag
-</div>
-<div class="message">
-encadré Reynolds number
-</div>
-
 However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
 
 The answer is yes, and the results are shown below:
@@ -101,7 +91,9 @@ Continuous control over 17 time-steps at Reynolds = 40 and 100, from two random 
  </em>
  </center>
 
-I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:
+I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations.
+
+However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:
 
 ![test fish8]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/probes-JR.png)
 
