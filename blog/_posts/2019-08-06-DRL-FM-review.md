@@ -109,6 +109,7 @@ I used an autoencoder but had no time no compare results with and without it. I 
 Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
  </em>
  </center>
+ 
 
 In total, I trained six agents, as shown below :
 
