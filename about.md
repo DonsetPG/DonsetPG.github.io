@@ -1,3 +1,8 @@
+---
+glayout: page
+title: About
+---
+
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145347384-1"></script>
 <script>
@@ -7,12 +12,6 @@
 
   gtag('config', 'UA-145347384-1');
 </script>
-
----
-layout: page
-title: About
----
-
 
 Coming from Paris & Shanghai, I am now a student at [MINES Paristech](http://www.mines-paristech.fr). I started with Mathematics and Physics, and work now on Machine Learning and Data Science. My main focus are on Deep Reinforcement Learning and its applications : finding solutions to challenging problems is what I love the most.
 
