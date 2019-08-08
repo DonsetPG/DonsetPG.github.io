@@ -48,7 +48,7 @@ Fluid jets to control rigid body reproduced from <a href="https://dl.acm.org/cit
  </em>
  </center>
 
-and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI).
+and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI). (that is pretty amazing)
 
 # My own test case :
 
