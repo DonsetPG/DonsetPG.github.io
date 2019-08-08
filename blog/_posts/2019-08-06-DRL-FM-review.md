@@ -21,12 +21,14 @@ Currently, most of the reviewed cases always consider objects (a cylinder, a squ
 * Change the geometry or size of the object
 * Change the fluid directly
 
-![NS]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/navier-stokes.png)
-
 <div class="message">
 <p><strong>A small step into the world of fluid mechanics</strong></p>
 
 <p>The Navier-Stokes equation looks pretty (and complicated) but is in fact traduction of Newton's equation for a fluid. Rather than describing the movement of an object, it is representing the movement of a fluid (more precisely, of a field (of points, vectors, etc).).</p>
+
+<p align="center">
+  <img src="{{ site.url }}/imgs/2019-08-06-DRL-FM-review/navier-stokes.png">
+</p>
 
 <p>This equation is quite a paradox itself. Its application are enormous, but we still don't know if solutions always exists (it is even one of the seven <a href="https://en.wikipedia.org/wiki/Millennium_Prize_Problems">Millenium Prize Problems</a>).</p>
 
