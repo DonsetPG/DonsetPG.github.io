@@ -75,7 +75,7 @@ The answer is yes, and the results are shown below for several Reynolds number :
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+Variation of drag induced by a small control cylinder at Reynolds = 40, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Meliga et al. (2014)</a>.
  </em>
  </center>
 
@@ -83,7 +83,7 @@ Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelay
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+Variation of drag induced by a small control cylinder at Reynolds = 100, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Meliga et al. (2014)</a>.
  </em>
  </center>
 
