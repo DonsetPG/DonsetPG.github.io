@@ -2,6 +2,7 @@
 layout: post
 title: A review on Deep Reinforcement Learning for Fluid Mechanics
 ---
+
 When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr), I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane (cf refs), some where even currently working at the [CEMEF](http://www.cemef.mines-paristech.fr) when I arrived. However, I (and my tutor Elie) still had several questions/goals on my mind :
 
 * How was DRL applied to Fluid Mechanics?
