@@ -93,7 +93,6 @@ Now, of course solving this case with DRL was interesting, but I wanted to see i
 
 Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.
 
-
 ![R40-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
 <center>
 <em>
