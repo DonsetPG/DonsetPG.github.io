@@ -24,12 +24,8 @@ Currently, most of the seen cases always consider an object (a cylinder, a squar
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
 
 ![fish_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
+*Test about fish article in [Openfoam](https://www.openfoam.com)*
 
-<center>
-<em>
-Test about fish article in [Openfoam](https://www.openfoam.com)
- </em>
- </center>
 
 ![flow_control_jet_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
