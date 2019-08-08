@@ -37,6 +37,7 @@ Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelay
 
 ![flow_control_jet_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
+
 <center>
 <em>
 Comparison of the velocity magnitude without (top) and with (bottom) active flow control, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Rabault et al. (2019)</a>. This active flow control being linked to a DRL agent.
