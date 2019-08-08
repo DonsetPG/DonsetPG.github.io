@@ -97,17 +97,15 @@ Now, of course solving this case with DRL was interesting, but I wanted to see i
 
 Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.
 
+<center>
 ![R40-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
 
-<center>
 <em>
 Continuous control over 17 time-steps at Reynolds = 40, from a random position.
  </em>
- </center>
 
 ![R100-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
 
-<center>
 <em>
 Continuous control over 17 time-steps at Reynolds = 100, from a random position.
  </em>
