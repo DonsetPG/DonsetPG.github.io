@@ -2,6 +2,10 @@
 layout: post
 title: A review on Deep Reinforcement Learning for Fluid Mechanics
 ---
+
+<a href="https://github.com/nicoelayda/celeste/issues/new">Open an issue.</a>
+
+
 When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr), I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane (cf refs), some where even currently working at the [CEMEF](http://www.cemef.mines-paristech.fr) when I arrived. However, I (and my tutor Elie) still had several questions/goals on my mind :
 
 * How was DRL applied to Fluid Mechanics?
@@ -24,11 +28,28 @@ Currently, most of the seen cases always consider an object (a cylinder, a squar
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
 
 ![fish_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
-*Test about fish article in [Openfoam](https://www.openfoam.com)*
+
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017)</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
 
 ![flow_control_jet_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
+<center>
+<em>
+Comparison of the velocity magnitude without (top) and with (bottom) active flow control, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Rabault et al. (2019)</a>. This active flow control being linked to a DRL agent.
+ </em>
+ </center>
+
 ![fluid_solid_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
+
+<center>
+<em>
+Fluid jets to control rigid body reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Ma et al. (2018)</a>. The position and orientation of the jet is DRL controlled.
+ </em>
+ </center>
 
 and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI).
 
@@ -52,7 +73,19 @@ The answer is yes, and the results are shown below for several Reynolds number :
 
 ![meliga_40]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_40.png)
 
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
+
 ![meliga_100]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_100.png)
+
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
 
 Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](http://www.cemef.mines-paristech.fr) and the review I did previously) :
 
@@ -65,11 +98,29 @@ Regarding the first point, I found no particular difference between direct optim
 
 ![R40-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
 
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
+
 ![R100-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
+
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
 
 I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:
 
 ![test fish8]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/probes-JR.png)
+
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
 
 In total, I trained six agents, as shown below :
 
