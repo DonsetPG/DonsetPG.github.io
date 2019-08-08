@@ -21,16 +21,16 @@ Currently, most of the reviewed cases always consider objects (a cylinder, a squ
 * Change the geometry or size of the object
 * Change the fluid directly
 
-## A small step into the world of fluid mechanics
-
-$ \frac{\partial(\rho \overrightarrow{u})}{\partial t} + (\overrightarrow{u} \cdot \nabla)\rho\overrightarrow{u} = -\overrightarrow{\nabla p} + \mu \nabla \times (\nabla \times \overrightarrow{u}) + \rho\overrightarrow{F} $
+![NS]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/navier-stokes.png)
 
 <div class="message">
-The Navier-Stokes equation looks pretty (and complicated) but is in fact traduction of Newton's equation for a fluid. Rather than describing the movement of an object, it is representing the movement of a fluid (more precisely, of a field (of points, vectors, etc).).
+<p><strong>A small step into the world of fluid mechanics</strong></p>
 
-This equation is quite a paradox itself. Its application are enormous, but we still don't know if solutions always exists (it is even one of the seven <a href="https://en.wikipedia.org/wiki/Millennium_Prize_Problems">Millenium Prize Problems</a>).
+<p>The Navier-Stokes equation looks pretty (and complicated) but is in fact traduction of Newton's equation for a fluid. Rather than describing the movement of an object, it is representing the movement of a fluid (more precisely, of a field (of points, vectors, etc).).</p>
 
-Solving the Navier-Stokes now doesn't mean we are trying to solve it. We use the finite element method to 'slice' our domain into small parts, and starting from initial conditions, we run our simulation, making sure our equations are 'approximatively verified' every (little) timestep.
+<p>This equation is quite a paradox itself. Its application are enormous, but we still don't know if solutions always exists (it is even one of the seven <a href="https://en.wikipedia.org/wiki/Millennium_Prize_Problems">Millenium Prize Problems</a>).</p>
+
+<p>Solving the Navier-Stokes now doesn't mean we are trying to solve it. We use the finite element method to 'slice' our domain into small parts, and starting from initial conditions, we run our simulation, making sure our equations are 'approximatively verified' every (little) timestep.</p>
 </div>
 
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
