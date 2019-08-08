@@ -47,6 +47,7 @@ Comparison of the velocity magnitude without (top) and with (bottom) active flow
 Fluid jets to control rigid body reproduced from <a href="https://dl.acm.org/citation.cfm?id=3201334">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
  </em>
  </center>
+ 
 
 and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI). (that is pretty amazing)
 
