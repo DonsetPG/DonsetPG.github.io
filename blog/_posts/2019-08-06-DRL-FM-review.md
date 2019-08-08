@@ -109,7 +109,7 @@ I used an autoencoder but had no time no compare results with and without it. I 
 Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
  </em>
  </center>
- 
+
 
 In total, I trained six agents, as shown below :
 
@@ -273,15 +273,18 @@ class Problem:
 
 However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.
 
-# Conlusion
-
-- concl
-- thanks
+<div class="message">
+In the end, we now have a better overview of how DRL can be used to help Fluid Mechanics problems. Moreover, several important features can be kept in mind: transfer learning, autoencoder, LSTM and so on. If the goal of building a real DRL-CFD library was not achieved, the way it could be possible is now much clearer.
+</div>
 
 # References
 
-- JR
-- articles review dont images
-- meliga
-- our paper
-- ...
+1. [Synchronisation through learning for two self-propelled swimmers - Novati et al. (2017)](https://iopscience.iop.org/article/10.1088/1748-3190/aa6311/pdf)
+
+2. [Artificial Neural Networks trained through Deep Reinforcement Learning discover control strategies for active flow control - Rabault et al. (2019)](https://arxiv.org/abs/1808.07664)
+
+3. [Fluid directed rigid body control using deep reinforcement learning - Ma et al. (2018)](https://dl.acm.org/citation.cfm?id=3201334)
+
+4. [Sensitivity of aerodynamic forces in laminar and turbulent flow past a square cylinder - Meliga et al. (2014)](https://hal.archives-ouvertes.fr/hal-01082600v2)
+
+5. [A review on Deep Reinforcement Learning for Fluid Mechanics - Garnier et al. (2019)](arxiv link)
