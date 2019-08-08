@@ -47,7 +47,7 @@ Comparison of the velocity magnitude without (top) and with (bottom) active flow
 
 <center>
 <em>
-Fluid jets to control rigid body reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Ma et al. (2018)</a>. The position and orientation of the jet is DRL controlled.
+Fluid jets to control rigid body reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
  </em>
  </center>
 
@@ -100,7 +100,7 @@ Regarding the first point, I found no particular difference between direct optim
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+Continuous control over 17 time-steps at Reynolds = 40, from a random position.
  </em>
  </center>
 
@@ -108,7 +108,7 @@ Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelay
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+Continuous control over 17 time-steps at Reynolds = 100, from a random position.
  </em>
  </center>
 
@@ -118,7 +118,7 @@ I used an autoencoder but had no time no compare results with and without it. I 
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017.</a>, with the displacement and the orientation between the leader and the follower.
+Value of the drag coefficient with active flow control reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
  </em>
  </center>
 
