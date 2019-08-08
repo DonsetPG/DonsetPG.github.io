@@ -47,7 +47,7 @@ Comparison of the velocity magnitude without (top) and with (bottom) active flow
 Fluid jets to control rigid body reproduced from <a href="https://dl.acm.org/citation.cfm?id=3201334">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
  </em>
  </center>
- 
+
 
 and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI). (that is pretty amazing)
 
@@ -67,15 +67,7 @@ encadré Reynolds number
 
 However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
 
-The answer is yes, and the results are shown below for several Reynolds number :
-
-![meliga_40]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_40.png)
-
-<center>
-<em>
-Variation of drag induced by a small control cylinder at Reynolds = 40, reproduced from <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">Meliga et al. (2014)</a>.
- </em>
- </center>
+The answer is yes, and the results are shown below:
 
 ![meliga_100]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_100.png)
 
