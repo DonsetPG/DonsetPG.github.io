@@ -107,7 +107,7 @@ I used an autoencoder but had no time no compare results with and without it. I 
 
 <center>
 <em>
-Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
+Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more pieces of information we give about the fluid (i.e., the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
  </em>
  </center>
 
@@ -197,9 +197,11 @@ class FluidMechanicsEnv_(gym.Env):
         ...
 ```
 
-With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases. They use 3 main class : Channel, Obstacles and Problem :
+With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases. They use three main class: Channel, Obstacles, and Problem :
 
 ### Channel :
+
+Basically, this is the *box* you want your experiment to take place in. You only define it by giving the lower and upper corner of the box.
 
 ```python
 class Channel:
@@ -218,6 +220,8 @@ class Channel:
 ```
 
 ### Obstacles :
+
+This is the objects you want to add to the previously seen box. If you only want to use Fenics, you can only easily add squares, circles, or polygons. However, if you want to add much more complex shapes and mesh, you can use the *Mesh* function from Fenics.
 
 ```python
 class Obstacles:
@@ -238,6 +242,8 @@ class Obstacles:
 ```
 
 ### Problem :
+
+This is where everything is taking place: setting up the box, placing the several objects, defining the boundary conditions, etc.
 
 ```python
 class Problem:
@@ -275,7 +281,7 @@ class Problem:
 However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.
 
 <div class="message">
-In the end, we now have a better overview of how DRL can be used to help Fluid Mechanics problems. Moreover, several important features can be kept in mind: transfer learning, autoencoder, LSTM and so on. If the goal of building a real DRL-CFD library was not achieved, the way it could be possible is now much clearer.
+In the end, we now have a better overview of how DRL can be used to help Fluid Mechanics problems. Moreover, several important features can be kept in mind: transfer learning, autoencoder, LSTM, and so on. If the goal of building a real DRL-CFD library was not achieved, the way it could be possible is now much clearer.
 </div>
 
 # References
@@ -284,7 +290,7 @@ In the end, we now have a better overview of how DRL can be used to help Fluid M
 
 2. [Artificial Neural Networks trained through Deep Reinforcement Learning discover control strategies for active flow control - Rabault et al. (2019)](https://arxiv.org/abs/1808.07664)
 
-3. [Fluid directed rigid body control using deep reinforcement learning - Ma et al. (2018)](https://dl.acm.org/citation.cfm?id=3201334)
+3. [fluid directed rigid body control using deep reinforcement learning - Ma et al. (2018)](https://dl.acm.org/citation.cfm?id=3201334)
 
 4. [Sensitivity of aerodynamic forces in laminar and turbulent flow past a square cylinder - Meliga et al. (2014)](https://hal.archives-ouvertes.fr/hal-01082600v2)
 
