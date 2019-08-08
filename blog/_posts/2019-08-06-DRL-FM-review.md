@@ -23,11 +23,17 @@ Currently, most of the seen cases always consider an object (a cylinder, a squar
 
 This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :
 
-![test fish]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
+![fish_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
 
-![test fish2]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
+<center>
+<em>
+Test about fish article in [Openfoam](https://www.openfoam.com)
+ </em>
+ </center>
 
-![test fish3]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
+![flow_control_jet_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
+
+![fluid_solid_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
 
 and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI).
 
@@ -49,9 +55,9 @@ However, the question asked by [this paper](https://hal.archives-ouvertes.fr/hal
 
 The answer is yes, and the results are shown below for several Reynolds number :
 
-![test fish4]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_40.png)
+![meliga_40]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_40.png)
 
-![test fish5]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_100.png)
+![meliga_100]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/meliga_100.png)
 
 Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the [CEMEF](http://www.cemef.mines-paristech.fr) and the review I did previously) :
 
@@ -62,9 +68,9 @@ Now, of course solving this case with DRL was interesting, but I wanted to see i
 
 Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.
 
-![test fish6]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
+![R40-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R40-GIF.gif)
 
-![test fish7]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
+![R100-GIF]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/R100-GIF.gif)
 
 I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations. However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. However, it does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:
 
