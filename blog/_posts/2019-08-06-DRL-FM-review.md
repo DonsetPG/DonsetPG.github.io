@@ -9,7 +9,7 @@ When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr)
 * To improve in both subject, I wanted to try a test case on my own;
 * How could we code something as general as possible?
 
-The results of these questions are available [here](arxiv link), with the help of a fantastic team.
+The results of these questions are available [here](arxiv li nk), with the help of a fantastic team.
 
 # Applications of DRL to Fluid mechanics
 
