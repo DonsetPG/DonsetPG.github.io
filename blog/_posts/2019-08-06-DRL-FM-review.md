@@ -26,7 +26,6 @@ This agent can perform these tasks at two key moments : (i) when the experiment 
 ![fish_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fish_article.png)
 *Test about fish article in [Openfoam](https://www.openfoam.com)*
 
-
 ![flow_control_jet_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png)
 
 ![fluid_solid_article]({{ site.url }}/imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png)
