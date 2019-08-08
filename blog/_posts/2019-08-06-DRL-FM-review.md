@@ -31,7 +31,7 @@ This agent can perform these tasks at two key moments : (i) when the experiment 
 
 <center>
 <em>
-Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Novati et al. (2017)</a>, with the displacement and the orientation between the leader and the follower.
+Leader and Follower swimmer reproduced from <a href="https://iopscience.iop.org/article/10.1088/1748-3190/aa6311/pdf">Novati et al. (2017)</a>, with the displacement and the orientation between the leader and the follower.
  </em>
  </center>
 
@@ -40,7 +40,7 @@ Leader and Follower swimmer reproduced from <a href="https://github.com/nicoelay
 
 <center>
 <em>
-Comparison of the velocity magnitude without (top) and with (bottom) active flow control, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Rabault et al. (2019)</a>. This active flow control being linked to a DRL agent.
+Comparison of the velocity magnitude without (top) and with (bottom) active flow control, reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. This active flow control being linked to a DRL agent.
  </em>
  </center>
 
@@ -48,7 +48,7 @@ Comparison of the velocity magnitude without (top) and with (bottom) active flow
 
 <center>
 <em>
-Fluid jets to control rigid body reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
+Fluid jets to control rigid body reproduced from <a href="https://dl.acm.org/citation.cfm?id=3201334">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
  </em>
  </center>
 
@@ -76,7 +76,7 @@ The answer is yes, and the results are shown below for several Reynolds number :
 
 <center>
 <em>
-Variation of drag induced by a small control cylinder at Reynolds = 40, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Meliga et al. (2014)</a>.
+Variation of drag induced by a small control cylinder at Reynolds = 40, reproduced from <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">Meliga et al. (2014)</a>.
  </em>
  </center>
 
@@ -84,7 +84,7 @@ Variation of drag induced by a small control cylinder at Reynolds = 40, reproduc
 
 <center>
 <em>
-Variation of drag induced by a small control cylinder at Reynolds = 100, reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Meliga et al. (2014)</a>.
+Variation of drag induced by a small control cylinder at Reynolds = 100, reproduced from <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">Meliga et al. (2014)</a>.
  </em>
  </center>
 
@@ -119,7 +119,7 @@ I used an autoencoder but had no time no compare results with and without it. I 
 
 <center>
 <em>
-Value of the drag coefficient with active flow control reproduced from <a href="https://github.com/nicoelayda/celeste/issues/new">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
+Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more informations we give about the fluid (i.e. the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
  </em>
  </center>
 
