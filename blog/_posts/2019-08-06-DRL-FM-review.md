@@ -3,7 +3,7 @@ layout: post
 title: A review on Deep Reinforcement Learning for Fluid Mechanics
 ---
 
-When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr), I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane, some where even currently working at the [CEMEF](http://www.cemef.mines-paristech.fr) when I arrived. However, I (and my tutor Elie) still had several questions/goals on my mind :
+When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr), I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane, some where even currently working at the [CEMEF](http://www.cemef.mines-paristech.fr) when I arrived. However, I (and my tutor [Elie Hachem](http://www.cemef.mines-paristech.fr/staff/elie-hachem)) still had several questions/goals on my mind :
 
 * How was DRL applied to Fluid Mechanics?
 * To improve in both subject, I wanted to try a test case on my own;
@@ -53,7 +53,7 @@ and even [this video](https://www.youtube.com/watch?v=O8QtAi2cHBI). (which is pr
 
 # My own test case
 
-In order to dive deeper into the subject, I wanted to try a test case on my own (with the help of [Jonathan](https://github.com/jviquerat) at the beginning though). We took inspiration from [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
+In order to dive deeper into the subject, I wanted to try a test case on my own (with the help of [Jonathan Viquerat](https://scholar.google.fr/citations?user=guoJL5UAAAAJ&hl=fr) at the beginning though). We took inspiration from [this paper](https://hal.archives-ouvertes.fr/hal-01082600v2) and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).
 
 However, the question asked by [the paper](https://hal.archives-ouvertes.fr/hal-01082600v2) was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?
 
@@ -286,3 +286,5 @@ In the end, we now have a better overview of how DRL can be used to help Fluid M
 4. [Sensitivity of aerodynamic forces in laminar and turbulent flow past a square cylinder - Meliga et al. (2014)](https://hal.archives-ouvertes.fr/hal-01082600v2)
 
 5. [A review on Deep Reinforcement Learning for Fluid Mechanics - Garnier et al. (2019)](arxiv link)
+
+# [Github Repository](https://github.com/DonsetPG/fenics-DRL)
