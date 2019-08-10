@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d209999-69a1-49a8-a9b2-e342e83acafd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2018-09-2-LOCAM.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2018-09-2-LOCAM.md" afterDir="false" />
-    </list>
+    <list default="true" id="0d209999-69a1-49a8-a9b2-e342e83acafd" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +25,7 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="245">
-                <caret line="306" lean-forward="true" selection-start-line="306" selection-end-line="306" />
+                <caret line="316" lean-forward="true" selection-start-line="316" selection-end-line="316" />
               </first_editor>
               <second_editor />
             </state>
@@ -164,7 +162,7 @@
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="245">
-            <caret line="306" lean-forward="true" selection-start-line="306" selection-end-line="306" />
+            <caret line="316" lean-forward="true" selection-start-line="316" selection-end-line="316" />
           </first_editor>
           <second_editor />
         </state>
