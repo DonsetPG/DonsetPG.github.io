@@ -300,6 +300,7 @@ However, this is not getting even close to a true DRL-fluid mechanics library, t
 In the end, we now have a better overview of how DRL can be used to help Fluid Mechanics problems. Moreover, several important features can be kept in mind: transfer learning, autoencoder, LSTM, and so on. If the goal of building a real DRL-CFD library was not achieved, the way it could be possible is now much clearer.
 </div>
 
+
 # References
 
 1. [Synchronisation through learning for two self-propelled swimmers - Novati et al. (2017)](https://iopscience.iop.org/article/10.1088/1748-3190/aa6311/pdf)
