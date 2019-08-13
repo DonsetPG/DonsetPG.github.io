@@ -20,7 +20,7 @@ When I started an Internship at the [CEMEF](http://www.cemef.mines-paristech.fr)
 * To improve in both subject, I wanted to try a test case on my own;
 * How could we code something as general as possible?
 
-The results of these questions are available [here](arxiv ink), with the help of a fantastic team.
+The results of these questions are available [here](https://arxiv.org/abs/1908.04127), with the help of a fantastic team.
 
 # Applications of DRL to Fluid mechanics
 
@@ -310,6 +310,6 @@ In the end, we now have a better overview of how DRL can be used to help Fluid M
 
 4. [Sensitivity of aerodynamic forces in laminar and turbulent flow past a square cylinder - Meliga et al. (2014)](https://hal.archives-ouvertes.fr/hal-01082600v2)
 
-5. [A review on Deep Reinforcement Learning for Fluid Mechanics - Garnier et al. (2019)](arxiv link)
+5. [A review on Deep Reinforcement Learning for Fluid Mechanics - Garnier et al. (2019)](https://arxiv.org/abs/1908.04127)
 
 # [Github Repository](https://github.com/DonsetPG/fenics-DRL)
