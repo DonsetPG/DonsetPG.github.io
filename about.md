@@ -26,6 +26,7 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
 
 ## Professional experience
 
+* Amazon - A9.com - Search Relevance Team, Research on Neural Networks applied to Learning to Rank.
 * [CEMEF](http://www.cemef.mines-paristech.fr) - Fluid mechanics and Reinforcement Learning Researcher - Paris & Nice, France - May. 19/Aug. 19
 * [ARMINES](https://www.armines.net/fr) - Machine Learning Consultancy for [H4D](https://www.h-4-d.com) and [IOMA](https://www.ioma-paris.com/fr/?v=11aedd0e4327) - Paris, France - Jun. 19/Aug. 19
 * [Pass Culture](http://www.culture.gouv.fr/Actualites/Le-Pass-Culture-une-innovation-dans-l-univers-de-l-offre-culturelle) - Machine Learning Researcher - Paris, France - Sep. 17/Mar. 19
