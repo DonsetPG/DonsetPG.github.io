@@ -14,6 +14,7 @@ title: About
 </script>
 
 Coming from Paris & Shanghai, I am now a student at [MINES Paristech](http://www.mines-paristech.fr). I started with Mathematics and Physics, and work now on Machine Learning and Data Science. My main focus are on Deep Reinforcement Learning and its applications : finding solutions to challenging problems is what I love the most.
+I am currently an intern at A9.com (Amazon Search Relevance Team).
 
 You can find below an updated version of my resume (last update: Aug. 2019) :
 
