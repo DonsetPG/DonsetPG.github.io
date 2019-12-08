@@ -97,7 +97,7 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
       <td>3,100</td>
     </tr>
     <tr>
-      <td>[Agat](http://www.allocine.fr/film/fichefilm_gen_cfilm=29718.html)</td>
+      <td><a href="http://www.allocine.fr/film/fichefilm_gen_cfilm=29718.html">Agat</a></td>
       <td>1 vs 1</td>
       <td>UKN</td>
       <td>UKN</td>
