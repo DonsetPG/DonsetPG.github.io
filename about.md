@@ -90,10 +90,16 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
       <td>1,600</td>
     </tr>
     <tr>
-      <td>Ghost In The Cel</td>
+      <td>Ghost In The Cell</td>
       <td>Multiplayer Game</td>
       <td>276</td>
       <td>3,100</td>
+    </tr>
+    <tr>
+      <td>[Agat](http://www.allocine.fr/film/fichefilm_gen_cfilm=29718.html)</td>
+      <td>1 vs 1</td>
+      <td>UKN</td>
+      <td>UKN</td>
     </tr>
   </tbody>
   <tfoot>
