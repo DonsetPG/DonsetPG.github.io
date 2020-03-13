@@ -14,9 +14,9 @@ title: About
 </script>
 
 Coming from Paris & Shanghai, I am now a student at [MINES Paristech](http://www.mines-paristech.fr). I started with Mathematics and Physics, and work now on Machine Learning and Data Science. My main focus are on Deep Reinforcement Learning and its applications : finding solutions to challenging problems is what I love the most.
-I am currently an intern at A9.com (Amazon Search Relevance Team).
+I am currently an intern at Artefact China.
 
-You can find below an updated version of my resume (last update: Aug. 2019) :
+You can find below an updated version of my resume (last update: Mar. 2020) :
 
 ## Education
 
@@ -26,6 +26,7 @@ You can find below an updated version of my resume (last update: Aug. 2019) :
 
 ## Professional experience
 
+* Artefact CHina - Data Scientist Intern
 * Amazon - A9.com - Search Relevance Team, Research on Neural Networks applied to Learning to Rank.
 * [CEMEF](http://www.cemef.mines-paristech.fr) - Fluid mechanics and Reinforcement Learning Researcher - Paris & Nice, France - May. 19/Aug. 19
 * [ARMINES](https://www.armines.net/fr) - Machine Learning Consultancy for [H4D](https://www.h-4-d.com) and [IOMA](https://www.ioma-paris.com/fr/?v=11aedd0e4327) - Paris, France - Jun. 19/Aug. 19
