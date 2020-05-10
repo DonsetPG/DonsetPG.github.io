@@ -50,14 +50,14 @@ Sadio Mané, Mohamed Salah and Firmino celebrating.
 
 This post illustrates how data analysis and machine learning can be applied to football players’ tracking data in order to reveal key insights. Our analysis will be articulated in two parts :
 
-* Pitch control for opponent analysis
-* Deep Reinforcement Learning (DRL) for accessing action value
+* **Pitch control** for opponent analysis
+* **Deep Reinforcement Learning (DRL)** for accessing action value
 
 # Pitch control for opponent analysis
 
 A pitch control model basically tells you which team is in control of every pitch part at a given time. Here, “in control” means being the quicker to arrive at a specific location in case the ball is shot there.
 
-Starting from position data, we got access to speed data thanks to discrete derivation and Savitzky–Golay filter. Then, our approach was to use a time-based Voronoi tessellation operating with ball and players’ tracking data (positions and speeds) as inputs and physical characteristics (player maximum speed, reaction time…) as parameters. This model is an adaptation from the one developed by [Laurie Shaw](https://twitter.com/EightyFivePoint) (Harvard) for Metrica’s tracking data.
+Starting from position data, we got access to **speed data** thanks to discrete derivation and Savitzky–Golay filter. Then, our approach was to use a **time-based Voronoi tessellation** operating with ball and players’ tracking data (positions and speeds) as inputs and physical characteristics (player maximum speed, reaction time…) as parameters. This model is an adaptation from the one developed by [Laurie Shaw](https://twitter.com/EightyFivePoint) (Harvard) for Metrica’s tracking data.
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/liverpool_2.png">
@@ -78,9 +78,9 @@ video 1 - Pitch control analysis of Mohamed Salah’s goal against Manchester Ci
 
 Football analysts often emphasize on LFC amazing attacking trio : Mané, Salah and Firmino. In fact, the two wing-backs, Andrew Robertson and Trent Alexander-Arnold, play an offensive role almost as significant as the famous trio.
 
-Analyzing the Reds goals, their attacking system seems to focus on the wings in order to get around the defensive line. Indeed, most of the goals are coming from either curved passes (and crosses) or diving runs from outside to inside.
+Analyzing the Reds goals, their attacking system seems to focus on the wings in order to get around the defensive line. Indeed, most of the goals are coming from either **curved passes** (and crosses) or **diving runs** from outside to inside.
 
-Our pitch control model enabled us to illustrate space creation by wing-backs such as this triggering run from Alexander-Arnold against Porto FC.
+Our pitch control model enabled us to illustrate **space creation by wing-backs** such as this triggering run from Alexander-Arnold against Porto FC.
 
 video 2 - Trent Alexander-Arnold triggers a key diving run to deliver a precise assist against Porto FC in Champions League on April 13th, 2019
 
@@ -99,7 +99,7 @@ Comparative analysis of LFC attacking player’s speed evolution versus their di
 </center>
 <br/>
 
-At first sight, these graphs just seem to show that attacking players are faster than defending players which is not surprising. However, the important point we would like to highlight is the time taken by defenders to reach the attacker’s initial speed. Defenders from Bayern and Everton seem to take a lot more time to react whereas the ones from Newcastle were very reactive (but victim of a huge space between their two center-backs).
+At first sight, these graphs just seem to show that attacking players are faster than defending players which is not surprising. However, the important point we would like to highlight is **the time taken by defenders to reach the attacker’s initial speed**. Defenders from Bayern and Everton seem to take a lot more time to react whereas the ones from Newcastle were very reactive (but victim of a huge space between their two center-backs).
 
 The three goals are available here as the support of this analysis.
 
@@ -109,7 +109,7 @@ This pitch control model enables to produce some insights on the game. Now, let�
 
 # Deep Reinforcement Learning Agent
 
-An important aspect of football analysis is the concept of expected goals (xG). An overview can be found [here](https://www.youtube.com/watch?v=310_eW0hUqQ&t=29s), with several references as well. We adapt this concept here to the Reinforcement Learning framework, considering a football game as a Markov Decision Process. At its core, reinforcement learning models an agent interacting with an environment and receiving observations and rewards from it. The goal of an agent is to determine the best action in any given state. In the case of football, we could consider :
+An important aspect of football analysis is the concept of **expected goals** (xG). An overview can be found [here](https://www.youtube.com/watch?v=310_eW0hUqQ&t=29s), with several references as well. We adapt this concept here to the **Reinforcement Learning framework**, considering a football game as a **Markov Decision Process**. At its core, reinforcement learning models an agent interacting with an environment and receiving observations and rewards from it. The goal of an agent is to determine the best action in any given state. In the case of football, we could consider :
 
 * An episode as one game.
 * A state as the position and velocity of each player and the ball.
@@ -128,17 +128,17 @@ and we define the discounted cumulative reward as the gain along a trajectory :
 
 $$ R(\tau) = \displaystyle \sum_{t=0}^{T} \gamma^{t} r_{t} $$
 
-where $\gamma$ is a discount factor, and $r_t$ the reward at time $t$. 
+where $\gamma$ is a **discount factor**, and $r_t$ the **reward** at time $t$. 
 
-Finally, we define the state value function according to a policy $\pi$ (the way the agent behave) as : 
+Finally, we define the **state value function** according to a policy $\pi$ (the way the agent behave) as : 
 
 $$ V^\pi (s) = \underset{\tau \sim \pi}{\mathbb{E}} \big[ R(\tau) \vert s \big] $$
 
 This value function can represent the expected discounted cumulative reward starting from a state $s$ and following a given policy $\pi$. Since, in our framework, we only get a reward when the agent scores a goal, we can interpret  $V(s)$ as the expected discounted goals from a given state.
 
-Granted, you would need a policy or an agent that can play the same way the players you are targetting, and that is a complicated issue to tackle. We used [here](https://github.com/google-research/football) the Google Research Football environment to train our agents and used their hyper-parameters (except for the reward, we used the scoring reward). We also kept training our agent against middle and hard opponents overtime and finished the training with self-play. We release the checkpoint used for the value function evaluation in our repository.
+Granted, you would need a policy or an agent that can play the same way the players you are targetting, and that is a complicated issue to tackle. We used [here](https://github.com/google-research/football) the **Google Research Football environment** to train our agents and used their hyper-parameters (except for the reward, we used the scoring reward). We also kept training our agent against middle and hard opponents overtime and finished the training with self-play. We release the checkpoint used for the value function evaluation in our repository.
 
-Finally, we wanted to fine-tune our agent with some Imitation Learning, by using real games data. However, due to the lack of time, this did not happen. It will be the next step for this particular project. We will also need to conduct a more thorough analysis of the differences between this approach and the more usual Expected Goals models.
+Finally, we wanted to fine-tune our agent with some **Imitation Learning**, by using real games data. However, due to the lack of time, this did not happen. It will be the next step for this particular project. We will also need to conduct a more thorough analysis of the differences between this approach and the more usual Expected Goals models.
 
 ## Results
 
