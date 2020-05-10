@@ -220,7 +220,6 @@ Analyses of a goal against Leicester. We present the value function, and the rea
 </center>
 <br/>
 
-
 # Conclusion 
 
 Through this post, we tried to find interesting approaches to Liverpool FC tracking data and we are fully aware our analysis is not complete. We still had a lot of fun working on the dataset provided by [@lastrowview](https://twitter.com/lastrowview) and we would also like to thank [Friends of Tracking youtube channel](https://www.youtube.com/channel/UCUBFJYcag8j2rm_9HkrrA7w) for sharing useful repositories and gathering knowledge on Football Data Analysis.
