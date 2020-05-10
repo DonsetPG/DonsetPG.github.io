@@ -118,7 +118,7 @@ You can find below an updated version of my resume (last update: Mar. 2020) :
 
 ## Papers
 
-* [A review on Deep Reinforcement Learning for Fluid Mechanics](a) - Aug. 19
+* [A review on Deep Reinforcement Learning for Fluid Mechanics](https://arxiv.org/pdf/1908.04127.pdf) - Aug. 19
 
 ## Blog
 
