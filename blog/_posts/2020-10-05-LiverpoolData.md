@@ -152,7 +152,20 @@ that are stacked for four frames.
 
 We then compute the value function for each time step and smooth it using a Savitzky-Golay filter. We apply our value function to a goal against Leicester. The results are available below :
 
-video 4 
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/L-L_value.gif">
+</p>
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/L_valueonly.gif">
+</p>
+<center>
+<em>
+|
+to do
+|
+</em>
+</center>
+<br/>
 
 Without over-analyzing the value function, a few things are still interesting to notice :
 
