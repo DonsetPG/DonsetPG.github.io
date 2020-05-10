@@ -160,7 +160,25 @@ $$ V^\pi (s) = \underset{\tau \sim \pi}{\mathbb{E}} \big[ R(\tau) \vert s \big] 
 
 This value function can represent the expected discounted cumulative reward starting from a state $s$ and following a given policy $\pi$. Since, in our framework, we only get a reward when the agent scores a goal, we can interpret  $V(s)$ as the expected discounted goals from a given state.
 
-Granted, you would need a policy or an agent that can play the same way the players you are targetting, and that is a complicated issue to tackle. We used [here](https://github.com/google-research/football) the **Google Research Football environment** to train our agents and used their hyper-parameters (except for the reward, we used the scoring reward). We also kept training our agent against middle and hard opponents overtime and finished the training with self-play. We release the checkpoint used for the value function evaluation in our repository.
+Granted, you would need a policy or an agent that can play the same way the players you are targetting, and that is a complicated issue to tackle. We used [here](https://github.com/google-research/football) the **Google Research Football environment** to train our agents and used their hyper-parameters (except for the reward, we used the scoring reward):
+
+```
+--level 11_vs_11_easy_stochastic \
+  --reward_experiment scoring \
+  --policy impala_cnn \
+  --cliprange 0.08 \
+  --gamma 0.993 \
+  --ent_coef 0.003 \
+  --num_timesteps 50000000 \
+  --max_grad_norm 0.64 \
+  --lr 0.000343 \
+  --num_envs 16 \
+  --noptepochs 2 \
+  --nminibatches 8 \
+  --nsteps 512 \
+```
+
+We also kept training our agent against middle and hard opponents overtime and finished the training with self-play. We release the checkpoint used for the value function evaluation in our repository.
 
 Finally, we wanted to fine-tune our agent with some **Imitation Learning**, by using real games data. However, due to the lack of time, this did not happen. It will be the next step for this particular project. We will also need to conduct a more thorough analysis of the differences between this approach and the more usual Expected Goals models.
 
