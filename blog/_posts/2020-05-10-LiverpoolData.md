@@ -35,7 +35,7 @@ MathJax.Hub.Queue(function() {
 This post was made possible by [@lastrowview](https://twitter.com/lastrowview) and [@Soccermatics](https://twitter.com/Soccermatics) which shared the tracking data of 19 goals scored by LFC during 2018–2019 and 2019-2020 seasons.
 Our code is available on this [GitHub repository](https://github.com/TheoGreg/Last-Row).
 
-This article was co-written with [Théphane](https://github.com/TheoGreg), a classmate.
+This article was co-written with [Théphane](https://github.com/TheoGreg), a classmate, while we worked on this project for a few days.
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/liverpool-1.jpeg">
