@@ -160,9 +160,7 @@ We then compute the value function for each time step and smooth it using a Savi
 </p>
 <center>
 <em>
-|
-to do
-|
+Analyses of a goal against Leicester. We present the value function, and the tracking of the players. A voronoi diagram and the player's velocity vectors are presented as well.
 </em>
 </center>
 <br/>
