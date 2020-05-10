@@ -180,7 +180,7 @@ Granted, you would need a policy or an agent that can play the same way the play
 
 We also kept training our agent against middle and hard opponents overtime and finished the training with self-play. We release the checkpoint used for the value function evaluation in our repository.
 
-Finally, we wanted to fine-tune our agent with some **Imitation Learning**, by using real games data. However, due to the lack of time, this did not happen. It will be the next step for this particular project. We will also need to conduct a more thorough analysis of the differences between this approach and the more usual Expected Goals models.
+Finally, we wanted to fine-tune our agent with some **Imitation Learning**, by using real games data. However, due to the lack of time, this did not happen. It will be the next step for this particular project. We will also need to conduct a more thorough analysis of the differences between this approach and the more usual Expected Goals models. A multi-agent approach might also bring some value to this application, with a more precise prediction of the Expected Discounted Goals.
 
 ## Results
 
