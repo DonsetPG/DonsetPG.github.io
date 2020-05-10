@@ -34,7 +34,7 @@ You can find below an updated version of my resume (last update: Mar. 2020) :
 * [Pass Culture](http://www.culture.gouv.fr/Actualites/Le-Pass-Culture-une-innovation-dans-l-univers-de-l-offre-culturelle) - Machine Learning Researcher - Paris, France - Sep. 17/Mar. 19
 * [The Socksbox](https://socksbox.com/en/) - Co-owner; DataSciences and Marketing - Paris, France - Jul. 17/Oct. 18
 
-## Projectsg
+## Projects
 
 * [DeepFluid](https://github.com/DonsetPG/fenics-DRL) - Open source library for Deep Reinforcement Learning applied to fluid mechanics - 2019
 * Mines Paristech Mecatronique - Robotics and Machine learning : creation of a robot to automatically harvest cauliflower - 2018/2019
