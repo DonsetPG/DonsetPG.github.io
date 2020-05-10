@@ -72,7 +72,15 @@ Example of our pitch control output for a given frame extracted from Mohamed Sal
 
 After calculating pitch control map frame per frame, we were then able to produce video analysis like this one :
 
-video 1 - Pitch control analysis of Mohamed Salah’s goal against Manchester City on November 10th, 2019 (assist from Andrew Robertson)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/gif1.gif">
+</p>
+<center>
+<em>
+Pitch control analysis of Mohamed Salah’s goal against Manchester City on November 10th, 2019 (assist from Andrew Robertson)
+</em>
+</center>
+<br/>
 
 ## Wing-backs : the two lungs of Liverpool’s attack
 
@@ -82,7 +90,15 @@ Analyzing the Reds goals, their attacking system seems to focus on the wings in 
 
 Our pitch control model enabled us to illustrate **space creation by wing-backs** such as this triggering run from Alexander-Arnold against Porto FC.
 
-video 2 - Trent Alexander-Arnold triggers a key diving run to deliver a precise assist against Porto FC in Champions League on April 13th, 2019
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/gif2.gif">
+</p>
+<center>
+<em>
+Trent Alexander-Arnold triggers a key diving run to deliver a precise assist against Porto FC in Champions League on April 13th, 2019
+</em>
+</center>
+<br/>
 
 This attacking system is based on speed and quick decisions as opposed to more centered playing styles creating a nexus of short passes such as Guardiola’s FC Bayern Munich from 2015–2016 season (or even more in 2010 during Barcelona FC golden age). Therefore, defenders’ response time must be extremely short to counteract the Reds and reach a clean sheet.
 
@@ -103,7 +119,15 @@ At first sight, these graphs just seem to show that attacking players are faster
 
 The three goals are available here as the support of this analysis.
 
-video 3 - Same order as the one used for the graph : Bayern Munich, Everton and Newcastle.
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/gif3.gif">
+</p>
+<center>
+<em>
+Same order as the one used for the graph : Bayern Munich, Everton and Newcastle.
+</em>
+</center>
+<br/>
 
 This pitch control model enables to produce some insights on the game. Now, let’s see how we can value actions thanks to Deep Reinforcement Learning.
 
