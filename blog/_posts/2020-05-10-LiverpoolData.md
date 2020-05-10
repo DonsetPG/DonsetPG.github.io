@@ -35,7 +35,7 @@ MathJax.Hub.Queue(function() {
 This post was made possible by [@lastrowview](https://twitter.com/lastrowview) and [@Soccermatics](https://twitter.com/Soccermatics) which shared the tracking data of 19 goals scored by LFC during 2018–2019 and 2019-2020 seasons.
 Our code is available on this [GitHub repository](https://github.com/TheoGreg/Last-Row).
 
-This article was co-written with [Théphane](https://github.com/TheoGreg)!
+This article was co-written with [Théphane](https://github.com/TheoGreg), a classmate.
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/liverpool-1.jpeg">
@@ -144,17 +144,14 @@ Finally, we wanted to fine-tune our agent with some Imitation Learning, by using
 
 We convert the tracking data from Last Row into a readable format for our agent :
 
-```
-“The observation is composed of 4 planes of size ‘channel_dimensions’. Its size is then ‘channel_dimensions’x4 (or ‘channel_dimensions’x16 when stacked is True). The first plane P holds the position of players on the left team, P[y,x] is 255 if there is a player at position (x,y), otherwise, its value is 0. The second plane holds in the same way the position of players on the right team. The third plane holds the position of the ball. The last plane holds the active player.” extracted from Google Research Football GitHub
-```
+
+> “The observation is composed of 4 planes of size ‘channel_dimensions’. Its size is then ‘channel_dimensions’x4 (or ‘channel_dimensions’x16 when stacked is True). The first plane P holds the position of players on the left team, P(y,x) is 255 if there is a player at position (x,y), otherwise, its value is 0. The second plane holds in the same way the position of players on the right team. The third plane holds the position of the ball. The last plane holds the active player.” extracted from Google Research Football GitHub
+
 
 that are stacked for four frames.
 
 We then compute the value function for each time step and smooth it using a Savitzky-Golay filter. We apply our value function to a goal against Leicester. The results are available below :
 
-<p align="center">
-  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/L-L_value.gif">
-</p>
 <p align="center">
   <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/L_valueonly.gif">
 </p>
@@ -170,6 +167,16 @@ Without over-analyzing the value function, a few things are still interesting to
 * The pass between time frames 20–30 increases a lot the value function, as well as the assist from Alexander-Arnold.
 * Overall, the entire action on the right side brings a lot of value.
 * The value function decreases before the shot (as the agent believes that the action is compromised) and after the goal (since such a configuration is never seen within the simulation)
+
+<p align="center">
+  <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/L-L_value.gif">
+</p>
+<center>
+<em>
+Analyses of a goal against Leicester. We present the value function, and the real time live goal.
+</em>
+</center>
+<br/>
 
 # Conclusion 
 
