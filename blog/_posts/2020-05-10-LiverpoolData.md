@@ -2,7 +2,6 @@
 layout: post
 title: Football Data Analysis - Liverpool FC attacking system
 ---
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145347384-1"></script>
 <script>
