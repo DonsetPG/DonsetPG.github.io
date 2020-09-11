@@ -405,14 +405,6 @@ where:
   <img width="" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_10.png">
 </p>
 
-<br>
-<center>
-<em>
-Caption
-</em>
-</center>
-<br/
-
 Most of the time however we want to compare this metric to the DCG obtained from the ground truth labels. We then define: 
 
 <p align="center">
