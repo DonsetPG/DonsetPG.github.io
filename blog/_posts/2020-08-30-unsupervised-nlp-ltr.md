@@ -50,7 +50,6 @@ Example of the embedding of "Etudiant" in 6 dimensions.
 </em>
 </center>
 <br/>
-
 Word vectors are conceived to synthesize and quantify semantic nuances, using a few hundred coordinates. These are generally used in downstream tasks to improve generalization when the amount of data is scarce. The widespread use and successes of these "word embeddings" in monolingual tasks has inspired further research on the induction of multilingual word embeddings for two or more languages in the same vector space. 
 
 <p align="center">
@@ -64,7 +63,6 @@ Words embeddings in 2 different languages but in the same vector space.
 </em>
 </center>
 <br/>
-
 The starting point was the discovery [[4]](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) that word embedding spaces have similar structures across languages, even when considering distant language pairs like English and Vietnamese. More precisely, two sets of pre-trained vectors in different languages can be aligned to some extent: good word translations can be produced through a simple linear mapping between the two sets of embeddings. As an example, learning a direct mapping between Italian and Portuguese leads to a word translation accuracy of 78.1% with a nearest neighbor (NN) criterion.
 
 <p align="center">
@@ -78,7 +76,6 @@ Example of a direct mapping and translation with a NN criterion for French and E
 </em>
 </center>
 <br/>
-
 Embeddings of translations and words with similar meaning are close (geometrically) in the shared  cross-lingual vector space. This property makes them very effective for cross-lingual Natural Language Processing (NLP) tasks.
 The simplest way to evaluate the result is the Bilingual Lexicon Induction (BLI) criterion, which designs the percentage of the dictionary that can be correctly induced. 
 Thus, BLI is often the first step towards several downstream tasks such as Part-Of-Speech (POS) tagging, parsing, document classification, language genealogy analysis or (unsupervised) machine translation.
@@ -112,7 +109,6 @@ Word embeddings alignment (in dimension 2).
 </em>
 </center>
 <br/>
-
 Historically, the problem of word vector alignment has been formulated as as a quadratic problem.
 This approach, resulting from the supervised literature then allowed to presume the absence of lexicon without modifying too much the framework. That is why we will deal with it first in what follows. 
 
@@ -130,7 +126,6 @@ Set of n words (embeddings of dimensions d) for 2 languages.
 </em>
 </center>
 <br/>
-
 Procustes is a method that aligns points if given the correspondences between them (supervised scenario).
 $\mathbf{X} \in \mathbb{R}^{n \times d}$ and $\mathbf{Y} \in \mathbb{R}^{n \times d}$ are the two sets of word embeddings or points and we suppose, as previously said, that we know which point **X** corresponds to which point **Y**. This leads us to solve the following least-square problem of optimization, looking for the **W** matrix performing the alignment [[5]](https://arxiv.org/pdf/1805.11222.pdf):
 
@@ -149,7 +144,6 @@ Operation applied for each word in the first language. The goal is to minimize t
 </em>
 </center>
 <br/>
-
 We have access to a closed form solution with a cubic complexity. 
 Restraining **W** to the set of orthogonal matrices $\mathcal{O}_{d}$, improves the alignments for two reasons: it limits overfitting by reducing the size of the minimization space and allows to translate the idea of keeping distances and angles, resulting from the similarity in the space structure. The resulting problem is known as Orthogonal Procrustes and it also admits a closed form solution through a singular value decomposition (cubic complexity).
 
@@ -157,8 +151,6 @@ Thus, if their correspondences are known, the translation matrix between two set
 
 
 ## Wasserstein Distance
-
-### add subtitles or schema
 
 In a similar fashion, finding the correct mapping between two sets of word can be done by solving the following minimization problem: 
 
@@ -215,7 +207,7 @@ and look for a transportation map realizing:
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cinf+_%7BT%7D%5Cleft%5C%7B%5Cint_%7B%5Cmathcal%7BX%7D%7D+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29+d+%5Cmu%28%5Cmathbf%7Bx%7D%29+%5C%3B+%5C%3B+%7C+%5C%3B+%5C%3B+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu%5Cright%5C%7D" />
 </p>
 
-where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| \mathbf{x}-\) \(T(\mathbf{x}) \|$ and $T_{\#} \mu=\nu$ implies that the source points must exactly map to the targets. 
+where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x} - \mathbf{x} \|$ and $T_{\#} \mu=\nu$ implies that the source points must exactly map to the targets. 
 
 <p align="center">
   <img width="300" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_6.png">
@@ -393,8 +385,6 @@ One first et very important note is how $f$ is defined. This could be done in tw
 
 * We consider $f$ as a *univariate* scoring function, meaning that it can be decomposed into a per-item scoring function such as $f(X)_{i} := u(x_i)$ with $u : x \mapsto \mathbb{R}_{+}$. We will have $f(X) = [u(x_0), ... , u(x_n)]$. 
 * We consider $f$ as a *multivariate* scoring function, meaning that each item is scored relatively to every other items in the set, with $f : X \mapsto \mathbb{R}^{n}_{+}$. This means that changing one item could change the score of the rest of the set.
-
-### add image
 
 While the first option is simpler to implement, the second one is much closer to the reality, as the relevance of an item often depends on the distribution its in. For example, the relevance of a item on an e-commerce query will always depend on what the website offers you next to it.
 
@@ -594,7 +584,7 @@ Ablation study for the same pipeline as above, but without the right prediction 
 </center>
 <br/>
 
-Without going into too much details, the same trends as above appear here as well. The main difference is in pure BLI results: we only achieve the same results as the state of the art. 
+Without going into too much details, the same trends as above appear here as well. The main difference is in pure BLI results: we only achieve the same results as the state of the art.
 
 # Conclusion 
 
@@ -604,31 +594,31 @@ We do believe that leveraging knowledge of previous idioms acquisition can keep 
 
 # References
 
-[1]: CHEN, WEI, YAN LIU, TIE, LAN, YANYAN, MING MA, ZHI & LI, HANG 2009 Ranking measures and loss functions in learning to rank. In Advances in Neural Information Processing Systems 22 (ed. Y. Bengio, D. Schuurmans, J. D. Lafferty, C. K. I. Williams & A. Culotta), pp. 315–323. Curran Associates, Inc
+1: CHEN, WEI, YAN LIU, TIE, LAN, YANYAN, MING MA, ZHI & LI, HANG 2009 Ranking measures and loss functions in learning to rank. In Advances in Neural Information Processing Systems 22 (ed. Y. Bengio, D. Schuurmans, J. D. Lafferty, C. K. I. Williams & A. Culotta), pp. 315–323. Curran Associates, Inc
 
-[2]: CAO, ZHE, QIN, TAO, LIU, TIE-YAN, TSAI, MING-FENG & LI, HANG 2007 Learn- ing to rank: From pairwise approach to listwise approach. In Proceedings of the 24th International Conference on Machine Learning, pp. 129–136. New York, NY, USA: ACM.
+2: CAO, ZHE, QIN, TAO, LIU, TIE-YAN, TSAI, MING-FENG & LI, HANG 2007 Learn- ing to rank: From pairwise approach to listwise approach. In Proceedings of the 24th International Conference on Machine Learning, pp. 129–136. New York, NY, USA: ACM.
 
-[3]: QIN et al. A general approximation framework for direct optimization of information retrieval measures.
+3: QIN et al. A general approximation framework for direct optimization of information retrieval measures.
 
-[4]: Ilya Sutskever, Thomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean 2013. Distributed Representations of Words and Phrases and their Compositionality
+4: Ilya Sutskever, Thomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean 2013. Distributed Representations of Words and Phrases and their Compositionality
 
-[5]: Quentin Berthet, Edouard Grave and Armand Joulin: Unsupervised Alignment of Embeddings with Wasserstein Procrustes, 2018
+5: Quentin Berthet, Edouard Grave and Armand Joulin: Unsupervised Alignment of Embeddings with Wasserstein Procrustes, 2018
 
-[6]: Cédric Villani. Topics in optimal transportation. Number 58. American Mathematical Soc., 2003.
+6: Cédric Villani. Topics in optimal transportation. Number 58. American Mathematical Soc., 2003.
 
-[7]: David Alvarez-Melis and Tommi Jaakkola. Gromov-wasserstein alignment of word embedding spaces. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing, 2018.
+7: David Alvarez-Melis and Tommi Jaakkola. Gromov-wasserstein alignment of word embedding spaces. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing, 2018.
 
-[8]: Mikhail Gromov. Metric structures for Riemannian and non-Riemannian spaces. Springer Science & Business Media, 2007.
+8: Mikhail Gromov. Metric structures for Riemannian and non-Riemannian spaces. Springer Science & Business Media, 2007.
 
-[9]: Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in neural information processing systems, pp. 2672–2680, 2014.
+9: Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in neural information processing systems, pp. 2672–2680, 2014.
 
-[10]: Conneau, A., Lample, G., Ranzato, M., Denoyer, L., and Jégou, H: Word translation without parallel data, 2017
+10: Conneau, A., Lample, G., Ranzato, M., Denoyer, L., and Jégou, H: Word translation without parallel data, 2017
 
-[11]: Jean Alaux, Edouard Grave, Marco Cuturi and Armand Joulin: Unsupervised hyperaligment for multilingual word embeddings, 2019
+11: Jean Alaux, Edouard Grave, Marco Cuturi and Armand Joulin: Unsupervised hyperaligment for multilingual word embeddings, 2019
 
-[12]: Georgiana Dinu, Angeliki Lazaridou, and Marco Baroni. Improving zero-shot learning by mitigating the hubness problem. International Conference on Learning Representations, Workshop Track, 2015.
+12: Georgiana Dinu, Angeliki Lazaridou, and Marco Baroni. Improving zero-shot learning by mitigating the hubness problem. International Conference on Learning Representations, Workshop Track, 2015.
 
-[13]: Smith, S. L., Turban, D. H., Hamblin, S., and Hammerla, N. Y.: Bilingual word vectors,
+13: Smith, S. L., Turban, D. H., Hamblin, S., and Hammerla, N. Y.: Bilingual word vectors,
 orthogonal transformations and the inverted softmax., 2017
 
 # [Github Repository](https://github.com/Gguinet/semisupervised-alignement)
