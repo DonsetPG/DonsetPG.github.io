@@ -3,8 +3,6 @@ layout: post
 title: nlp unsup. ltr
 ---
 
-(4/(pi**2 * (k**2+p**2)))*-(200 (cos((k π)/4) - cos((3 k π)/10)) (cos((p π)/2) - cos((3 p π)/5)))/(k p π^2)
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145347384-1"></script>
 <script>
