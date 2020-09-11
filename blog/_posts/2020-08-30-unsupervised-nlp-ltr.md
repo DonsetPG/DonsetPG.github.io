@@ -54,7 +54,7 @@ Example of the embedding of "Etudiant" in 6 dimensions.
 Word vectors are conceived to synthesize and quantify semantic nuances, using a few hundred coordinates. These are generally used in downstream tasks to improve generalization when the amount of data is scarce. The widespread use and successes of these "word embeddings" in monolingual tasks has inspired further research on the induction of multilingual word embeddings for two or more languages in the same vector space. 
 
 <p align="center">
-  <img width="" height="190" src="imgs/img_blog_2.png">
+  <img width="" height="190" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_2.png">
 </p>
 
 <br>
