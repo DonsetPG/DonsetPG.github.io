@@ -38,60 +38,79 @@ MathJax.Hub.Queue(function() {
 
 This blog post contains an introduction to Unsupervised Bilingual Alignment and Multilingual Alignment. We also go through the theoretical framework behind Learning to Rank, and discuss how it migh help to produce better alignments in a Semi-Supervised fashion. 
 
-This post was written with [Gauthier Guinet](https://www.linkedin.com/in/gauthier-guinet/) and was initially suppose to explore the impact of learning to rank to Unsupevised Translation.
+This post was written with [Gauthier Guinet](https://www.linkedin.com/in/gauthier-guinet/) and was initially suppose to explore the impact of learning to rank to Unsupervised Translation.
 
 We both hope that this post will serve as a good introduction to anyone interested in this topic.
 
-#Introduction
+# Introduction
+
+<p align="center">
+  <img width="" height="150" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_1.png">
+</p>
+
+<br>
+<center>
+<em>
+Example of the embedding of "Etudiant" in 6 dimensions.
+</em>
+</center>
+<br/>
 
 Word vectors are conceived to synthesize and quantify semantic nuances, using a few hundred coordinates. These are generally used in downstream tasks to improve generalization when the amount of data is scarce. The widespread use and successes of these "word embeddings" in monolingual tasks has inspired further research on the induction of multilingual word embeddings for two or more languages in the same vector space. 
 
-### add simple image 
+<p align="center">
+  <img width="" height="190" src="imgs/img_blog_2.png">
+</p>
+
+<br>
+<center>
+<em>
+Words embeddings in 2 different languages but in the same vector space.
+</em>
+</center>
+<br/>
 
 The starting point was the discovery [[4]](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) that word embedding spaces have similar structures across languages, even when considering distant language pairs like English and Vietnamese. More precisely, two sets of pre-trained vectors in different languages can be aligned to some extent: good word translations can be produced through a simple linear mapping between the two sets of embeddings. As an example, learning a direct mapping between Italian and Portuguese leads to a word translation accuracy of 78.1% with a nearest neighbor (NN) criterion.
 
-### add image example of such mapping
+<p align="center">
+  <img width="" height="190" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_3.png">
+</p>
+
+<br>
+<center>
+<em>
+Example of a direct mapping and translation with a NN criterion for French and English.
+</em>
+</center>
+<br/>
 
 Embeddings of translations and words with similar meaning are close (geometrically) in the shared  cross-lingual vector space. This property makes them very effective for cross-lingual Natural Language Processing (NLP) tasks.
 The simplest way to evaluate the result is the Bilingual Lexicon Induction (BLI) criterion, which designs the percentage of the dictionary that can be correctly induced. 
 Thus, BLI is often the first step towards several downstream tasks such as Part-Of-Speech (POS) tagging, parsing, document classification, language genealogy analysis or (unsupervised) machine translation.
 
-Frequently, these common representations are learned through a two-step process, whether in a bilingual or multilingual setting. First, monolingual word representations are learned over large portions of text; these pre-formed representations are actually available for several languages and are widely used, such as the Fasttext Wikipedia vectors used in this work. Second, a correspondence between languages is learned in three ways: in a supervised manner if parallel dictionaries or data are available to be used for supervisory purposes, with minimal supervision, for example by using only identical strings, or in a completely unsupervised manner.
+Frequently, these common representations are learned through a two-step process, whether in a bilingual or multilingual setting. First, monolingual word representations are learned over large portions of text; these pre-formed representations are actually available for several languages and are widely used, such as the Fasttext Wikipedia. Second, a correspondence between languages is learned in three ways: in a supervised manner if parallel dictionaries or data are available to be used for supervisory purposes, with minimal supervision, for example by using only identical strings, or in a completely unsupervised manner.
 
-### image example of fasttext + add reference
-
-It is common practice in the literature on the subject to separate these two steps and not to address them simultaneously in a paper. Indeed, measuring the efficiency of the algorithm would lose its meaning if the corpus of vectors is not identical at the beginning. We will therefore use open-source data from Facebook containing embeddings of several dozen languages computed using Wikipedia data. The fact that the underlying text corpus is identical also helps to reinforce the isomorphic character of the point clusters.
-
-### add reference to the facebook paper
+It is common practice in the literature on the subject to separate these two steps and not to address them simultaneously in a paper. Indeed, measuring the efficiency of the algorithm would lose its meaning if the corpus of vectors is not identical at the beginning. 
 
 Concerning the second point, although three different approaches exist, they are broadly based on the same ideas: the goal is to identify a subset of points that are then used as anchors points to achieve alignment. In the supervised approach, these are the words for which the translation is available. In the semi-supervised approach, we will gradually try to enrich the small initial corpus to have more and more anchor points. The non-supervised approach differs because there is no parallel corpus or dictionary between the two languages. The subtlety of the algorithms will be to release a potential dictionary and then to enrich it progressively. 
 
-We will focus in the following work on this third approach. Although it is a less frequent scenario, it is of great interest for several reasons. First of all, from a theoretical point of view, it provides a practical answer to a very interesting problem of information theory: given a set of texts in a totally unknown language, what information can we retrieve? The algorithms we chose to implement contrast neatly with the classical approach used until now. Finally, for very distinct languages or languages that are no longer used, it is true that the common corpus can be very thin. 
+We will focus on this third approach. Although it is a less frequent scenario, it is of great interest for several reasons. First of all, from a theoretical point of view, it provides a practical answer to a very interesting problem of information theory: given a set of texts in a totally unknown language, what information can we retrieve? The algorithms we chose to implement contrast neatly with the classical approach used until now. Finally, for very distinct languages or languages that are no longer used, it is true that the common corpus can be very thin. 
 
-Many developments have therefore taken place in recent years in this field of unsupervised bilingual lexicon induction. One of the recent discoveries, which pushed us to do this project, is the idea that using information from other languages during the training process helps improve translating language pairs. We came across this idea while searching for multi-alignment of languages instead of bi-alignment. 
+Many developments have therefore taken place in recent years in this field of unsupervised bilingual lexicon induction. One of the recent discoveries is the idea that using information from other languages during the training process helps improve translating language pairs. 
 
-### add image of informations between 3 different languages
+This discoveries led us to formulate the problem as follows: **is it possible to gain experience in the progressive learning of several languages?** In other words, how can we make good use of the learning of several acquired languages to learn a new one? This new formulation can led one to consider the lexicon induction as a ranking problem.
 
-We chose to approach the problem in a different way, keeping an unsupervised alignment basis however.  We asked ourselves to what extent we could integrate the knowledge of a given set of languages when learning a new one, without having parallel data for the latter. The scenario of multi-alignment unsupervised assumes that there is no parallel data for all language pairs. We think it is more realistic and useful to assume that we do not have this data only for the last language. 
-
-The underlying learning theme led us to formulate the problem as follows: **is it possible to gain experience in the progressive learning of several languages?** In other words, how can we make good use of the learning of several acquired languages to learn a new one? To our knowledge, this problem has never yet been addressed in the literature on the subject. This new formulation led us to consider the lexicon induction as a ranking problem for which we used recent tools of this machine learning field called Learning to Rank. 
-
-In summary, this paper make the following main contributions:
-
-* We present a new approach for the unsupervised bilingual lexicon induction problem that consistently outperforms state-of-the-art methods on several language pairs. On a standard word translation retrieval benchmark, using 200k vocabularies, our method reaches 95.3% accuracy on English-Spanish while the best unsupervised approach is at 84.1%. By doing this, we set a new benchmark in the field. 
-* We conduced a study on the impact of the idioms used for the learning and for the prediction step, allowing us to have a better core understanding of our approach and to forecast the efficiency for a new idiom. 
-* Our results further strengthen in a new way the strong hypothesis that word embedding spaces have similar structures across languages. [[4]](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)
-
-We will proceed as follows:  Sections ~\ref{sec:state_art} and ~\ref{sec:eval_mtri} will outline  the state of the art and the different techniques used for unsupervised learning in this context. In particular, we will explain the Wasserstein Procustes approach for bilingual and multi alignment. We then emphasize the lexicon induction given the alignment. Section ~\ref{sec:ltr} presents the Learning to Rank key concepts alongside the TensorFlow framework used in our main algorithm. Section ~\ref{sec:semi_sup} describes our program, the different subtleties and the key parameters. Finally, Section ~\ref{sec:results} presents the experimental results we obtained.
-
-%Finally, Section ~\ref{sec:software} highlights software resources that accompany this text. 
+We will proceed as follows:  First, we will outline  the state of the art and the different techniques used for unsupervised learning in this context. In particular, we will explain the Wasserstein Procustes approach for bilingual and multi alignment. We then emphasize the lexicon induction given the alignment. We then present the Learning to Rank key concepts. We then discuss a method using learning to rank for lexicon induction, and then present some experimental results.
 
 # Unsupervised Bilingual Alignement
 
 In this section, we provide a brief overview of unsupervised bilingual alignment methods to learn a mapping between two sets of embeddings. The majority are divided into two stages: the actual alignment and lexicon induction, given the alignment. Even if the lexicon induction is often taken into account when aligning (directly or indirectly, through the loss function), this distinction is useful from a theoretical point of view. 
 
-![](/imgs/2020-08-20-nlp/alignement.png)
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/alignement.png">
+</p>
 
+<br>
 <center>
 <em>
 Word embeddings alignment (in dimension 2).
@@ -100,12 +119,22 @@ Word embeddings alignment (in dimension 2).
 <br/>
 
 Historically, the problem of word vector alignment has been formulated as as a quadratic problem.
-This approach, resulting from the supervised literature then allowed to presume the absence of lexicon without modifying to much the framework. That is why we will deal with it first in what follows. 
+This approach, resulting from the supervised literature then allowed to presume the absence of lexicon without modifying too much the framework. That is why we will deal with it first in what follows. 
 
 
-##Orthogonal Procrustes Problem
+## Orthogonal Procrustes Problem
 
-### add subtitles or schema
+<p align="center">
+  <img width="500" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_4.png">
+</p>
+
+<br>
+<center>
+<em>
+Set of n words (embeddings of dimensions d) for 2 languages. 
+</em>
+</center>
+<br/>
 
 Procustes is a method that aligns points if given the correspondences between them (supervised scenario).
 ![\mathbf{X} \in \mathbb{R}^{n \times d}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathbf%7BX%7D+%5Cin+%5Cmathbb%7BR%7D%5E%7Bn+%5Ctimes+d%7D) and ![\mathbf{Y} \in \mathbb{R}^{n \times d}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathbf%7BY%7D+%5Cin+%5Cmathbb%7BR%7D%5E%7Bn+%5Ctimes+d%7D) are the two sets of word embeddings or points and we suppose, as previously said, that we know which point **X** corresponds to which point **Y**. This leads us to solve the following least-square problem of optimization, looking for the **W** matrix performing the alignment [[5]](https://arxiv.org/pdf/1805.11222.pdf):
@@ -113,6 +142,18 @@ Procustes is a method that aligns points if given the correspondences between th
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmin+_%7B%5Cmathbf%7BW%7D+%5Cin+%5Cmathbb%7BR%7D%5E%7Bd+%5Ctimes+d%7D%7D%5C%7C%5Cmathbf%7BX%7D+%5Cmathbf%7BW%7D-%5Cmathbf%7BY%7D%5C%7C_%7B2%7D%5E%7B2%7D" />
 </p>
+
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/gif_blog_1.gif">
+</p>
+
+<br>
+<center>
+<em>
+Operation applied for each word in the first language. The goal is to minimize the distance between the orange and the blue vectors.
+</em>
+</center>
+<br/>
 
 We have access to a closed form solution with a cubic complexity. 
 Restraining **W** to the set of orthogonal matrices ![\mathcal{O}_{d}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathcal%7BO%7D_%7Bd%7D), improves the alignments for two reasons: it limits overfitting by reducing the size of the minimization space and allows to translate the idea of keeping distances and angles, resulting from the similarity in the space structure. The resulting problem is known as Orthogonal Procrustes and it also admits a closed form solution through a singular value decomposition (cubic complexity).
@@ -130,6 +171,10 @@ In a similar fashion, finding the correct mapping between two sets of word can b
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmin+_%7B%5Cmathbf%7BP%7D+%5Cin+%5Cmathcal%7BP%7D_%7Bn%7D%7D%5C%7C%5Cmathbf%7BX%7D-%5Cmathbf%7BP%7D+%5Cmathbf%7BY%7D%5C%7C_%7B2%7D%5E%7B2%7D" />
 </p>
 
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/gif_blog_2.gif">
+</p>
+
 ![\mathcal{P}_{n}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathcal%7BP%7D_%7Bn%7D) containing all the permutation matrices, the solution of the minimization, ![P_t
 ](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+P_t%0A) will be an alignment matrix giving away the pair of words. This 1 to 1 mapping can be achieved thanks to the Hungarian algorithm.
 It is equivalent to solve the following linear program: 
@@ -143,10 +188,16 @@ The combination of the Procustes- Wasserstein minimization problem is the follow
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmin+_%7B%5Cmathbf%7BQ%7D+%5Cin+%5Cmathcal%7BO%7D_%7Bd%7D%7D+%5Cmin+_%7B%5Cmathbf%7BP%7D+%5Cin+%5Cmathcal%7BP%7D_%7Bn%7D%7D%5C%7C%5Cmathbf%7BX+Q%7D-%5Cmathbf%7BP%7D+%5Cmathbf%7BY%7D%5C%7C_%7B2%7D%5E%7B2%7D" />
 </p>
 
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/gif_blog_3.gif">
+</p>
+
 In order to solve this problem, the approach of [[5]](https://arxiv.org/pdf/1805.11222.pdf) was to use a stochastic optimization algorithm. 
 As solving separately those 2 problems was leading to bad local optima, their choice was to select a smaller batch of size *b*, and perform their minimization algorithm on these sub-samples. The batch is playing the role of anchors points. Combining this with a convex relaxation for an optimal initialization, it leads to the following algorithm:
 
-![](/imgs/2020-08-20-nlp/algo_1.png)
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/algo_1.png">
+</p>
 
 ## Other unsupervised approaches
 
@@ -154,7 +205,9 @@ Other approaches exist but they are currently less efficient than the one descri
 
 **Optimal transport:**
 
-### schema to add
+<p align="center">
+  <img width="" height="190" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_5.png">
+</p>
 
 Optimal transport [[6]](https://people.math.gatech.edu/~gangbo/Cedric-Villani.pdf) formalizes the problem of finding a minimum cost mapping between two word embedding sets, viewed as discrete distributions. More precisely, they assume the following distributions:
 
@@ -168,7 +221,21 @@ and look for a transportation map realizing:
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cinf+_%7BT%7D%5Cleft%5C%7B%5Cint_%7B%5Cmathcal%7BX%7D%7D+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29+d+%5Cmu%28%5Cmathbf%7Bx%7D%29+%5C%3B+%5C%3B+%7C+%5C%3B+%5C%3B+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu%5Cright%5C%7D" />
 </p>
 
-where the cost ![c(\mathbf{x}, T(\mathbf{x}))](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29) is typically just ![\| \mathbf{x}-\) \(T(\mathbf{x}) \|](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5C%7C+%5Cmathbf%7Bx%7D-%5C%29+%5C%28T%28%5Cmathbf%7Bx%7D%29+%5C%7C) and ![T_{\#} \mu=\nu](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu) implies that the source points must exactly map to the targets. Yet, this transportation not always exist and a relaxation is used. Thus, the discrete optimal transport (DOT) problem consists of finding a plan ![\Gamma](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5CGamma) that solves
+where the cost ![c(\mathbf{x}, T(\mathbf{x}))](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29) is typically just ![\| \mathbf{x}-\) \(T(\mathbf{x}) \|](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5C%7C+%5Cmathbf%7Bx%7D-%5C%29+%5C%28T%28%5Cmathbf%7Bx%7D%29+%5C%7C) and ![T_{\#} \mu=\nu](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu) implies that the source points must exactly map to the targets. 
+
+<p align="center">
+  <img width="300" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_6.png">
+</p>
+
+<br>
+<center>
+<em>
+Push forward operator
+</em>
+</center>
+<br/>
+
+Yet, this transportation not always exist and a relaxation is used. Thus, the discrete optimal transport (DOT) problem consists of finding a plan ![\Gamma](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5CGamma) that solves
 
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmin+_%7B%5CGamma+%5Cin+%5CPi%28%5Cmathbf%7Bp%7D%2C+%5Cmathbf%7Bq%7D%29%7D%5Clangle%5CGamma%2C+%5Cmathbf%7BC%7D%5Crangle" />
@@ -192,6 +259,11 @@ Some works [[7]](https://www.aclweb.org/anthology/D18-1214/) are  based on these
 
 **Adversarial Training:**
     Another popular alternative approach derived from the literature on generative adversarial network [[9]](https://arxiv.org/pdf/1406.2661.pdf) is to align point clouds without cross-lingual supervision by training a discriminator and a generator [[10]](https://arxiv.org/pdf/1710.04087.pdf). The discriminator aims at maximizing its ability to identify the origin of an embedding, and the generator of **W** aims at preventing the discriminator from doing so by making **WX** and **Y** as similar as possible.
+
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/gif_blog_4.gif">
+</p>
+
 They note ![\theta_{D} .](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Ctheta_%7BD%7D+.) the discriminator parameters and consider the probability ![P_{\theta_{D}}(\text { source }=1 | z)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+P_%7B%5Ctheta_%7BD%7D%7D%28%5Ctext+%7B+source+%7D%3D1+%7C+z%29) that a vector ![z](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+z) is the mapping of a source embedding (as opposed to a target embedding) according to the discriminator. 
 The discriminator loss can then be written as:
 
@@ -206,7 +278,7 @@ On the other hand, the loss of the generator is:
 </p>
     
 For every input sample, the discriminator and the mapping matrix W are trained successively with stochastic gradient updates to respectively minimize ![\mathcal{L}_{W}$ and $\mathcal{L}_{D}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathcal%7BL%7D_%7BW%7D%24+and+%24%5Cmathcal%7BL%7D_%7BD%7D) . 
-Yet, papers [[10]](https://arxiv.org/pdf/1710.04087.pdf) on the subject show that, although innovative, this framework is more useful as a pre-training for the classical model than as a full-fledged algorithm. Hence our choice not to explore in more details this avenue. 
+Yet, papers [[10]](https://arxiv.org/pdf/1710.04087.pdf) on the subject show that, although innovative, this framework is more useful as a pre-training for the classical model than as a full-fledged algorithm. 
 
 ## Multilingual alignment
 
@@ -215,6 +287,18 @@ Thus, when it comes to aligning multiple languages together, two principle appro
 
 * Align all languages to one pivot language, often English, without taking into account for the loss function other alignments. This leads to low complexity but also to low efficiency between the very distinct language, forced to transit through English. 
 * Align all language pairs, by putting them all in the loss function, without giving importance to any one in particular. If this improves the efficiency of the algorithm, the counterpart is in the complexity, which is very important because it is quadratic in the number of languages.
+
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_7.png">
+</p>
+
+<br>
+<center>
+<em>
+Example of both approaches to align multiple languages.
+</em>
+</center>
+<br/>
 
 A trade-off must therefore be found between these two approaches.
 
@@ -245,7 +329,9 @@ At the beginning, we wanted to use this algorithm to incorporate exogenous knowl
 The core idea of the least-square problem of optimization in Wasserstein Procustes is to minimize the distance between a word and its translation. Hence, given the alignment, the inference part first just consisted in finding the nearest neighbors (NN). Yet, this criterion had a mayor issue:
 Nearest neighbors are by nature asymmetric: y being a K-NN of x does not imply that x is a K-NN of y. In high-dimensional spaces, this leads to a phenomenon that is detrimental to matching pairs based on a nearest neighbor rule: some vectors, called hubs, are with high probability nearest neighbors of many other points, while others (anti-hubs) are not nearest neighbors of any point. [[12]](https://arxiv.org/abs/1412.6568)
 
-### add example
+<p align="center">
+  <img width="250" height="190" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_8.png">
+</p>
 
 Two solutions to this problem have been brought through new criteria, aiming at giving similarity measure between two embeddings, thus allowing to match them appropriately. Among them, the most popular is Cross-Domain Similarity Local Scaling (CSLS) [[10]](https://arxiv.org/pdf/1710.04087.pdf). Other exist such as Inverted Softmax (ISF)[[13]](https://arxiv.org/pdf/1702.03859.pdf), yet they usually require to estimate noisy parameter in an unsupervised setting where we do not have a direct cross-validation criterion. 
 
@@ -255,7 +341,13 @@ The idea behind CSLS is quite simple: it is a matter of calculating a cosine sim
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+r_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%3D%5Cfrac%7B1%7D%7BK%7D+%5Csum_%7By_%7Bt%7D+%5Cin+%5Cmathcal%7BN%7D_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%7D+%5Ccos+%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29" />
 </p>
 
-where cos(...) is the cosine similarity. Likewise we denote by ![r_{\mathrm{S}}\left(y_{t}\right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+r_%7B%5Cmathrm%7BS%7D%7D%5Cleft%28y_%7Bt%7D%5Cright%29) the mean similarity of a target word ![y_{t}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+y_%7Bt%7D) to its neighborhood. Finally, the CSLS is defined as:
+where cos(...) is the cosine similarity. 
+
+<p align="center">
+  <img width="" height="" src="{{ site.url }}/imgs/2020-08-20-nlp/gif_blog_5.gif">
+</p>
+
+Likewise we denote by ![r_{\mathrm{S}}\left(y_{t}\right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+r_%7B%5Cmathrm%7BS%7D%7D%5Cleft%28y_%7Bt%7D%5Cright%29) the mean similarity of a target word ![y_{t}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+y_%7Bt%7D) to its neighborhood. Finally, the CSLS is defined as:
 
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Coperatorname%7BCSLS%7D%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29%3D2+%5Ccos+%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29-r_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29-r_%7B%5Cmathrm%7BS%7D%7D%5Cleft%28y_%7Bt%7D%5Cright%29" />
@@ -277,11 +369,11 @@ However, we wanted to keep the unsupervised framework, hence the idea of trainin
 
 # Learning to Rank
 
-A ranking problem is defined as the task of ordering a set of items to maximize the utility of the entire set. Such a problem is widely studied in several domains such as Information Retrieval. For example, on Gmail, given a query "order amazon" and a list of received email, the task would be to send an ordered list of received email with the first one being the one we want to see. 
+A ranking problem is defined as the task of ordering a set of items to maximize the utility of the entire set. Such a problem is widely studied in several domains such as Information Retrieval or Natural Language Processing. For example, on any e-commerce website, where given a query "iphone black case" and the list of available products, the return list should be ordered by probability of getting purchased. One can start understanding why a ranking problem is different than a classification or a regression task. While their goal is to predict a class or a value, the ranking task needs to order an entire list, such that, the higher you are the more relevant you should be.
 
-Another exaple would be on any e-commerce website, where given a query "iphone black case" and the list of products available, the return list should be ordered by probability of getting purchased. With these examples, one can start understanding why a ranking problem is different than a classification or a regression task. While their goal is to predict a class or a value, the ranking task needs to order an entire list, such that, the higher you are the more relevant you should be.
-
-### add example 
+<p align="center">
+  <img width="400" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_9.png">
+</p>
 
 ## Theoretical framework
 
@@ -308,9 +400,9 @@ One first et very important note is how ![f](https://render.githubusercontent.co
 * We consider ![f](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+f) as a *univariate* scoring function, meaning that it can be decomposed into a per-item scoring function such as ![f(X)_{i} := u(x_i)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+f%28X%29_%7Bi%7D+%3A%3D+u%28x_i%29) with ![u : x \mapsto \mathbb{R}_{+}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+u+%3A+x+%5Cmapsto+%5Cmathbb%7BR%7D_%7B%2B%7D). We will have ![f(X) = [u(x_0), ... , u(x_n)]](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+f%28X%29+%3D+%5Bu%28x_0%29%2C+...+%2C+u%28x_n%29%5D). 
 * We consider ![f](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+f) as a *multivariate* scoring function, meaning that each item is scored relatively to every other items in the set, with ![f : X \mapsto \mathbb{R}^{n}_{+}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+f+%3A+X+%5Cmapsto+%5Cmathbb%7BR%7D%5E%7Bn%7D_%7B%2B%7D). This means that changing one item could change the score of the rest of the set.
 
-While the first option is simpler to implement, the second one is much closer to the reality, as the relevance of an item often depends on the distribution its in. For example, the relevance of a item on an e-commerce query will always depend on what the website offers you next to it.
+### add image
 
-### add example
+While the first option is simpler to implement, the second one is much closer to the reality, as the relevance of an item often depends on the distribution its in. For example, the relevance of a item on an e-commerce query will always depend on what the website offers you next to it.
 
 We now have to define some metrics in order to judge how good a ranking is. We start by defining the *Discounted Cumulativ Gain* (DCG) of a list:
 
@@ -324,6 +416,18 @@ where:
 * ![\pi(j)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cpi%28j%29) is the rank of the j-th item in X
 * ![\frac{1}{ln_{2}(1+\pi(j))}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cfrac%7B1%7D%7Bln_%7B2%7D%281%2B%5Cpi%28j%29%29%7D) is the discount factor
 * ![k](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+k) is how much we want to go deep into the list. A low value of ![k](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+k) means that we want to focus on how well ranked the start of our list is.
+
+<p align="center">
+  <img width="" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_10.png">
+</p>
+
+<br>
+<center>
+<em>
+Caption
+</em>
+</center>
+<br/
 
 Most of the time however we want to compare this metric to the DCG obtained from the ground truth labels. We then define: 
 
@@ -393,7 +497,7 @@ the position of ![x](https://render.githubusercontent.com/render/math?math=%5Cdi
 
 where ![\alpha](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Calpha) is a hyperparameter. 
 
-![](/imgs/2020-08-20-nlp/example_approx_indicator.jpg)
+![]({{ site.url }}/imgs/2020-08-20-nlp/example_approx_indicator.jpg)
 
 <center>
 <em>
@@ -424,7 +528,7 @@ We can now define our differentiable version of the DCG metric by using these ap
 
 # RUBI: Ranked Unsupervised Bilingual Induction
 
-**Motivations:** Let's describe more precisely the functioning of our algorithm, denoted RUBI, although already mentioned in previous sections. Two points guided our approach:
+**Motivations:** Let's describe more precisely the functioning of our algorithm. Two points guided our approach:
 
 * From a linguistic point of view, there is obviously a learning to learn phenomenon for languages. We observe that by assimilating the structure of the new language, its grammar and vocabulary to one of the already known languages, it is easier for us to create links that help learning.
 It is the search for these links that motivates us and we are convinced that they can be useful when inferring vocabulary. 
@@ -439,6 +543,70 @@ Finally, a final conceptual point is important to raise. In the context of the C
 
 # Results
 
+We can split our results in two very distinct parts. They both depend on how the Learning to Rank item sets are built. Given a word, you can build the list of potential traduction from a CSLS criterion and then force or not the presence of the right traduction. This choice needs to be discussed thoroughly. First, let's quickly present some results with and without the right prediction forced in the query. 
+
+## With forced prediction
+
+| Method                | EN\-ES                               | ES\-EN                               | EN\-FR                               | FR\-EN                               |
+|-----------------------|--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|
+| Wass\. Proc\. \- NN   | 77\.2                                | 75\.6                                | 75\.0                                | 72\.1                                |
+| Wass\. Proc\. \- CSLS | 79\.8                                | 81\.8                                | 79\.8                                | 78\.0                                |
+| Wass\. Proc\. \- ISF  | 80\.2                                | 80\.3                                | 79\.6                                | 77\.2                                |
+| Adv\. \- NN           | 69\.8                                | 71\.3                                | 70\.4                                | 61\.9                                |
+| Adv\. \-CSLS          | 75\.7                                | 79\.7                                | 77\.8                                | 71\.2                                |
+| RCSLS\+spectral       | 83\.5                                | 85\.7                                | 82\.3                                | 84\.1                                |
+| RCSLS                 | 84\.1                                | 86\.3                                | 83\.3                                | 84\.1                                |
+| RUBI                  | **93.3** *(DE)* | **91.6** *(FR)* | **93.8** *(NL)* | **91\.9** *(IT)* |
+|                       | **EN\-DE**                               | **DE\-EN**                               | **EN\-RU**                               | **RU\-EN**                               |
+| Wass\. Proc\. \- NN   | 66\.0                                | 62\.9                                | 32\.6                                | 48\.6                                |
+| Wass\. Proc\. \- CSLS | 69\.4                                | 66\.4                                | 37\.5                                | 50\.3                                |
+| Wass\. Proc\. \- ISF  | 66\.9                                | 64\.2                                | 36\.9                                | 50\.3                                |
+| Adv\. \- NN           | 63\.1                                | 59\.6                                | 29\.1                                | 41\.5                                |
+| Adv\. \-CSLS          | 70\.1                                | 66\.4                                | 37\.2                                | 48\.1                                |
+| RCSLS\+spectral       | 78\.2                                | 75\.8                                | 56\.1                                | 66\.5                                |
+| RCSLS                 | 79\.1                                | 76\.3                                | 57\.9                                | 67\.2                                |
+| RUBI                  | **93\.6** *(HU)* | **89\.8** *(FR)* | **83\.7** *(HU)* | \-                                   |
+
+![]({{ site.url }}/imgs/2020-08-20-nlp/abl2.jpg)
+
+**1: Loss function impact** - Loss used for the Learning to Rank model. In other expriments, we found that ApproxNDCG and List MLE continue to perform similarly, hence our default choice of Approx NDCG. 
+**2: Group size impact** - The group size measures how many items the Learning to Rank model takes as input at the same time (multivariate vs. univariate). The dilemma is however to optimize the computation time because increasing the group size exponentially increases the number of calculations.
+**3: CSLS feature impact** - The features for the each potential translation in a query can incorporate several elements:
+
+  * the word embedding of the potential translation (size 300)
+  * the word embedding of the query (size 300)
+  * pre-computed features such a distance to query word in the aligned vector space, CSLS distance, ISF....
+
+Those features are crucial for the learning as it will fully rely on it. 
+At first, we decided to only use the word embedding of the potential translation and of the query. That gave us a 600 feature list. However, after several experiments, we noticed that the learning to rank algorithm, despite the variation of the parameters, was not able to learn relevant information from these 600 features, the performance was poor. The function learned through deep learning was less efficient than a simple Euclidean distance between the potential translation and the query (NN criterion). In fact, after consulting the literature, we realised that using such a number of features is not very common. Most algorithms were only using pre-computed features (often less than a hundred). Although this information is already interesting in itself, we therefore turned to the second approach. We chose to restrict ourselves to certain well-specified types of pre-computed features in order to evaluate their full impact. More precisely, for a fixed k parameter, we provided as features the euclidean distance to the query, as well as the CSLS(i) "distance" for i ranging from 1 to *k*. In other words, we provided information about the neighborhood through the penalties described in the section on CSLS. 
+
+Training with the full embeddings were also perform but did not lead to any improvements.
+
+**4: Query size impact** - Number of potential translations given with a query (number of items). There is a low incidence of the number of queries on the results, a very slight but perceptible decrease. The algorithm is therefore able, despite a large number of candidates, to discern the correct information.
+
+![]({{ site.url }}/imgs/2020-08-20-nlp/alb1.jpg)
+
+Plot of the BLI criterion in the training step according to the CSLS criterion, i.e. the quality of the alignment of the language used for learning with English. The trend that emerges is that of a very clear positive correlation (linear trend plotted in red, (**R** ^2 = 0.82)). We have also shown the averages per language family (Romance, Germanic and Uralic). In conclusion, it seems easier to learn using a language that is well aligned with English. Although this seems logical, it is not that obvious. Three clusters seem to appear in conjunction with the different families. Romance languages are associated with a high rate of alignment with English and therefore with high performance in the learning stage. 
+The Germanic language cluster has a lower performance combined with a slightly lower quality alignment. Knowing that English belongs to the Germanic language type, it is interesting to note this slight underperformance in alignment compared to Romance. Finally, the Slave cluster shows the worst performance in terms of alignment with English and therefore also the worst for the learning step. 
+
+## Without forced prediction
+
+![]({{ site.url }}/imgs/2020-08-20-nlp/abl3.jpg)
+
+<center>
+<em>
+Ablation study for the same pipeline as above, but without the right prediction forced into the query.
+</em>
+</center>
+<br/>
+
+Without going into too much details, the same trends as above appear here as well. The main difference is in pure BLI results: we only achieve the same results as the state of the art. 
+
+# Conclusion 
+
+If in the Learning to rank framework, a query without at least one relevant item doesn't have a lot of sense, this is not something one can ensure when working with unsupervised translation. If it is clear that given a query where the right translation appears, a Learning to Rank model surpasses existing methods, it is still unclear on how to achieve such query every time. While one way could be to extend drasticaly the query size, one still has to keep in mind the memory capability of such model. Another bias might come from every query where the right translation does not appear naturally (thus always giving a poor results to every model except "forced translation" model). 
+
+We do believe that leveraging knowledge of previous idioms acquisition can keep leading to many improvements over existing models. 
 
 
 # References
@@ -471,57 +639,3 @@ Finally, a final conceptual point is important to raise. In the context of the C
 orthogonal transformations and the inverted softmax., 2017
 
 # [Github Repository](https://github.com/Gguinet/semisupervised-alignement)
-
-
-# semisupervised-alignement
-
-## Instructions for google collab
-
-**Settings for Virtual Machine:**
-
-* europe-west2-c (London)
-* 8 precesseurs virtuels, n1-highmem-8, haute capacité de mémoire
-* Ubuntu, Version 18.04, 200 Go mémoire
-* Pare-feu: Autoriser traffic HTTPS et HTTP
-
-**Ligne de commande:**
-
-```
-sudo apt install python
-sudo apt-get install python3-distutils
-sudo curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
-python3 get-pip.py
-python3 -m pip install numpy tensorflow_ranking POT pandas sklearn 
-git clone https://github.com/Gguinet/semisupervised-alignement.git ("Entrer compte et mdp git")
-cd semisupervised-alignement
-sh main.sh
-```
-
-**Instructions Python:**
-
-```
-python3 query_extraction.py --src_emb_train "${output_src1}" --tgt_emb_train "${output_tgt1}" \
-    --src_emb_test "${output_src2}" --tgt_emb_test "${output_tgt2}" --output_dir 'query/' \
-    --dico_train "${dico_train}" --dico_valid "${dico_valid}" --dico_test "${dico_test}" \
-    --query_size 10 --query_relevance_type 'binary' --add_csls_coord false \
-    --k_csls 10 --add_word_coord false --add_query_coord false 
-
-python3 tf_ranking_libsvm.py --train_path 'query/train' --vali_path 'query/valid' \
-    --test_path 'query/test' --output_dir 'tf_res' --group_size 1 --loss "approx_ndcg_loss" \
-    --num_train_steps 100000 --query_relevance_type 'binary' --query_size 10
-```
-
-**Code framework:**
-
-* ```Ablation_study``` collects the bash codes associated with the ablation tests.
-* ```bli.sh``` takes as input two languages and run all the framework
-* ```lang_impact.sh``` and ```lang_variation.sh``` run simulations for all languages
-* ```main.sh``` is the older version of ```bli.sh```
-* ```main_pre_align.sh``` and ```pre_alignment.sh``` are precomputing all the alignment for computations (to be deleted)
-* ```query_extraction.py``` is extracting test, validation and training queries for two langues
-* ```single_query_extract.py``` is only exctracting one query (usefull if re-use of query)
-* ```query_aux.py``` is the auxiliary functions for query extraction
-* ``tf_ranking_libsvm.py`` handle the learning to rank
-* ``unsup_align.py`` is the facebook code for unsupervised alignment
-* ``align.py`` and ``unsup_multialign.py`` are the supervised and multi alignment facebook code (not used)
-* ``utils.py`` are auxiliary functions for alignment
