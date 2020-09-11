@@ -35,7 +35,6 @@ MathJax.Hub.Queue(function() {
 This blog post contains an introduction to Unsupervised Bilingual Alignment and Multilingual Alignment. We also go through the theoretical framework behind Learning to Rank, and discuss how it migh help to produce better alignments in a Semi-Supervised fashion. 
 
 This post was written with [Gauthier Guinet](https://www.linkedin.com/in/gauthier-guinet/) and was initially suppose to explore the impact of learning to rank to Unsupervised Translation.
-
 We both hope that this post will serve as a good introduction to anyone interested in this topic.
 
 # Introduction
