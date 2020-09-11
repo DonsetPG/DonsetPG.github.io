@@ -1,6 +1,6 @@
 ---
 layout: post
-title: nlp unsup. ltr
+title: Semi-Supervised Learning for Bilingual Lexicon Induction
 ---
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -31,8 +31,6 @@ MathJax.Hub.Queue(function() {
 });
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
-
-# Semi-Supervised Learning for Bilingual Lexicon Induction
 
 This blog post contains an introduction to Unsupervised Bilingual Alignment and Multilingual Alignment. We also go through the theoretical framework behind Learning to Rank, and discuss how it migh help to produce better alignments in a Semi-Supervised fashion. 
 
