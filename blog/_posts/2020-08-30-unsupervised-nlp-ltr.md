@@ -602,7 +602,6 @@ If in the Learning to rank framework, a query without at least one relevant item
 
 We do believe that leveraging knowledge of previous idioms acquisition can keep leading to many improvements over existing models. 
 
-
 # References
 
 [1]: CHEN, WEI, YAN LIU, TIE, LAN, YANYAN, MING MA, ZHI & LI, HANG 2009 Ranking measures and loss functions in learning to rank. In Advances in Neural Information Processing Systems 22 (ed. Y. Bengio, D. Schuurmans, J. D. Lafferty, C. K. I. Williams & A. Culotta), pp. 315–323. Curran Associates, Inc
