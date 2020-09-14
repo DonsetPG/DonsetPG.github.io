@@ -213,7 +213,6 @@ where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x}
 <p align="center">
   <img width="300" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_6.png">
 </p>
-
 <br>
 <center>
 <em>
@@ -221,7 +220,6 @@ Push forward operator
 </em>
 </center>
 <br/>
-
 Yet, this transportation not always exist and a relaxation is used. Thus, the discrete optimal transport (DOT) problem consists of finding a plan $\Gamma$ that solves
 
 <p align="center">
