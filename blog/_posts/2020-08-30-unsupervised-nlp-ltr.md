@@ -327,9 +327,9 @@ Two solutions to this problem have been brought through new criteria, aiming at 
 
 The idea behind CSLS is quite simple: it is a matter of calculating a cosine similarity between the two vectors, subtracting a penalty if one or both of the vectors is also similar at many other points.
 
-More formally, we denote by $\mathcal{N}_\mathrm{T} (\mathbf{W} x_s)$ the neighboors of $\boldsymbol{x}_\boldsymbol{S}$ for the target language, after the alignment (hence the presence of $\mathbf{W}$.
+More formally, we denote by $\mathcal{N}_{\mathrm{T}} (\mathbf{W} x_s)$ the neighboors of $\boldsymbol{x}_{\boldsymbol{S}}$ for the target language, after the alignment (hence the presence of $\mathbf{W}$.
 
-Similarly we denote by $\mathcal{N}_\mathrm{S}(y_t)$ the neighborhood associated with a word $t$ of the target language. The penalty term we consider is the mean similarity of a source embedding $x_s$ to its target neighborhood:
+Similarly we denote by $\mathcal{N}_{\mathrm{S}(y_t)}$ the neighborhood associated with a word $t$ of the target language. The penalty term we consider is the mean similarity of a source embedding $x_s$ to its target neighborhood:
 
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+r_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%3D%5Cfrac%7B1%7D%7BK%7D+%5Csum_%7By_%7Bt%7D+%5Cin+%5Cmathcal%7BN%7D_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%7D+%5Ccos+%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29" />
