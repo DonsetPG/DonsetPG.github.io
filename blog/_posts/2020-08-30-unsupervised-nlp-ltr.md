@@ -207,7 +207,7 @@ and look for a transportation map realizing:
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cinf+_%7BT%7D%5Cleft%5C%7B%5Cint_%7B%5Cmathcal%7BX%7D%7D+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29+d+%5Cmu%28%5Cmathbf%7Bx%7D%29+%5C%3B+%5C%3B+%7C+%5C%3B+%5C%3B+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu%5Cright%5C%7D" />
 </p>
 
-where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x}) - \mathbf{x} \|$ and $T_{\#} \mu = \nu$ implies that the source points must exactly map to the targets. 
+where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x}) - \mathbf{x} \|$ and $T \mu = \nu$ implies that the source points must exactly map to the targets. 
 
 <p align="center">
   <img width="300" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_6.png">
@@ -380,12 +380,13 @@ The goal is to find a scoring function $f : \mathcal{X}^n \rightarrow \mathbb{R}
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmathcal%7BL%7D+%28f%29+%3A%3D+%5Cfrac%7B1%7D%7B%7C%5Cpsi%7C%7D+%5Cdisplaystyle%5Csum+_%7B%28X%2CY%29+%5Cin+%5Cpsi%7D+l%28Y%2Cf%28X%29%29" />
 </p>
 
-where $l \: \mathbb{R}^{n}_{+} \times \mathbb{R}^{n}_{+} \rightarrow \mathbb{R}$ is a local loss function. 
+
+where $l : \mathbb{R}^{n}_{+} \times \mathbb{R}^{n}_{+} \rightarrow \mathbb{R}$ is a local loss function. 
 
 One first et very important note is how $f$ is defined. This could be done in two ways: 
 
-* We consider $f$ as a **univariate** scoring function, meaning that it can be decomposed into a per-item scoring function such as $f(X)_{i} = u(x_i)$ with $u \: x \mapsto \mathbb{R}_{+}$. We will have $f(X) = [u(x_0), ... , u(x_n)]$. 
-* We consider $f$ as a **multivariate** scoring function, meaning that each item is scored relatively to every other items in the set, with $f \: X \mapsto \mathbb{R}^{n}_{+}$. This means that changing one item could change the score of the rest of the set.
+* We consider $f$ as a **univariate** scoring function, meaning that it can be decomposed into a per-item scoring function such as $f(X)_{i} = u(x_i)$ with $u : x \mapsto \mathbb{R}_{+}$. We will have $f(X) = [u(x_0), ... , u(x_n)]$. 
+* We consider $f$ as a **multivariate** scoring function, meaning that each item is scored relatively to every other items in the set, with $f : X \mapsto \mathbb{R}^{n}_{+}$. This means that changing one item could change the score of the rest of the set.
 
 While the first option is simpler to implement, the second one is much closer to the reality, as the relevance of an item often depends on the distribution its in. For example, the relevance of a item on an e-commerce query will always depend on what the website offers you next to it.
 
