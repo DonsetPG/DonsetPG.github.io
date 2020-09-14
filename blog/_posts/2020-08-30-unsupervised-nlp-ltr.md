@@ -635,5 +635,4 @@ We believe that leveraging the knowledge of previous idioms acquisition can keep
 13: Smith, S. L., Turban, D. H., Hamblin, S., and Hammerla, N. Y.: Bilingual word vectors,
 orthogonal transformations and the inverted softmax., 2017
 
-
 # [Github Repository](https://github.com/Gguinet/semisupervised-alignement)
