@@ -347,7 +347,11 @@ Likewise we denote by $r_{\mathrm{S}}\left(y_{t}\right)$ the mean similarity of 
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Coperatorname%7BCSLS%7D%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29%3D2+%5Ccos+%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29-r_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29-r_%7B%5Cmathrm%7BS%7D%7D%5Cleft%28y_%7Bt%7D%5Cright%29" />
 </p>
 
-However, it may seem irrelevant to align the embedding words with the NN criterion metric and to use the CSLS criterion in the inference phase. Indeed, it creates a discrepancy between the learning of the translation model and the inference: the global minimum on the set of vectors of one does not necessarily correspond to the one of the other. This naturally led to modify the least-square optimization problem to propose a loss function associated with CSLS. By assuming that word vectors are $\ell_{2}-$ normalized, we have $\cos \left(\mathbf{W} \mathbf{x}_i, \mathbf{y}_i\right)=\mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_i$. Similarly, we have $\left\|\mathbf{y}_j-\mathbf{W} \mathbf{x}_i\right\|_{2}^{2}=2-2 \mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_j$
+However, it may seem irrelevant to align the embedding words with the NN criterion metric and to use the CSLS criterion in the inference phase. Indeed, it creates a discrepancy between the learning of the translation model and the inference: the global minimum on the set of vectors of one does not necessarily correspond to the one of the other. This naturally led to modify the least-square optimization problem to propose a loss function associated with CSLS.
+
+By assuming that word vectors are $\ell_{2}-$ normalized, we have $\cos \left(\mathbf{W} \mathbf{x}_i, \mathbf{y}_i\right)=\mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_i$. 
+
+Similarly, we have $\left\|\mathbf{y}_j-\mathbf{W} \mathbf{x}_i\right\|_{2}^{2}=2-2 \mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_j$
 
 Therefore, finding the $k$ nearest neighbors of $\mathbf{W} \mathbf{x}_i$ among the elements of $\mathbf{Y}$ is equivalent to finding the $k$ elements of $\mathbf{Y}$ which have the largest dot product with $\mathbf{W} \mathbf{x}_i$. This equivalent formulation is adopted because it leads to a convex formulation when relaxing the orthogonality constraint on $\mathbf{W}$. This optimization problem with the Relaxed CSLS loss (RCSLS) is written as:
 
