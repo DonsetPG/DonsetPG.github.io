@@ -232,7 +232,11 @@ where $\mathbf{C} \in \mathbb{R}^{n \times m}$, e.g., $C_{i j}=\left\|\mathbf{x}
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Clangle%5CGamma%2C+C%5Crangle%3A%3D%5Csum_%7Bi+j%7D+%5CGamma_%7Bi+j%7D+C_%7Bi+j%7D+." />
 </p>
 
-where $\Gamma$ belongs to the polytope $\Pi(\mathbf{p}, \mathbf{q})=\{\Gamma \in \mathbb{R}_{+}^{n \times m} \; \mid \; \Gamma 1_{n}=\mathbf{p}, \Gamma^{\top} 1_{n}=\mathbf{q}\}$.
+where $\Gamma$ belongs to the polytope:
+
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5CPi%28%5Cmathbf%7Bp%7D%2C+%5Cmathbf%7Bq%7D%29%3D%5Cleft%5C%7B%5CGamma+%5Cin+%5Cmathbb%7BR%7D_%7B%2B%7D%5E%7Bn+%5Ctimes+m%7D+%7C+%5CGamma+1_%7Bn%7D%3D%5Cmathbf%7Bp%7D%2C+%5CGamma%5E%7B%5Ctop%7D+1_%7Bn%7D%3D%5Cmathbf%7Bq%7D%5Cright%5C%7D" />
+</p>
 
 A regularization is usually added, mostly through the form of an entropy penalization:
 
@@ -288,7 +292,7 @@ Example of both approaches to align multiple languages.
 
 A trade-off must therefore be found between these two approaches.
 
-Let us consider $\mathbf{X}_{i}$ word embeddings for each language $i$, $i=0$ can be considered as the reference language, $\mathbf{W}_{i}$ is the mapping matrix we want to learn and $\mathbf{P}_{i}$ the permutation matrix. The alignment of multiple languages using a reference language as pivot can be resumed by the following problem:
+Let us consider $\mathbf{X}_i$ word embeddings for each language $i$, $i=0$ can be considered as the reference language, $\mathbf{W}_i$ is the mapping matrix we want to learn and $\mathbf{P}_i$ the permutation matrix. The alignment of multiple languages using a reference language as pivot can be resumed by the following problem:
 
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cmin+_%7B%5Cmathbf%7BW%7D_%7Bi%7D+%5Cin+%5Cmathcal%7BO%7D_%7Bd%7D%2C+%5Cmathbf%7BP%7D_%7Bi%7D+%5Cin+%5Cmathcal%7BP%7D_%7Bn%7D%7D+%5Csum_%7Bi%7D+%5Cell%5Cleft%28%5Cmathbf%7BX%7D_%7Bi%7D+%5Cmathbf%7BW%7D_%7Bi%7D%2C+%5Cmathbf%7BP%7D_%7Bi%7D+%5Cmathbf%7BX%7D_%7B0%7D%5Cright%29" />
@@ -321,7 +325,7 @@ Nearest neighbors are by nature asymmetric: y being a K-NN of x does not imply t
 
 Two solutions to this problem have been brought through new criteria, aiming at giving similarity measure between two embeddings, thus allowing to match them appropriately. Among them, the most popular is Cross-Domain Similarity Local Scaling (CSLS) [[10]](https://arxiv.org/pdf/1710.04087.pdf). Other exist such as Inverted Softmax (ISF)[[13]](https://arxiv.org/pdf/1702.03859.pdf), yet they usually require to estimate noisy parameter in an unsupervised setting where we do not have a direct cross-validation criterion. 
 
-The idea behind CSLS is quite simple: it is a matter of calculating a cosine similarity between the two vectors, subtracting a penalty if one or both of the vectors is also similar at many other points. More formally, we denote by $\mathcal{N}_{\mathrm{T}} \left({W} x_{s}\right)$ the neighboors of $\boldsymbol{x}_{\boldsymbol{S}}$ for the target language, after the alignment (hence the presence of $\mathbf{W}$.  Similarly we denote by $\mathcal{N}_{\mathrm{S}}\left(y_{t}\right)$ the neighborhood associated with a word $t$ of the target language. The penalty term we consider is the mean similarity of a source embedding $x_{s}$ to its target neighborhood:
+The idea behind CSLS is quite simple: it is a matter of calculating a cosine similarity between the two vectors, subtracting a penalty if one or both of the vectors is also similar at many other points. More formally, we denote by $\mathcal{N}_{\mathrm{T}} \left({W} x_s\right)$ the neighboors of $\boldsymbol{x}_{\boldsymbol{S}}$ for the target language, after the alignment (hence the presence of $\mathbf{W}$.  Similarly we denote by $\mathcal{N}_{\mathrm{S}}\left(y_t\right)$ the neighborhood associated with a word $t$ of the target language. The penalty term we consider is the mean similarity of a source embedding $x_s$ to its target neighborhood:
 
 <p align="center">
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+r_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%3D%5Cfrac%7B1%7D%7BK%7D+%5Csum_%7By_%7Bt%7D+%5Cin+%5Cmathcal%7BN%7D_%7B%5Cmathrm%7BT%7D%7D%5Cleft%28W+x_%7Bs%7D%5Cright%29%7D+%5Ccos+%5Cleft%28W+x_%7Bs%7D%2C+y_%7Bt%7D%5Cright%29" />
