@@ -262,7 +262,7 @@ On the other hand, the loss of the generator is:
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbegin%7Baligned%7D%0A%5Cmathcal%7BL%7D_%7BW%7D%5Cleft%28W+%7C+%5Ctheta_%7BD%7D%5Cright%29%3D%0A-%26+%5Cfrac%7B1%7D%7Bn%7D+%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+%5Clog+P_%7B%5Ctheta_%7BD%7D%7D%5Cleft%28%5Ctext%7Bsource%7D%3D0+%7C+W+x_%7Bi%7D%5Cright%29+%5C%5C%0A-%26+%5Cfrac%7B1%7D%7Bm%7D+%5Csum_%7Bi%3D1%7D%5E%7Bm%7D+%5Clog+P_%7B%5Ctheta_%7BD%7D%7D%5Cleft%28%5Ctext%7Bsource%7D%3D1+%7C+y_%7Bi%7D%5Cright%29%0A%5Cend%7Baligned%7D" />
 </p>
     
-For every input sample, the discriminator and the mapping matrix $W$ are trained successively with stochastic gradient updates to respectively minimize $\mathcal{L}_{W}$ and $\mathcal{L}_{D}$.
+For every input sample, the discriminator and the mapping matrix $W$ are trained successively with stochastic gradient updates to respectively minimize $\mathcal{L}_W$ and $\mathcal{L}_D$.
 
 Yet, papers [[10]](https://arxiv.org/pdf/1710.04087.pdf) on the subject show that, although innovative, this framework is more useful as a pre-training for the classical model than as a full-fledged algorithm. 
 
