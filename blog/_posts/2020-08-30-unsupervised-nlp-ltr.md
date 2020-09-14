@@ -233,7 +233,7 @@ where $\mathbf{C} \in \mathbb{R}^{n \times m}$, e.g., $C_{i j}=\left\|\mathbf{x}
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Clangle%5CGamma%2C+C%5Crangle%3A%3D%5Csum_%7Bi+j%7D+%5CGamma_%7Bi+j%7D+C_%7Bi+j%7D+." />
 </p>
 
-where $\Gamma$ belongs to the polytope $\Pi(\mathbf{p}, \mathbf{q})=\left\{\Gamma \in \mathbb{R}_{+}^{n \times m} \; \| \; \Gamma 1_{n}=\mathbf{p}, \Gamma^{\top} 1_{n}=\mathbf{q}\right\}$
+where $\Gamma$ belongs to the polytope $\Pi(\mathbf{p}, \mathbf{q})=\left\{\Gamma \in \mathbb{R}_{+}^{n \times m} \; \| \; \Gamma 1_{n}=\mathbf{p}, \Gamma^{\top} 1_{n}=\mathbf{q}\right\}$.
 
 A regularization is usually added, mostly through the form of an entropy penalization:
 
