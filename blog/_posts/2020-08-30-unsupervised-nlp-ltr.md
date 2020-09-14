@@ -384,7 +384,7 @@ The goal is to find a scoring function $f : \mathcal{X}^n \rightarrow \mathbb{R}
 </p>
 
 
-where $l : \mathbb{R}^{n}_{+} \times \mathbb{R}^{n}_{+} \rightarrow \mathbb{R}$ is a local loss function. 
+where $l : (\mathbb{R}^{n}_{+})^2 \rightarrow \mathbb{R}$ is a local loss function. 
 
 One first et very important note is how $f$ is defined. This could be done in two ways: 
 
