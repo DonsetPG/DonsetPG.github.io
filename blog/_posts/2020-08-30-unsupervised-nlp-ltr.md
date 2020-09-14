@@ -349,9 +349,15 @@ Likewise we denote by $r_{\mathrm{S}}\left(y_{t}\right)$ the mean similarity of 
 
 However, it may seem irrelevant to align the embedding words with the NN criterion metric and to use the CSLS criterion in the inference phase. Indeed, it creates a discrepancy between the learning of the translation model and the inference: the global minimum on the set of vectors of one does not necessarily correspond to the one of the other. This naturally led to modify the least-square optimization problem to propose a loss function associated with CSLS.
 
-By assuming that word vectors are $\ell_{2}-$ normalized, we have $\cos (\mathbf{W} \mathbf{x}_i, \mathbf{y}_i) = \mathbf{x}_{i}^\top \mathbf{W}^\top \mathbf{y}_i$. 
+By assuming that word vectors are $\ell_{2}-$ normalized, we have:
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Ccos+%5Cleft%28%5Cmathbf%7BW%7D+%5Cmathbf%7Bx%7D_%7Bi%7D%2C+%5Cmathbf%7By%7D_%7Bi%7D%5Cright%29%3D%5Cmathbf%7Bx%7D_%7Bi%7D%5E%7B%5Ctop%7D+%5Cmathbf%7BW%7D%5E%7B%5Ctop%7D+%5Cmathbf%7By%7D_%7Bi%7D+." />
+</p>
 
-Similarly, we have $\|\mathbf{y}_j-\mathbf{W} \mathbf{x}_i\|_{2}^{2}=2-2 \mathbf{x}_{i}^\top \mathbf{W}^\top \mathbf{y}_j$
+Similarly, we have:
+<p align="center">
+  <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cleft%5C%7C%5Cmathbf%7By%7D_%7Bj%7D-%5Cmathbf%7BW%7D+%5Cmathbf%7Bx%7D_%7Bi%7D%5Cright%5C%7C_%7B2%7D%5E%7B2%7D%3D2-2+%5Cmathbf%7Bx%7D_%7Bi%7D%5E%7B%5Ctop%7D+%5Cmathbf%7BW%7D%5E%7B%5Ctop%7D+%5Cmathbf%7By%7D_%7Bj%7D+." />
+</p>
 
 Therefore, finding the $k$ nearest neighbors of $\mathbf{W} \mathbf{x}_i$ among the elements of $\mathbf{Y}$ is equivalent to finding the $k$ elements of $\mathbf{Y}$ which have the largest dot product with $\mathbf{W} \mathbf{x}_i$. This equivalent formulation is adopted because it leads to a convex formulation when relaxing the orthogonality constraint on $\mathbf{W}$. This optimization problem with the Relaxed CSLS loss (RCSLS) is written as:
 
