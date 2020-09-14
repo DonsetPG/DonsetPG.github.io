@@ -402,8 +402,8 @@ where $l : (\mathbb{R}^{n}_{+})^2 \rightarrow \mathbb{R}$ is a local loss functi
 
 One first et very important note is how $f$ is defined. This could be done in two ways: 
 
-* We consider $f$ as a **univariate** scoring function, meaning that it can be decomposed into a per-item scoring function such as $f(X)_{i} = u(x_i)$ with $u : x \mapsto \mathbb{R}_{+}$. We will have $f(X) = [u(x_0), ... , u(x_n)]$. 
-* We consider $f$ as a **multivariate** scoring function, meaning that each item is scored relatively to every other items in the set, with $f : X \mapsto \mathbb{R}^{n}_{+}$. This means that changing one item could change the score of the rest of the set.
+* We consider $f$ as a **univariate** scoring function, meaning that it can be decomposed into a per-item scoring function such as $f(X)_i = u(x_i)$ with $u : x \mapsto \mathbb{R}_+$. We will have $f(X) = [u(x_0), ... , u(x_n)]$. 
+* We consider $f$ as a **multivariate** scoring function, meaning that each item is scored relatively to every other items in the set, with $f$ in $\mathbb{R}^{n}_{+}$. This means that changing one item could change the score of the rest of the set.
 
 While the first option is simpler to implement, the second one is much closer to the reality, as the relevance of an item often depends on the distribution its in. For example, the relevance of a item on an e-commerce query will always depend on what the website offers you next to it.
 
