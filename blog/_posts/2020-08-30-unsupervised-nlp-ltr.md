@@ -349,9 +349,9 @@ Likewise we denote by $r_{\mathrm{S}}\left(y_{t}\right)$ the mean similarity of 
 
 However, it may seem irrelevant to align the embedding words with the NN criterion metric and to use the CSLS criterion in the inference phase. Indeed, it creates a discrepancy between the learning of the translation model and the inference: the global minimum on the set of vectors of one does not necessarily correspond to the one of the other. This naturally led to modify the least-square optimization problem to propose a loss function associated with CSLS.
 
-By assuming that word vectors are $\ell_{2}-$ normalized, we have $\cos \left(\mathbf{W} \mathbf{x}_i, \mathbf{y}_i\right)=\mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_i$. 
+By assuming that word vectors are $\ell_{2}-$ normalized, we have $\cos (\mathbf{W} \mathbf{x}_i, \mathbf{y}_i)=\mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_i$. 
 
-Similarly, we have $\left\|\mathbf{y}_j-\mathbf{W} \mathbf{x}_i\right\|_{2}^{2}=2-2 \mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_j$
+Similarly, we have $\|\mathbf{y}_j-\mathbf{W} \mathbf{x}_i\|_{2}^{2}=2-2 \mathbf{x}_{i}^{\top} \mathbf{W}^\top \mathbf{y}_j$
 
 Therefore, finding the $k$ nearest neighbors of $\mathbf{W} \mathbf{x}_i$ among the elements of $\mathbf{Y}$ is equivalent to finding the $k$ elements of $\mathbf{Y}$ which have the largest dot product with $\mathbf{W} \mathbf{x}_i$. This equivalent formulation is adopted because it leads to a convex formulation when relaxing the orthogonality constraint on $\mathbf{W}$. This optimization problem with the Relaxed CSLS loss (RCSLS) is written as:
 
