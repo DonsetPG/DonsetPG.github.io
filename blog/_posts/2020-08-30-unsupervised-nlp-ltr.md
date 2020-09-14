@@ -207,7 +207,7 @@ and look for a transportation map realizing:
   <img src="https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cinf+_%7BT%7D%5Cleft%5C%7B%5Cint_%7B%5Cmathcal%7BX%7D%7D+c%28%5Cmathbf%7Bx%7D%2C+T%28%5Cmathbf%7Bx%7D%29%29+d+%5Cmu%28%5Cmathbf%7Bx%7D%29+%5C%3B+%5C%3B+%7C+%5C%3B+%5C%3B+T_%7B%5C%23%7D+%5Cmu%3D%5Cnu%5Cright%5C%7D" />
 </p>
 
-where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x}) - \mathbf{x} \|$ and $T_{#} \mu = \nu$ implies that the source points must exactly map to the targets. 
+where the cost $c(\mathbf{x}, T(\mathbf{x}))$ is typically just $\| T(\mathbf{x}) - \mathbf{x} \|$ and $T_{\#} \mu = \nu$ implies that the source points must exactly map to the targets. 
 
 <p align="center">
   <img width="300" height="300" src="{{ site.url }}/imgs/2020-08-20-nlp/img_blog_6.png">
@@ -580,7 +580,7 @@ Ablation study for the same pipeline as above, but without the right prediction 
 
 Without going into too much details, the same trends as above appear here as well and hold even when the proper translation is not artificially added to the query.
 
-The main difference is in pure BLI results: we only achieve the same results as the state of the art.
+The main difference comes from the value of the BLI results: we only achieve the same results as the state of the art, or slighly better. We discuss in the conclusion the implication of these results, and especially the implication of forcing the right translation to appear in each query.
 
 # Conclusion 
 
