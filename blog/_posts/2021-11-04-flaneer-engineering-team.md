@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Narya - Tracking and Evaluating Soccer Players
+title: Join the Flaneer Engineering Team
 ---
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145347384-1"></script>
