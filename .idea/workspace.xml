@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0d209999-69a1-49a8-a9b2-e342e83acafd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/blog/_posts/2022-01-18-why-virtualization-is-the-future-for-education.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +92,7 @@
       <option name="presentableId" value="Default" />
       <updated>1565434546477</updated>
       <workItem from="1565434553510" duration="2722000" />
-      <workItem from="1645460682494" duration="1102000" />
+      <workItem from="1645460682494" duration="1315000" />
     </task>
     <servers />
   </component>
