@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0d209999-69a1-49a8-a9b2-e342e83acafd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/blog/_posts/2022-01-18-why-virtualization-is-the-future-for-education.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/imgs/2022-01-18-why-virtualization-is-the-future-for-education/9.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2018-09-2-LOCAM.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2018-09-2-LOCAM.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2019-08-06-DRL-FM-review.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2019-08-06-DRL-FM-review.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2020-03-13-Pimobile.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2020-03-13-Pimobile.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2020-05-10-LiverpoolData.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2020-05-10-LiverpoolData.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2020-08-30-unsupervised-nlp-ltr.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2020-08-30-unsupervised-nlp-ltr.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/_posts/2020-12-24-Narya.md" beforeDir="false" afterPath="$PROJECT_DIR$/blog/_posts/2020-12-24-Narya.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,10 +79,16 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/imgs/2022" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/imgs/2022" />
+      <recent name="$PROJECT_DIR$/blog/_posts" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -92,7 +102,7 @@
       <option name="presentableId" value="Default" />
       <updated>1565434546477</updated>
       <workItem from="1565434553510" duration="2722000" />
-      <workItem from="1645460682494" duration="233000" />
+      <workItem from="1645460682494" duration="1102000" />
     </task>
     <servers />
   </component>
@@ -128,6 +138,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/blog/_posts/2019-08-06-DRL-FM-review.md">
