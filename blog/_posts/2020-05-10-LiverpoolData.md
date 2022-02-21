@@ -36,6 +36,8 @@ Our code is available on this [GitHub repository](https://github.com/TheoGreg/La
 
 This article was co-written with [Théophane](https://github.com/TheoGreg), a classmate, while we worked on this project for a few days.
 
+*I now work at [Flaneer](https://www.flaneer.com/), feel free to reach out if you are interested!*
+
 <p align="center">
   <img src="{{ site.url }}/imgs/2020-10-05-LiverpoolData/liverpool-1.jpeg">
 </p>

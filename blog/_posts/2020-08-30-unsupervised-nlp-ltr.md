@@ -37,6 +37,8 @@ This blog post contains an introduction to Unsupervised Bilingual Alignment and 
 This post was written with [Gauthier Guinet](https://www.linkedin.com/in/gauthier-guinet/) and was initially supposed to explore the impact of learning to rank to Unsupervised Translation.
 We both hope that this post will serve as a good introduction to anyone interested in this topic.
 
+*I now work at [Flaneer](https://www.flaneer.com/), feel free to reach out if you are interested!*
+
 # Introduction
 
 <p align="center">
