@@ -114,11 +114,3 @@ You can find below an updated version of my resume (last update: Mar. 2020) :
     </tr>
   </tfoot>
 </table>
-
-## Papers
-
-* [A review on Deep Reinforcement Learning for Fluid Mechanics](https://arxiv.org/pdf/1908.04127.pdf) - Aug. 19
-
-## Blog
-
-Celeste is <i class="fa fa-code"></i> with <i class="fa fa-heart"></i> by [@nicoelayda](https://github.com/nicoelayda). Learn more and contribute on [GitHub](https://github.com/nicoelayda/celeste).
