@@ -16,6 +16,10 @@ title: Introducing Celeste
 This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: [Multi-grid Graph Neural Networks](https://)
 Videos of predictions from our models are available [here](#predictions)
 
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-05-13-multigrid-gnn/intro.gif">
+</p>
+
 # Finite Element Methods
 
 Partial differential equations can be very, very complicated. To some extent, they are still one of the biggest mystery in physics and mathematics. We often do not know the exact solution for a particular equation, and are thus forced to find a way to approximate it.
