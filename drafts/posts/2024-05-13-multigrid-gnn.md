@@ -118,6 +118,12 @@ Speaking of inference, the network makes its predictions in an autoregressive fa
 
 It means that at each step, the output of the model is now used as the input to generate the next prediction. This process is then repeated for the number of desired time steps.
 
+# Conclusion
+
+You can find videos of predictions from our models in the section below. You can also read a much more detailed paper about our models here: (Multi-grid Graph Neural Networks)[https://]
+
+While it is obviously more dense than this overly simplified blog post, we hope it is easily understandable even for people that does not gravitate around either CFD, Finite Element Methods or Graph Neural Networks. 
+
 # Predictions
 
 <iframe src="https://drive.google.com/file/d/1zU1JSmPzobJz6O0ut7waIaKpoe-gvWS_/preview" width="640" height="480" allow="autoplay"></iframe>
