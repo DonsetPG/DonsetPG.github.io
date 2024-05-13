@@ -27,7 +27,7 @@ Partial differential equations can be very, very complicated. To some extent, th
 
 A popular method to achieve this is the finite element method. It consists of subdividing a domain into small parts, called finite elements. This space discretization produces an object called a mesh: a set of points and edges similar to a graph.
 
-Instead of considerent the equation on each continuous values, we consider it instead on each nodes of our mesh: on each nodes lives some values of interests (such as the velocity, the pressure, etc).
+Instead of considering the equation on a continuous spectrum, we consider it instead on our mesh: on each node lives some values of interests (such as the velocity, the pressure, etc).
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2024-05-13-multigrid-gnn/animations-graph-1.gif">
