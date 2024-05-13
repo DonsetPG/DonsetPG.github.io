@@ -20,4 +20,6 @@ title: Introducing Celeste
 
 # Gifs
 
-
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-05-13-multigrid-gnn/animations-graph-1.gif">
+</p>
