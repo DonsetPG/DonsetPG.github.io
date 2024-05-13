@@ -13,8 +13,9 @@ title: Graph Neural Networks for Finite Element Methods
   gtag('config', 'UA-145347384-1');
 </script>
 
-This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: [Multi-grid Graph Neural Networks](https://)
-Videos of predictions from our models are available [here](#predictions)
+This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: [Multi-grid Graph Neural Networks](https://).
+
+**Videos of predictions from our models are available [here](#predictions).**
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2024-05-13-multigrid-gnn/intro.gif">
