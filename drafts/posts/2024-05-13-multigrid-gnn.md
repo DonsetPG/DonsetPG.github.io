@@ -13,8 +13,8 @@ title: Introducing Celeste
   gtag('config', 'UA-145347384-1');
 </script>
 
-This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: (Multi-grid Graph Neural Networks)[https://]
-Videos of predictions from our models are available [here](Predictions)
+This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: [Multi-grid Graph Neural Networks](https://)
+Videos of predictions from our models are available [here](#predictions)
 
 # Finite Element Methods
 
@@ -120,7 +120,7 @@ It means that at each step, the output of the model is now used as the input to 
 
 # Conclusion
 
-You can find videos of predictions from our models in the section below. You can also read a much more detailed paper about our models here: (Multi-grid Graph Neural Networks)[https://]
+You can find videos of predictions from our models in the section below. You can also read a much more detailed paper about our models here: [Multi-grid Graph Neural Networks](https://)
 
 While it is obviously more dense than this overly simplified blog post, we hope it is easily understandable even for people that does not gravitate around either CFD, Finite Element Methods or Graph Neural Networks. 
 
