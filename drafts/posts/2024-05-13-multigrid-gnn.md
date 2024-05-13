@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Introducing Celeste
+title: Graph Neural Networks for Finite Element Methods
 ---
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
