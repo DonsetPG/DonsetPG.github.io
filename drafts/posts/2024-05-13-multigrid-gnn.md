@@ -19,6 +19,7 @@ title: Introducing Celeste
 
 <iframe src="https://drive.google.com/file/d/1zDhHHtTkuCSKcZRydOxnbes9JInJR7yx/preview" width="640" height="480" allow="autoplay"></iframe>
 
+<iframe src="https://drive.google.com/file/d/1joLY-pQedQikt2OltIVrDLWrXNW3m_ss/preview" width="640" height="480" allow="autoplay"></iframe>
 
 # Gifs
 
