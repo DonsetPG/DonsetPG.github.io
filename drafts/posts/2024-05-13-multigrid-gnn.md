@@ -13,7 +13,7 @@ title: Graph Neural Networks for Finite Element Methods
   gtag('config', 'UA-145347384-1');
 </script>
 
-This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. It serves as a support for a paper published in - and available here: [Multi-grid Graph Neural Networks](https://).
+This blog post contains a small introduction to Finite Element Methods and Graph Neural Networks. This may or may not be to serve as future support for a paper.
 
 **Videos of predictions from our models are available [here](#predictions).**
 
@@ -27,7 +27,7 @@ Partial differential equations can be very, very complicated. To some extent, th
 
 A popular method to achieve this is the finite element method. It consists of subdividing a domain into small parts, called finite elements. This space discretization produces an object called a mesh: a set of points and edges similar to a graph.
 
-Instead of considering the equation on a continuous spectrum, we consider it instead on our mesh: on each node lives some values of interests (such as the velocity, the pressure, etc).
+Instead of considering the equation in a continuous domain, we consider it instead on our mesh: on each node lives some values of interests (such as the velocity, the pressure, etc).
 
 <p align="center">
   <img src="{{ site.url }}/imgs/2024-05-13-multigrid-gnn/animations-graph-1.gif">
