@@ -77,9 +77,9 @@ $x$ is equal to $2$, again. (Quickly in your head realize that indeed, 3 times 2
 
 Let's take it up a notch: 
 
-$$x^2 = x \times x = 4$. 
+$$x^2 = x \times x = 4$$ 
 
 Yes, you are right. $x$ is again equal to $2$ (because 2 times 2 equals 4, yeah). But, what is $-2$ times $-2$ ? 4. Yes. Yeah? Does that mean that some equation
 has more than one solution? Yes, absolutely. A super intersting way to think about equation is to plot them on a graph. For example, let's get back to equation $(2)$:
 
-![png]({{ site.url }}/imgs/2024-06-05-whats a pde (an intro to math)/plot-linear.png)
+![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-linear.png)
