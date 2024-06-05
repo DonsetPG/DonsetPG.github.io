@@ -64,14 +64,14 @@ $$x-2=0$$$
 Obviously, if we say that $x=2$, we do have $2-2=0$, so that works. yeah ! In fact, in an equation, we can add the same number on both side of the equation, and
 the result holds true. For example:
 
-$$x-2 = 0 \leftarrow x-2 +2 = 0 + 2 \leftarrow x=2$$
+$$x-2 = 0 \rightarrow x-2 +2 = 0 + 2 \rightarrow x=2$$
 
-> I'm writing $\leftarrow$ more to symbolize a chain of thought. Given the audience, i don't want to use other symbol that may have other signification in other context.
+> I'm writing $\rightarrow$ more to symbolize a chain of thought. Given the audience, i don't want to use other symbol that may have other signification in other context.
 
 So, you solved an equation. yeah again. We can also multiply (or divide) the two sides of our equation (we can't divide by 0 though, you rememember that right?). 
 For example:
 
-$$3 \times x = 6 \leftarrow \frac{3 \times x}{3} = \frac{6}{3} \leftarrow x=2 (2)$$
+$$3 \times x = 6 \rightarrow \frac{3 \times x}{3} = \frac{6}{3} \rightarrow x=2 (2)$$
 
 $x$ is equal to $2$, again. (Quickly in your head realize that indeed, 3 times 2 does equal 6). 
 
@@ -96,3 +96,29 @@ $$x^2 = -1$$ does not have any solution.
 
 > Well, hm, in fact, it does have solutions. But, they're not real so they can't hurt you. And it's probably better if we don't talk about them here. 
 
+Equations can be as complex as you want them to be. In our case here, we don't. We simply want to understand the concept of unknown, and what it means to solve an equation. However, as you may have noticed here, our unknown is a number. It can be equal to 2, or to anything, as long as it solves the problem we were given.
+
+But what if, this unknown, was now a function?
+
+# Functional Equations 
+
+## wtf is a function
+
+Let's take a box, and call it $f$. That box is pretty simple, you give it a number and it returns to you another number. For example, if that box is your government, you give it $x$ your salary, and it returns to you $0.5x$, your new salary ! (yeah?). Let's say that box is a time converter for New-York: you give it 10 and it returns 16 (the current time in paris). 
+Well, those are functions. In the first case, we had $f(x) = 0.5x$.
+
+> Notice how I did not write the second one as it would be too complex for any reader actually reading what the hell a function is
+
+Here, $x$ is not the unkown anymore, it's a *variable*. It represents any number. You write $f(x) = 0.5x$ so that you can write $f(0) = 0$ or $f(2) = 1$. 
+
+Let's imagine a super simple functional equation. That is, the unkown is now a function itself ! 
+
+$$ f(x) -2 = 0$$
+
+Well, you guessed it. Our function is here very, very, very simple: $f(x) = 2$. That means that this box will always return 2, no matter what we give it.
+
+A more complex one could be:
+
+$$f(x+y) = f(x) + f(y)$$
+
+where $x$ and $y$ are both variables. 
