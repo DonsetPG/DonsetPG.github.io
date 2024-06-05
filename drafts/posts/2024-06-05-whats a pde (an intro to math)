@@ -68,4 +68,18 @@ $$x-2 = 0 \leftarrow x-2 +2 = 0 + 2 \leftarrow x=2$$
 
 > I'm writing $\leftarrow$ more to symbolize a chain of thought. Given the audience, i don't want to use other symbol that may have other signification in other context.
 
-So, you solved an equation. yeah again. 
+So, you solved an equation. yeah again. We can also multiply (or divide) the two sides of our equation (we can't divide by 0 though, you rememember that right?). 
+For example:
+
+$$3 \times x = 6 \leftarrow \frac{3 \times x}{3} = \frac{6}{3} \leftarrow x=2 (2)$$
+
+$x$ is equal to $2$, again. (Quickly in your head realize that indeed, 3 times 2 does equal 6). 
+
+Let's take it up a notch: 
+
+$$x^2 = x \times x = 4$. 
+
+Yes, you are right. $x$ is again equal to $2$ (because 2 times 2 equals 4, yeah). But, what is $-2$ times $-2$ ? 4. Yes. Yeah? Does that mean that some equation
+has more than one solution? Yes, absolutely. A super intersting way to think about equation is to plot them on a graph. For example, let's get back to equation $(2)$:
+
+![png]({{ site.url }}/imgs/2024-06-05-whats a pde (an intro to math)/plot-linear.png)
