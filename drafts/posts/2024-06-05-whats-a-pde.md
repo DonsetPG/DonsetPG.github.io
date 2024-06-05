@@ -121,4 +121,12 @@ A more complex one could be:
 
 $$f(x+y) = f(x) + f(y)$$
 
-where $x$ and $y$ are both variables. 
+where $x$ and $y$ are both variables. This means that we have $f(0) = f(0+0) = f(0) + f(0) = 2f(0)$. Or: $f(0) = f(1 + -1) = f(1) + f(-1)$. And so on and so on. Let's keep that in the back of our mind, and talk about something crucial: derivatives.
+
+## deri what?
+
+The derivative of a function, is, also a function. yes. More specifically, it's the function the tells us how are original function is "evolving". You remember $x^2 = 4$ right? We had the following plot:
+
+![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png)
+
+Well, on the right of 0, our function seems to decrease. After, it increase. Well, the derivative of $x^2$ tells us exactly that. 
