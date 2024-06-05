@@ -130,3 +130,10 @@ The derivative of a function, is, also a function. yes. More specifically, it's 
 ![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png)
 
 Well, on the right of 0, our function seems to decrease. After, it increase. Well, the derivative of $x^2$ tells us exactly that. 
+
+Let's introduce a almost rigourus definition, just for the sake of simple calculations. We can define the derivative of $f$ by:
+
+$$\frac{f(x+h) - f(x)}{h}$$
+
+when $h$ get's super small. Like smaller than the smallest number you can think of. (yes, it always exists). Let's investigate the function $f(x) = 2x$ and plot it:
+
