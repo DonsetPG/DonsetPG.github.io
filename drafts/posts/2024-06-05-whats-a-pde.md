@@ -183,10 +183,10 @@ That's the case of the velocity in fluid dynamics for example. Velocity is defin
 
 Knowing all of that, you can reach the king of all PDE, the flow motion of incompressible newtonian fluids is described by the Navier-Stokes (NS) equations: 
 
-$$ \rho\ (\partial_{t} \V{v} + \V{v} \cdot \nabla \V{v}) -\nabla \cdot \left( 2 \eta \GV{\epsilon}(\V{v}) - p \V{I} \right)  & = \V{f} $$
-$$\nabla \cdot \V{v} &= 0$$
+$$ \rho\ (\partial_{t} \vec{v} + \vec{v} \cdot \nabla \vec{v}) -\nabla \cdot \left( 2 \eta \vec{\epsilon}(\vec{v}) - p \vec{I} \right)  & = \vec{f} $$
+$$\nabla \cdot \vec{v} &= 0$$
 
-\noindent where $t \in [0,T]$ is the time, $\V{v}(x,t)$ the velocity, $p(x,t)$ the pressure, $\rho$ the fluid density, $\eta$ the dynamic viscosity and $\V{I}$ the identity tensor. 
+where $t \in [0,T]$ is the time, $\vec{v}(x,t)$ the velocity, $p(x,t)$ the pressure, $\rho$ the fluid density, $\eta$ the dynamic viscosity and $\vec{I}$ the identity tensor. 
 
 Even now, we don't always know if a smooth solution to this equation exists. So how do we solve it?? How can Formula 1 racing team make super precise simulation to improve their cars?? 
 
