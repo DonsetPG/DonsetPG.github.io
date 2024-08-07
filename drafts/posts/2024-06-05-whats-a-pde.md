@@ -137,3 +137,59 @@ $$\frac{f(x+h) - f(x)}{h}$$
 
 when $h$ get's super small. Like smaller than the smallest number you can think of. (yes, it always exists). Let's investigate the function $f(x) = 2x$ and plot it:
 
+![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-derivativ.png)
+
+We can see that this function is negative before $0$ and positive after. It actually tells us how are main function $x^2$ is moving: it's decreasing before $0$, and increasing after. Why you ask? Because $f(x) = 2x$ is the derivative of $x^2$ ! Let's show it quickly:
+
+$$\frac{f(x+h) - f(x)}{h} = \frac{(x+h)^2 - x^2}{h} = \frac{x^2+2xh+h^2 + h^2 - x^2}{h} = \frac{2xh+h^2 + h^2}{h} = 2x +h$$
+
+which is equal to $2x$ when $h$ get's closer and closer to 0.
+
+But why do we have this relationship between the sign of the derivative and how the main function is evolving? One way to look at it is to represent the derivative as a simple linear function. Let's plot the line that goes through $f(x+h)$ and $f(x)$, and let's reduce $h$:
+
+![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/tangent.gif)
+
+We can see that as $h$ get's smaller and smaller (and thus B get's closer and closer to A), the line becomes the tangent to our function at point A. This is the best straight-line approximation to our function at that point. Because of that, it makes sense that if our function is decreasing, then our line is decreasing as well. But for such a simple function, one can easily say if it's decreasing or not, that is thanks to the sign of its director coefficient. But in this case, you may ask what is it's coefficient? Well... $$\frac{f(x+h) - f(x)}{h}$$ of course, our derivative ! 
+
+And here you are, you see how it's sign and the main function shape are related. 
+
+## derivative? in equations??
+
+Yes, that is also possible. As a side note, we note the derivative of a function with a prime: $f'$. One of the most famous differential equation is $f' = f$. (and f(0) = 1). Yes, we also add those extra conditions because differential equations can have a infinity of solutions. So by adding a small extra constraint, we can define exactly one solution.
+
+In this case, it's $f(x) = e^x$ where $e$ is the euler constant.
+
+Differential equation can be more complex than regular equations, but they still live (mostly) in the realm where one can find and define solutions. It's gets more tricky when we start to be even more challenging:
+
+One can define a function with more than one variable. For example: $f(x,y) = x^2+3y$. It's a simple 2-variables function, but it can already lead to more complex equations. First of all, how do you define it's derivative? What variable do you use? That's why we defined partial derivative... 
+
+A partial derivative of a function of several variables is its derivative with respect to one of those variables, with the others held constant: $\frac{\partial f}{\partial x}$ is the partial derivative of $f$ with respect to $x$. In the very simple previous case, we had:
+
+$$\frac{\partial f}{\partial x} = 2x, \frac{\partial f}{\partial y} = 3$$
+
+and now we have it...
+
+## Partial differential equation
+
+You take an equation, you add functions in the mix, you put some of their partial derivatives on the side and there you have it: a proper PDE (partial differential equation). For example:
+
+$$\frac{\partial f}{\partial x} + \frac{\partial f}{\partial y} = 0$$
+
+(with some initial conditions as well of course). 
+
+But you can still be more complex: your function could be 2 or 3 dimensionals. That is to say your function could return vector (or list of numbers if you want) instead of just a single number. 
+
+That's the case of the velocity in fluid dynamics for example. Velocity is defined accross the $x$, $y$ and $z$ axis, and thus is a 3-dimensional vector. Pressure is not, it's simply a number (still defined in 1,2 or 3 dimensions depending on our use case). We could define more and more operations such as $\frac{\partial f}{\partial x}$ but it would take a lot of time. You can just keep in mind that any sign you don't recognize is most of the time a mix of additions and partial derivative. 
+
+Knowing all of that, you can reach the king of all PDE, the flow motion of incompressible newtonian fluids is described by the Navier-Stokes (NS) equations: 
+
+$$ \rho\ (\partial_{t} \V{v} + \V{v} \cdot \nabla \V{v}) -\nabla \cdot \left( 2 \eta \GV{\epsilon}(\V{v}) - p \V{I} \right)  & = \V{f} $$
+$$\nabla \cdot \V{v} &= 0$$
+
+\noindent where $t \in [0,T]$ is the time, $\V{v}(x,t)$ the velocity, $p(x,t)$ the pressure, $\rho$ the fluid density, $\eta$ the dynamic viscosity and $\V{I}$ the identity tensor. 
+
+Even now, we don't always know if a smooth solution to this equation exists. So how do we solve it?? How can Formula 1 racing team make super precise simulation to improve their cars?? 
+
+Well... you think outside the box and you don't solve it. You just try to find a solution that is close enough, and that isn't too bad. 
+
+But more on that on the next article.
