@@ -183,7 +183,7 @@ That's the case of the velocity in fluid dynamics for example. Velocity is defin
 
 Knowing all of that, you can reach the king of all PDE, the flow motion of incompressible newtonian fluids is described by the Navier-Stokes (NS) equations: 
 
-$$\rho\ (\partial_{t} \vec{v} + \vec{v} \cdot \nabla \vec{v}) -\nabla \cdot \left( 2 \eta \vec{\epsilon}(\vec{v}) - p \vec{I} \right)  = \vec{f} $$
+$$\rho\ (\frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot \nabla \vec{v}) -\nabla \cdot \left( 2 \eta \vec{\epsilon}(\vec{v}) - p \vec{I} \right)  = \vec{f} $$
 
 $$\nabla \cdot \vec{v} = 0$$
 
