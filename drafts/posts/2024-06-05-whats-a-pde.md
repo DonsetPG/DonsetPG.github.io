@@ -49,13 +49,11 @@ the word equation kind of crystallizes everything they hate about math. Let's ch
 
 In its simplest form:
 
-$$x=2 (1)$$
+$$x=2$$
 
 is an equation. Some will argue with you that it's not (mostly boring and annoying people), but let's say it is. Let's take a step back. In this equation, $x$ is what
 we call the unknown, and we could call $2$ the known part. When solving an equation, you simply want to find what the unknown is, given what you know. Here, it's pretty simple.
 I am sure 99% of you can do it: $x$ must be equal to $2$.
-
-> By the way, that $(1)$ is simply here to give a name (or a number) to our equation. This means that if later on I say something like "wait, this looks exactly like equation $(1)$", you know what I'm talking about.
 
 Another way to look at it would be:
 
@@ -71,24 +69,28 @@ $$x-2 = 0 \rightarrow x-2 +2 = 0 + 2 \rightarrow x=2$$
 So, you solved an equation. Yeah again. We can also multiply (or divide) the two sides of our equation (we can't divide by 0 though, you remember that, right?). 
 For example:
 
-$$3 \times x = 6 \rightarrow \frac{3 \times x}{3} = \frac{6}{3} \rightarrow x=2 (2)$$
+$$3 \times x = 6 \rightarrow \frac{3 \times x}{3} = \frac{6}{3} \rightarrow x=2$$
 
 $x$ is equal to $2$, again. (Quickly realize in your head that indeed, 3 times 2 does equal 6). 
 
 Let's take it up a notch: 
 
-$$x^2 = x \times x = 4 (3)$$ 
+$$x^2 = x \times x = 4$$ 
 
 Yes, you are right. $x$ is again equal to $2$ (because 2 times 2 equals 4, yeah). But, what is $-2$ times $-2$? 4. Yes. Yeah? Does that mean that some equations
 have more than one solution? Yes, absolutely. A super interesting way to think about equations is to plot them on a graph. For example, let's get back to equation $(2)$:
 
-![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-linear.png)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-linear.png">
+</p>
 
 We can see that our line crosses the number 6 at $x=2$, which solves our equation!
 
 Same for equation $(3)$, we have: 
 
-![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png">
+</p>
 
 Obviously our 2 solutions, at $x = 2$ and $x=-2$. So yeah, equations can have more than one solution. Worse than that, if you take a look at the plot above, you can see that the $-1$ line does not have any solution. It never crosses our equation. So the following equation:
 
@@ -127,7 +129,9 @@ where $x$ and $y$ are both variables. This means that we have $f(0) = f(0+0) = f
 
 The derivative of a function is also a function. Yes. More specifically, it's the function that tells us how our original function is "evolving". You remember $x^2 = 4$, right? We had the following plot:
 
-![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-squared.png">
+</p>
 
 Well, on the left of 0, our function seems to decrease. After that, it increases. Well, the derivative of $x^2$ tells us exactly that. 
 
@@ -137,7 +141,9 @@ $$\frac{f(x+h) - f(x)}{h}$$
 
 when $h$ gets super small. Like smaller than the smallest number you can think of. (Yes, it always exists). Let's investigate the function $f(x) = 2x$ and plot it:
 
-![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-derivativ.png)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-06-05-whats-a-pde/plot-derivativ.png">
+</p>
 
 We can see that this function is negative before $0$ and positive after. It actually tells us how our main function $x^2$ is moving: it's decreasing before $0$, and increasing after. Why, you ask? Because $f(x) = 2x$ is the derivative of $x^2$! Let's show it quickly:
 
@@ -147,7 +153,9 @@ which is equal to $2x$ when $h$ gets closer and closer to 0.
 
 But why do we have this relationship between the sign of the derivative and how the main function is evolving? One way to look at it is to represent the derivative as a simple linear function. Let's plot the line that goes through $f(x+h)$ and $f(x)$, and let's reduce $h$:
 
-![png]({{ site.url }}/imgs/2024-06-05-whats-a-pde/tangent.gif)
+<p align="center">
+  <img src="{{ site.url }}/imgs/2024-06-05-whats-a-pde/tangent.gif">
+</p>
 
 We can see that as $h$ gets smaller and smaller (and thus B gets closer and closer to A), the line becomes the tangent to our function at point A. This is the best straight-line approximation to our function at that point. Because of that, it makes sense that if our function is decreasing, then our line is decreasing as well. But for such a simple function, one can easily say if it's decreasing or not, thanks to the sign of its director coefficient. But in this case, you may ask what its coefficient is? Well... $$\frac{f(x+h) - f(x)}{h}$$ of course, our derivative! 
 
