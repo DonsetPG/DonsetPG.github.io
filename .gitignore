@@ -25,3 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ensure util helpers stay tracked even if a global gitignore excludes generic lib folders
+!src/lib/
+!src/lib/utils.ts

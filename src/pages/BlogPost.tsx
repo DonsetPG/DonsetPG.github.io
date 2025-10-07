@@ -7,8 +7,16 @@ import { ArrowLeft } from "lucide-react";
 import renderMathInElement from "katex/contrib/auto-render";
 import "katex/dist/katex.min.css";
 
-const htmlModules = import.meta.glob("@/content/posts/*.html", { eager: true, as: "raw" }) as Record<string, string>;
-const imageModules = import.meta.glob("@/assets/imgs/**/*", { eager: true, as: "url" }) as Record<string, string>;
+const htmlModules = import.meta.glob("@/content/posts/*.html", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as Record<string, string>;
+const imageModules = import.meta.glob("@/assets/imgs/**/*", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
 
 const assetMap = Object.entries(imageModules).reduce<Record<string, string>>((acc, [key, value]) => {
   const cleanedKey = key.replace("/src/assets/", "");
