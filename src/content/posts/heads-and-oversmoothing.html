@@ -224,8 +224,8 @@ A similar conclusion emerges from a more structural approach. Let \(A\) be the a
 $$
 R\big(g^{(h)}\big)
 \coloneqq
-\frac{\operatorname{tr}\big((g^{(h)})^\top L,g^{(h)}\big)}
-{\operatorname{tr}\big((g^{(h)})^\top D,g^{(h)}\big)}
+\frac{\operatorname{tr}\big((g^{(h)})^\top Lg^{(h)}\big)}
+{\operatorname{tr}\big((g^{(h)})^\top Dg^{(h)}\big)}
 \ \in\ [0,2],
 $$
 
@@ -238,8 +238,8 @@ The same conclusion emerges from a more structural route. Let \(A\) be the adjac
 $$
 R\big(g^{(h)}\big)
 \coloneqq
-\frac{\operatorname{tr}\big((g^{(h)})^\top L,g^{(h)}\big)}
-{\operatorname{tr}\big((g^{(h)})^\top D,g^{(h)}\big)}
+\frac{\operatorname{tr}\big((g^{(h)})^\top Lg^{(h)}\big)}
+{\operatorname{tr}\big((g^{(h)})^\top Dg^{(h)}\big)}
 \ \in\ [0,2],
 $$
 
@@ -298,8 +298,7 @@ $$
 
 <p>
 Consequently, $\mathbb{P}\!\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)\to F(\mu)$ as $H\to\infty$.
-If $F$ is differentiable at $\mu$ with density $f(\mu)$, then for any $\delta\in(0,1)$, setting
-$\varepsilon=\sqrt{\tfrac{\ln(1/\delta)}{2H}}$ gives
+If $F$ is differentiable at $\mu$ with density $f(\mu)$, then for any $\delta\in(0,1)$, we have:
 $$
 \Big|\,\mathbb{P}\!\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)-F(\mu)\,\Big|
 \;\le\; f(\mu)\sqrt{\tfrac{\ln(1/\delta)}{2H}} \;+\; 2\delta
