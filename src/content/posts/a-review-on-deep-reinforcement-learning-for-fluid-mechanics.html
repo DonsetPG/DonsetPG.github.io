@@ -1,0 +1,264 @@
+<p><em>I now work at <a href="https://www.flaneer.com/">Flaneer</a>, feel free to reach out if you are interested!</em></p>
+<p>When I started an Internship at the <a href="http://www.cemef.mines-paristech.fr">CEMEF</a>, I've already worked with both Deep Reinforcement Learning (DRL) and Fluid Mechanics, but never used one with the other. I knew that several people already went down that lane, some where even currently working at the <a href="http://www.cemef.mines-paristech.fr">CEMEF</a> when I arrived. However, I (and my tutor <a href="http://www.cemef.mines-paristech.fr/staff/elie-hachem">Elie Hachem</a>) still had several questions/goals on my mind :</p>
+<ul>
+<li>How was DRL applied to Fluid Mechanics?</li>
+<li>To improve in both subject, I wanted to try a test case on my own;</li>
+<li>How could we code something as general as possible?</li>
+</ul>
+<p>The results of these questions are available <a href="https://arxiv.org/abs/1908.04127">here</a>, with the help of a fantastic team.</p>
+<h1 id="applications-of-drl-to-fluid-mechanics">Applications of DRL to Fluid mechanics</h1>
+<p>Several Fluid Mechanics problems have already been tackled with the help of DRL. They always (mostly) follow the same pattern, using DRL tools on one side (such as <a href="https://gym.openai.com">Gym</a>, <a href="https://github.com/tensorforce/tensorforce">Tensorforce</a> or <a href="https://stable-baselines.readthedocs.io">stables-baselines</a>, etc) and Computational Fluid Dynamics (CFD) on the other (<a href="https://fenicsproject.org">Fenics</a>, <a href="https://www.openfoam.com">Openfoam</a>, etc).</p>
+<p>Currently, most of the reviewed cases always consider objects (a cylinder, a square, a fish, etc.) in a 2D/3D fluid. The DRL agent will then be able to perform several tasks :</p>
+<ul>
+<li>Move the object</li>
+<li>Change the geometry or size of the object</li>
+<li>Change the fluid directly</li>
+</ul>
+<div class="message">
+<p><strong>A small step into the world of fluid mechanics</strong></p>
+
+<p>The Navier-Stokes equation looks pretty (and complicated) but is in fact traduction of Newton's equation for a fluid. Rather than describing the movement of an object, it is representing the movement of a fluid (more precisely, of a field (of points, vectors, etc).).</p>
+
+<p align="center">
+  <img src="imgs/2019-08-06-DRL-FM-review/navier-stokes.png">
+</p>
+
+<p>This equation is quite a paradox itself. Its application are enormous, but we still don't know if solutions always exists (it is even one of the seven <a href="https://en.wikipedia.org/wiki/Millennium_Prize_Problems">Millenium Prize Problems</a>).</p>
+
+<p>Solving the Navier-Stokes now doesn't mean we are trying to solve it. We use the finite element method to 'slice' our domain into small parts, and starting from initial conditions, we run our simulation, making sure our equations are 'approximatively verified' every (little) timestep.</p>
+</div>
+
+<p>This agent can perform these tasks at two key moments : (i) when the experiment is done, and you want to start a new one, (ii) during the experiment (i.e., during the CFD time). One is about direct optimization; the other one is about continuous control. A few examples can be seen below :</p>
+<p><img alt="fish_article" src="imgs/2019-08-06-DRL-FM-review/fish_article.png" /></p>
+<center>
+<em>
+Leader and Follower swimmer reproduced from <a href="https://iopscience.iop.org/article/10.1088/1748-3190/aa6311/pdf">Novati et al. (2017)</a>, with the displacement and the orientation between the leader and the follower.
+ </em>
+ </center>
+
+<p><img alt="flow_control_jet_article" src="imgs/2019-08-06-DRL-FM-review/flow_control_jet_article.png" /></p>
+<center>
+<em>
+Comparison of the velocity magnitude without (top) and with (bottom) active flow control, reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. This active flow control being linked to a DRL agent.
+ </em>
+ </center>
+
+<p><img alt="fluid_solid_article" src="imgs/2019-08-06-DRL-FM-review/fluid_solid_article.png" /></p>
+<center>
+<em>
+Fluid jets to control rigid body reproduced from <a href="https://dl.acm.org/citation.cfm?id=3201334">Ma et al. (2018)</a>. The position and orientation of the jet are DRL controlled.
+ </em>
+ </center>
+
+<p>and even <a href="https://www.youtube.com/watch?v=O8QtAi2cHBI">this video</a>. (which is pretty amazing)</p>
+<h1 id="my-own-test-case">My own test case</h1>
+<p>In order to dive deeper into the subject, I wanted to try a test case on my own (with the help of <a href="https://scholar.google.fr/citations?user=guoJL5UAAAAJ&amp;hl=fr">Jonathan Viquerat</a> at the beginning though). We took inspiration from <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">this paper</a> and considered a simple case: a laminar flow past a square. Now, it is convenient to compute the drag of this square (in this very set-up).</p>
+<p>However, the question asked by <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">the paper</a> was: if we add a tiny cylinder, somewhere close to the square, could we be able to reduce the total drag of both the square and the small cylinder?</p>
+<p>The answer is yes, and the result is shown below:</p>
+<p><img alt="meliga_100" src="imgs/2019-08-06-DRL-FM-review/meliga_100.png" /></p>
+<center>
+<em>
+Variation of drag induced by a small control cylinder at Reynolds = 100, reproduced from <a href="https://hal.archives-ouvertes.fr/hal-01082600v2">Meliga et al. (2014)</a>.
+ </em>
+ </center>
+
+<p>Now, of course solving this case with DRL was interesting, but I wanted to see if more was possible (since the case was already settled technically). Several ideas were possible (thanks to discussions with peoples from the <a href="http://www.cemef.mines-paristech.fr">CEMEF</a> and the review I did previously) :</p>
+<ol>
+<li>Was there any difference between direct optimization and continuous control?</li>
+<li>Was the use of an autoencoder easy?</li>
+<li>Was Transfer Learning possible, and performant?</li>
+<li>Could we make a code as clear as possible?</li>
+</ol>
+<p>Regarding the first point, I found no particular difference between direct optimization and continuous control. Both agents converge and find almost the same optimal final positions.</p>
+<p align="center">
+  <img src="imgs/2019-08-06-DRL-FM-review/R40-GIF.gif">
+</p>
+
+<p align="center">
+  <img src="imgs/2019-08-06-DRL-FM-review/R100-GIF.gif">
+</p>
+
+<center>
+<em>
+Continuous control over 17 time-steps at Reynolds = 40 and 100, from two random positions.
+ </em>
+ </center>
+
+<p>I used an autoencoder but had no time no compare results with and without it. I do have to explain why an autoencoder could be of any help here. The agent needs observations, and when dealing with fluid mechanics, the fluid characteristics are significant observations.</p>
+<p>However, they can be of very high dimensions (more than 10,000). The Neural Network (NN) we would deal with would then be incredibly vast. In order to surpass this issue, an autoencoder could be used to extract simple features from high-dimensional fluid fields. It does seem like using as many fluid features as possible (which is possible with the autoencoder) is the best thing to do:</p>
+<p><img alt="test fish8" src="imgs/2019-08-06-DRL-FM-review/probes-JR.png" /></p>
+<center>
+<em>
+Value of the drag coefficient with active flow control reproduced from <a href="https://arxiv.org/abs/1808.07664">Rabault et al. (2019)</a>. It is important to see that the more pieces of information we give about the fluid (i.e., the more probes we give the agent), the more performant it will be. Being able to give everything without exploding the size of the neural network is therefore super valuable.
+ </em>
+ </center>
+
+<p>In total, I trained six agents, as shown below :</p>
+<table>
+  <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Reynolds Number - Re</th>
+      <th>Goal</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+    <td>Agent 3.2</td>
+    <td> Re=100 </td>
+    <td>Direct optimization</td>
+    <td>Transfer learning from Agent 1.2</td>
+    </tr>
+  </tfoot>
+  <tbody>
+  <tr>
+    <td>Agent 1.1</td>
+    <td> Re=10 </td>
+    <td>Continuous control</td>
+    <td>Trained from scratch</td>
+  </tr>
+    <tr>
+      <td>Agent 1.2</td>
+      <td> Re=10 </td>
+      <td>Direct optimization</td>
+      <td>Trained from scratch</td>
+    </tr>
+    <tr>
+      <td>Agent 2.1</td>
+      <td> Re=40 </td>
+      <td>Continuous control</td>
+      <td>Transfer learning from Agent 1.1</td>
+    </tr>
+    <tr>
+      <td>Agent 2.2</td>
+      <td> Re=40 </td>
+      <td>Direct optimization</td>
+      <td>Transfer learning from Agent 1.2</td>
+    </tr>
+<tr>
+      <td>Agent 3.1</td>
+      <td> Re=100 </td>
+      <td>Continuous control</td>
+      <td>Transfer learning from Agent 1.1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As you can see, I used transfer learning and obtained excellent results from it: the agent was learning from 5 to 10 times faster than the agent trained from scratch. This is an exciting feature in general, but especially for Fluid Dynamics, where CFD is computationally expensive.</p>
+<h1 id="a-drl-fluid-mechanics-library">A DRL-fluid mechanics library?</h1>
+<p>At the beginning, my goal was to find out if such a library could be built (in a reasonable amount of time). During the creation of my test case, I realized the biggest issue with such a library was coming from the CFD solver: not only no one is using the same, but they all are pretty different.</p>
+<p>For my test case, I based my code on <a href="https://fenicsproject.org">Fenics</a>, an easy-to-use solver (and super convenient since you can use it directly in Python). The code is available <a href="https://github.com/DonsetPG/fenics-DRL">here</a>. It is supposed to be as clear and re-usable as possible. It is based on <a href="https://gym.openai.com">Gym</a> and <a href="https://stable-baselines.readthedocs.io">stable-baselines</a>.</p>
+<p>I used Gym to build custom environment, always following the same pattern :</p>
+<pre><code class="language-python">class FluidMechanicsEnv_(gym.Env):
+    metadata = {'render.modes': ['human']}
+    def __init__(self,
+                    **kwargs):
+        ...
+        self.problem = self._build_problem()
+        self.reward_range = (-1,1)
+        self.observation_space = spaces.Box(low=np.array([]), high=np.array([]), dtype=np.float16)
+        self.action_space = spaces.Box(low=np.array([]), high=np.array([]), dtype=np.float16)     
+    def _build_problem(self,main_drag):
+        ...
+        return problem                
+    def _next_observation(self):
+        ...      
+    def step(self, action):
+        ...
+        return obs, reward, done, {}   
+    def reset(self):
+        ...
+</code></pre>
+<p>With stable-baselines, I used their DRL algorithms implementations, and finally, as I said earlier, I used Fenics to build my test case using custom class that I hope will be re-used for other test cases. They use three main class: Channel, Obstacles, and Problem :</p>
+<h3 id="channel">Channel :</h3>
+<p>Basically, this is the <em>box</em> you want your experiment to take place in. You only define it by giving the lower and upper corner of the box.</p>
+<pre><code class="language-python">class Channel:
+
+    &quot;&quot;&quot;
+    Object computing where our problem will take place.
+    At the moment, we restraint ourself to the easier domain possible : a rectangle.
+    :min_bounds:    (tuple (x_min,y_min))   The lower corner of the domain
+    :max_bounds:    (tuple (x_max,y_max))   The upper corner of the domain
+    :Channel:       (Channel)               Where the simulation will take place
+    &quot;&quot;&quot;
+    def __init__(self,
+                min_bounds,
+                max_bounds,
+                type='Rectangle'):
+</code></pre>
+<h3 id="obstacles">Obstacles :</h3>
+<p>This is the objects you want to add to the previously seen box. If you only want to use Fenics, you can only easily add squares, circles, or polygons. However, if you want to add much more complex shapes and mesh, you can use the <em>Mesh</em> function from Fenics.</p>
+<pre><code class="language-python">class Obstacles:
+
+    &quot;&quot;&quot;
+    These are the obstacles we will add to our domain.
+    You can add as much as you want.
+    At the moment, we only take care of squares and circles and polygons
+    :size_obstacles:    (int)           The amount of obstacle you wanna add
+    :coords:            (python list)   List of tuples, according to 'fenics_utils.py : add_obstacle'
+    :Obstacles:         (Obstacles)     An Obstacles object containing every shape we wanna add to our domain
+    &quot;&quot;&quot;
+
+
+    def __init__(self,
+                size_obstacles=0,
+                coords = []):
+</code></pre>
+<h3 id="problem">Problem :</h3>
+<p>This is where everything is taking place: setting up the box, placing the several objects, defining the boundary conditions, etc.</p>
+<pre><code class="language-python">class Problem:
+
+    def __init__(self,
+                min_bounds,
+                max_bounds,
+                import_mesh_path = None,
+                types='Rectangle',
+                size_obstacles=0,
+                coords_obstacle = [],
+                size_mesh = 64,
+                cfl=5,
+                final_time=20,
+                meshname='mesh_',
+                filename='img_',
+                **kwargs):
+
+        &quot;&quot;&quot;
+        We build here a problem Object, that is to say our simulation.
+        :min_bounds:                (tuple      (x_min,y_min)) The lower corner of the domain
+        :max_bounds:                (tuple      (x_max,y_max)) The upper corner of the domain
+        :import:import_mesh_path:   (String)    If you want to import a problem from a mesh, and not built it with mshr
+        :types:                     (String)    Forced to Rectangle at the moment
+        :size_obstacle:             (int)       The amount of shape you wanna add to your domain
+        :coords_obstacle:           (tuple)     the parameters for the shape creation
+        :size_mesh:                 (int)       Size of the mesh you wanna create
+        :cfl:                       (int)
+        :final_time:                (int)       Length of your simulation
+        :mesh_name:                 (String)    Name of the file you wanna save your mesh in
+        :filename:                  (String)    Name of the file you wanna save the imgs in
+        &quot;&quot;&quot;
+</code></pre>
+<p>However, this is not getting even close to a true DRL-fluid mechanics library, the issue being Fenics. While being very easy to use, it is a slow solver, and it would be impracticable to use it for a challenging problem.  This is why, with other people working at the CEMEF, the goal is to build this library, linking DRL with other CFD libraries, most of them being C++ based.</p>
+<div class="message">
+In the end, we now have a better overview of how DRL can be used to help Fluid Mechanics problems. Moreover, several important features can be kept in mind: transfer learning, autoencoder, LSTM, and so on. If the goal of building a real DRL-CFD library was not achieved, the way it could be possible is now much clearer.
+</div>
+
+<h1 id="references">References</h1>
+<ol>
+<li>
+<p><a href="https://iopscience.iop.org/article/10.1088/1748-3190/aa6311/pdf">Synchronisation through learning for two self-propelled swimmers - Novati et al. (2017)</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/1808.07664">Artificial Neural Networks trained through Deep Reinforcement Learning discover control strategies for active flow control - Rabault et al. (2019)</a></p>
+</li>
+<li>
+<p><a href="https://dl.acm.org/citation.cfm?id=3201334">fluid directed rigid body control using deep reinforcement learning - Ma et al. (2018)</a></p>
+</li>
+<li>
+<p><a href="https://hal.archives-ouvertes.fr/hal-01082600v2">Sensitivity of aerodynamic forces in laminar and turbulent flow past a square cylinder - Meliga et al. (2014)</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/1908.04127">A review on Deep Reinforcement Learning for Fluid Mechanics - Garnier et al. (2019)</a></p>
+</li>
+</ol>
+<h1 id="github-repository"><a href="https://github.com/DonsetPG/fenics-DRL">Github Repository</a></h1>

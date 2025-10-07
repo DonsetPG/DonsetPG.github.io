@@ -1,0 +1,340 @@
+<p><strong>What does adding more attention heads actually do in graph neural networks?</strong> This post develops an energy-based view of multi-head attention on graphs and uses it to separate two phenomena: <em>oversquashing</em> (long-range information being compressed away) and <em>oversmoothing</em> (node representations becoming too similar). We'll see that head count behaves very differently in these two regimes: in short, <em>more heads do not fix oversquashing under a fixed width budget</em>, but <em>they may help with oversmoothing</em> when the heads diversify in the right way.</p>
+
+<p>
+This work stems from some time I spent during the summer and September, when I was running ablations for a new project. I was simultaneously reading about oversmoothing
+<sup class="sidenote-ref" data-note="1">1</sup>
+<span class="sidenote" data-note="1" role="note">
+<span class="sidenote-number">1</span>
+Mostly from this  
+<a href="https://openreview.net/pdf?id=PwxYoMvmvy">paper</a>
+ that investigates the relationship between oversmoothing and dropouts.
+</span>
+<span class="sidenote-mobile" data-note="1" role="note">
+<span class="sidenote-number">1</span>
+Mostly from this  
+<a href="https://openreview.net/pdf?id=PwxYoMvmvy">paper</a>
+ that investigates the relationship between oversmoothing and dropouts.</span>, the number of heads in transformers <sup class="sidenote-ref" data-note="2">2</sup>
+ <span class="sidenote" data-note="2" role="note">
+<span class="sidenote-number">2</span>
+First, because the Kimi K2 paper examines the performance difference between 64 and 128 for $n_h$, and I then delved into a small rabbit hole regarding headcounts.
+</span>
+<span class="sidenote-mobile" data-note="2" role="note">
+<span class="sidenote-number">2</span>
+First, because the Kimi K2 paper examines the performance difference between 64 and 128 for $n_h$, and I then delved into a small rabbit hole regarding headcounts.
+</span> and, as I said, running ablations where I was for the first time checking out the impact of the number of heads on my graph transformer architecture. Since our use-case doesn't have the same inference constraint as your regular LLM architecture, it was fine for us to check models with heads as small as $\mathbb{R}^2$ or $\mathbb{R}^4$. And this is where weird results appeared: with a fixed number of parameters, I was getting better performances<sup class= "sidenote-ref" data-note= "3">3</sup>
+<span class="sidenote" data-note="3" role="note">
+<span class="sidenote-number">3</span>
+To be more precise, I was consistently achieving smaller training losses, and these were statistically significant. On the other hand, the noisier metric we used to evaluate how our model performs on long trajectory rollouts was improving, but the statistics were definitely harder to compute.
+</span>
+<span class="sidenote-mobile" data-note="3" role="note">
+<span class="sidenote-number">3</span>
+To be more precise, I was consistently achieving smaller training losses, and these were statistically significant. On the other hand, the noisier metric we used to evaluate how our model performs in long trajectory rollouts was getting better. Still, the statistics were definitely more complicated to compute.
+</span> with smaller heads, even very small ones.
+</p>
+
+<figure>
+  <img src="imgs/2025-10-06-heads-and-oversmoothing/loss.png" style="width:100%">
+      <figcaption>On the left, the final training loss versus $n_h$, grouped by the latent dimension. On the right, the same thing, but using the all-rollout RMSE as the y-axis. Models were trained using <a href="https://doi.org/10.48550/arXiv.2508.18051">this transformer architecture</a>.</figcaption>
+</figure>
+
+<p>
+Granted, those results are kinda weak, but I still wanted to investigate what was happening. This is what this blog post is about.
+</p>
+
+<h2 id="setup">The shape of a graph attention block</h2>
+
+<p>Let a graph be \(G=(V,E)\) with \(n=|V|\) nodes and no self-loops. At layer \(t\), each node \(v\) holds a feature vector \(h_v^{(t)}\in\mathbb{R}^p\); stacking rows gives \(H^{(t)}\in\mathbb{R}^{n\times p}\). A generic neighborhood <em>multi-head attention</em> layer with \(H\) heads computes</p>
+
+$$
+g_v^{(t,h)} = \sum_{u\in\mathcal N(v)} \alpha_{vu}^{(t,h)}V^{(t,h)}h_u^{(t)} \in \mathbb{R}^{d_h},
+\qquad
+z_v^{(t)} = [g_v^{(t,1)}|\dots|g_v^{(t,H)}]
+$$
+
+<p>and then updates</p>
+
+$$
+h_v^{(t+1)} = \sigma\Big(W_O^{(t)} z_v^{(t)} + h_v^{(t)}\Big)
+$$
+
+
+
+<p>Here \(V^{(t,h)}\) are the per-head value maps, \(W_O^{(t)}\) mixes the concatenated heads back to width \(p\), \(\alpha^{(t,h)}_{vu}\) are normalized neighbor weights, and \(\sigma\) is a pointwise nonlinearity (e.g., ReLU or leaky-ReLU).
+
+<sup class="sidenote-ref" data-note="4">4</sup>
+<span class="sidenote" data-note="4" role="note">
+<span class="sidenote-number">4</span>
+When differentiating through a layer to bound sensitivity, we "freeze" the \(\alpha^{(t,h)}\) coefficients. This isolates transport through the value maps and residual path without backpropagating through the attention kernel itself.
+</span>
+<span class="sidenote-mobile" data-note="4" role="note">
+<span class="sidenote-number">4</span>
+When differentiating through a layer to bound sensitivity, we "freeze" the \(\alpha^{(t,h)}\) coefficients. This isolates transport through the value maps and residual path without backpropagating through the attention kernel itself.
+</span>
+
+</p>
+
+<p>We will index oversmoothing in the features with the (edge-averaged) <em>Dirichlet energy</em>:</p>
+
+$$
+\mathcal{E}\big(H^{(t)}\big)
+\coloneqq
+\frac{1}{2|E|}\sum_{(u,v)\in E}\big|h_u^{(t)}-h_v^{(t)}\big|_2^2
+$$
+
+<p>Two simple facts about multi-head concatenation will drive our story:</p>
+<ol>
+  <li><strong>Additivity.</strong> If \(Z=[\,Z^{(1)}|\cdots|Z^{(H)}\,]\) concatenates the per-head outputs, then
+ $$\mathcal{E}(Z) \;=\; \sum_{h=1}^H \mathcal{E}\big(Z^{(h)}\big).$$</li>
+  <li><strong>Operator budgets.</strong> Heads contribute to the same effective mixing budget; which norm you use changes how budgets add (linearly in \(L_1\), in root-sum-squares in \(L_2\), etc.).
+<sup class="sidenote-ref" data-note="5">5</sup>
+<span class="sidenote" data-note="5" role="note">
+<span class="sidenote-number">5</span>
+For example, if \(A=\operatorname{Concat}(A_1,\dots,A_H)\) then \(\|A\|_2^2\le \sum_h\|A_h\|_2^2\) by Cauchy–Schwarz. The conclusions below are qualitatively robust to the specific norm choice.
+</span>
+<span class="sidenote-mobile" data-note="5" role="note">
+<span class="sidenote-number">5</span>
+For example, if \(A=\operatorname{Concat}(A_1,\dots,A_H)\) then \(\|A\|_2^2\le \sum_h\|A_h\|_2^2\) by Cauchy–Schwarz. The conclusions below are qualitatively robust to the specific norm choice.
+</span>
+</li>
+</ol>
+
+<h2 id= "oversquashing">Head count doesn't fix oversquashing (under a fixed-width budget)</h2>
+
+<p><em>Oversquashing</em> is the exponential loss of influence that faraway nodes have on a target node.
+    We define the node-to-node influence after $t$ layers as:</p>
+
+$$
+J^{(t)}_{v\leftarrow u}
+\coloneqq
+\Big\lVert \frac{\partial h_v^{(t)}}{\partial h_u^{(0)}} \Big\rVert_{L_1}
+$$
+
+<p>We say the model oversquashes if there exist \(C<\infty\) and \(\eta\in(0,1)\) such that for all \(u,v\):</p>
+
+$$
+\sup_{t\ge \operatorname{dist}(u,v)} J^{(t)}_{v\leftarrow u}
+\le
+C\eta^{\operatorname{dist}(u,v)}
+$$
+
+<p>We can bounds a layer’s <em>one-step</em> sensitivity by a nonnegative “transport” matrix
+\(B^{(t)}\in\mathbb{R}^{n\times n}\):</p>
+
+$$
+\Big\lVert \frac{\partial h_v^{(t+1)}}{\partial h_u^{(t)}} \Big\rVert_{L_1}
+\le c_\sigma\big(\mathbb{I}_{u=v} + B^{(t)}_{vu}\big),
+\qquad
+B^{(t)}_{vu}\coloneqq L_O^{(t)} \sum_{h=1}^H \alpha_{vu}^{(t,h)} L_V^{(t,h)}
+$$
+
+<p>with layerwise Lipschitz surrogates \(L_V^{(t,h)}\) for the value maps, \(L_O^{(t)}\) for the output mixer, and \(c_\sigma\) for the nonlinearity. Summing a row gives</p>
+
+$$
+\sum_{u} B^{(t)}_{vu} \le L_O^{(t)}\Lambda^{(t)},
+\qquad
+\Lambda^{(t)}\coloneqq\sum_{h=1}^H L_V^{(t,h)}.
+$$
+
+<p>Let \(S^{(t)}\coloneqq I+B^{(t)}\) and \(\tau^{(t)}\coloneqq\|S^{(t)}\|_{L_\infty}\le 1+L_O^{(t)}\Lambda^{(t)}\). Chaining across \(m\) layers yields a worst-case bound controlled by the product \(\prod_{t=0}^{m-1}\tau^{(t)}\). Two regimes emerge:</p>
+
+<ul>
+  <li><strong>Fixed-budget (constant effective width).</strong> If the total width \(p=\sum_h d_h\) is fixed and the per-head maps are scaled so that \(\Lambda^{(t)}\) does <em>not</em> grow with \(H\), then \(\tau^{(t)}\) is unchanged. Increasing head count <em>does not improve</em> the worst-case oversquashing rate.</li>
+  <li><strong>Growing-width (adding heads increases \(p\)).</strong> If you increase \(H\) by adding dimensions while keeping each \(d_h\) roughly constant, \(L_O^{(t)}\) typically scales with \(p\)
+<sup class="sidenote-ref" data-note="6">6</sup>
+<span class="sidenote" data-note="6" role="note">
+<span class="sidenote-number">6</span>
+This is the same conclusion that Di Giovanni et al. reaches in <a href="https://arxiv.org/pdf/2306.03589">this paper</a>.
+</span>
+<span class="sidenote-mobile" data-note="6" role="note">
+<span class="sidenote-number">6</span>
+This is the same conclusion that Di Giovanni et al. reaches in <a href="https://arxiv.org/pdf/2306.03589">this paper</a>.
+</span>
+, pushing \(\tau^{(t)}\) upward; this can <em>worsen</em> the bound. More heads without care can compound mixing rather than alleviate bottlenecks.
+</li>
+</ul>
+
+<p>
+I now had a lot of arguments against my hypothesis: oversmoothing would not change with the heads, and I was now aware that previous studies regarding heads on transformers actually showed that you could prune aggressively trained heads and maintain good performances<sup class= "sidenote-ref" data-note= "7">7</sup>
+<span class="sidenote" data-note="7" role="note">
+<span class="sidenote-number">7</span>
+See <a href="https://arxiv.org/pdf/1905.10650">Are Sixteen Heads Really Better than One</a>?
+</span>
+<span class="sidenote-mobile" data-note="7" role="note">
+<span class="sidenote-number">7</span>
+See <a href="https://arxiv.org/pdf/1905.10650">Are Sixteen Heads Really Better than One</a>?
+</span>. However, I still wanted to see if oversmoothing might benefit from an increase in headcount.
+</p>
+
+<h2 id="oversmoothing">Head count can help with oversmoothing</h2>
+
+<p>Oversmoothing is the drift toward low-energy (over-smoothed) features as layers accumulate. Here, we'll see how more heads can actually (maybe?) help. </p>
+
+<h3 id="diversity-index">A diversity index for attention blocks</h3>
+
+<p>For each head \(h\), let \(g^{(h)}\in\mathbb{R}^{n\times d_h}\) collect the head outputs over nodes. We define the <em>edge-averaged overlap</em>
+<sup class="sidenote-ref" data-note="8">8</sup>
+<span class="sidenote" data-note="8" role="note">
+<span class="sidenote-number">8</span>
+By Cauchy-Schwarz and the AM-GM inequality,
+$2|\left\langle u,v \right\rangle|\le \|u\|^2+\|v\|^2$, so
+$\frac{\left\langle u,v \right\rangle}{\|u\|^2+\|v\|^2}\in[-\tfrac12,\tfrac12]$ for any $u,v$.
+</span>
+<span class="sidenote-mobile" data-note="8" role="note">
+<span class="sidenote-number">8</span>
+By Cauchy-Schwarz and the AM-GM inequality,
+$2|\left\langle u,v \right\rangle|\le \|u\|^2+\|v\|^2$, so
+$\frac{\left\langle u,v \right\rangle}{\|u\|^2+\|v\|^2}\in[-\tfrac12,\tfrac12]$ for any $u,v$.
+</span>
+
+</p>
+
+$$
+\widehat{\rho}_h
+\coloneqq
+\frac{\sum_{(u,v)\in E}\langle g_u^{(h)},g_v^{(h)}\rangle}
+{\sum_{(u,v)\in E}\big(|g_u^{(h)}|_2^2+|g_v^{(h)}|_2^2\big)}
+\in[-\tfrac12,\tfrac12]
+$$
+
+<p>and the head’s <em>degree-weighted power</em> \(S_h \coloneqq \frac{1}{2|E|}\sum_{i}\deg_i\|g_i^{(h)}\|_2^2\). We now show an exciting result (at least for us, haha): 
+<sup class="sidenote-ref" data-note="9">9</sup>
+<span class="sidenote" data-note="9" role="note">
+<span class="sidenote-number">9</span>
+The key is to use the equality $  \mathcal{E}\!\big(g^{(h)}\big)
+  \;=\; \frac{1}{2|E|}\sum_{(u,v)\in E}\big\|g_u^{(h)}-g_v^{(h)}\big\|_2^2
+  \;=\; \frac{1}{2|E|}\sum_{(u,v)\in E}\Big(\|g_u^{(h)}\|_2^2+\|g_v^{(h)}\|_2^2-2\, \left\langle g_u^{(h)},g_v^{(h)} \right\rangle \Big)$</span>
+<span class="sidenote-mobile" data-note="9" role="note">
+<span class="sidenote-number">9</span>
+The key is to use the equality $  \mathcal{E}\!\big(g^{(h)}\big)
+  \;=\; \frac{1}{2|E|}\sum_{(u,v)\in E}\big\|g_u^{(h)}-g_v^{(h)}\big\|_2^2
+  \;=\; \frac{1}{2|E|}\sum_{(u,v)\in E}\Big(\|g_u^{(h)}\|_2^2+\|g_v^{(h)}\|_2^2-2\, \left\langle g_u^{(h)},g_v^{(h)} \right\rangle \Big)$</span>
+</span>
+</p>
+
+$$
+\mathcal{E}\big(g^{(h)}\big) = \big(1-2\widehat{\rho}_h\big)S_h
+$$
+
+<p>Summing over heads and using energy additivity under concatenation gives an exact identity for the block:
+<sup class="sidenote-ref" data-note="10">10</sup>
+<span class="sidenote" data-note="10" role="note">
+<span class="sidenote-number">10</span>
+A similar conclusion emerges from a more structural approach. Let \(A\) be the adjacency, \(D\) the degree matrix, and \(L=D-A\) the unnormalized Laplacian. For each head, define the generalized Rayleigh quotient
+
+$$
+R\big(g^{(h)}\big)
+\coloneqq
+\frac{\operatorname{tr}\big((g^{(h)})^\top L,g^{(h)}\big)}
+{\operatorname{tr}\big((g^{(h)})^\top D,g^{(h)}\big)}
+\ \in\ [0,2],
+$$
+
+so that \(\mathcal{E}(g^{(h)}) = S_h\,R(g^{(h)})\) and, in fact, \(R(g^{(h)})=1-2\widehat\rho_h\).
+</span>
+<span class="sidenote-mobile" data-note="10" role="note">
+<span class="sidenote-number">10</span>
+The same conclusion emerges from a more structural route. Let \(A\) be the adjacency, \(D\) the degree matrix, and \(L=D-A\) the unnormalized Laplacian. For each head, define the generalized Rayleigh quotient
+
+$$
+R\big(g^{(h)}\big)
+\coloneqq
+\frac{\operatorname{tr}\big((g^{(h)})^\top L,g^{(h)}\big)}
+{\operatorname{tr}\big((g^{(h)})^\top D,g^{(h)}\big)}
+\ \in\ [0,2],
+$$
+
+so that \(\mathcal{E}(g^{(h)}) = S_h\,R(g^{(h)})\) and, in fact, \(R(g^{(h)})=1-2\widehat\rho_h\).
+</span>
+</p>
+
+$$
+\mathcal{E}(Z)
+=
+\sum_{h=1}^H \mathcal{E}\big(g^{(h)}\big)
+=
+\underbrace{\sum_{h=1}^H \big(1-2\widehat{\rho}-h\big)S_h}_{\displaystyle \mathsf{Div}\ \text{(diversity index)}}
+$$
+
+<p>\(\widehat{\rho}_h\) measures how aligned a head is across edges. Anti-alignment (negative \(\widehat{\rho}_h\)) increases energy; strong alignment (positive \(\widehat{\rho}_h\)) decreases it. The block's energy is literally a head-wise sum of "magnitude" \(S_h\) times "anisotropy" \(1-2\widehat{\rho}_h\).</p>
+
+<p>Under a mild "non-positive correlation" assumption: heads that overlap more do not systematically carry larger power, one obtains a simple lower bound</p>
+
+$$
+\mathsf{Div}(H)
+\ge
+S_{\text{tot}}(H)\big(1-2\bar\rho_H\big)
+\qquad
+S_{\text{tot}}(H)=\sum_{h=1}^H S_h,\ \ \bar\rho_H=\tfrac1H\sum_h\widehat\rho_h
+$$
+
+<p> 
+This also allows us to show that $H \mapsto \mathsf{Div}(H)$ will be increasing with $H$; which was our intuition from the beginning. Hence, adding a head cannot hurt the diversity index,and therefore cannot decrease the block energy, whenever either (a) heads specialize so that the average overlap drops, or (b) the total floor increases (e.g., better utilization of width across heads). Unlike the oversquashing regime (dominated by Lipschitz/budget locality), oversmoothing is ameliorated by head diversification at fixed width.
+<sup class="sidenote-ref" data-note="11">11</sup>
+<span class="sidenote" data-note="11" role="note">
+<span class="sidenote-number">11</span>
+Among all pairings of $\{S_h\}$ and $\{\widehat{\rho}_h\}$ with fixed marginals, $\sum_h \widehat{\rho}_h S_h$ is maximized by co-monotone pairing and minimized by anti-monotone pairing (rearrangement inequality). Thus $\mathsf{Div}$ is maximized by pairing large floors with slight overlaps, formalizing the specialization effect. A practical regularizer that encourages this pairing would be to penalize the Spearman correlation between $\{S_h\}$ and $\{\widehat{\rho}_h\}$.
+</span>
+<span class="sidenote-mobile" data-note="11" role="note">
+<span class="sidenote-number">11</span>
+Among all pairings of $\{S_h\}$ and $\{\widehat{\rho}_h\}$ with fixed marginals, $\sum_h \widehat{\rho}_h S_h$ is maximized by co-monotone pairing and minimized by anti-monotone pairing (rearrangement inequality). Thus $\mathsf{Div}$ is maximized by pairing large floors with slight overlaps, formalizing the specialization effect. A practical regularizer that encourages this pairing would be to penalize the Spearman correlation between $\{S_h\}$ and $\{\widehat{\rho}_h\}$.
+</span>
+</p>
+
+<p>
+After that, I tried to find tricks around our assumptions, but this only led to dead ends. I was able to show the following results:
+</p>
+
+<p>
+Let $\mu=\mathbb{E}[\rho_h]\in[0,\tfrac12]$. For any $\varepsilon\in(-\tfrac12,\tfrac12)$, we have:
+</p>
+$$
+\mathbb{P}\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)
+\ge \big(1-2e^{-2H\varepsilon^2}\big)\,F(\mu-\varepsilon)
+$$
+$$
+\mathbb{P}\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)
+\le \big(1-2e^{-2H\varepsilon^2}\big)\,F(\mu+\varepsilon) + 2e^{-2H\varepsilon^2}
+$$
+
+<p>
+Consequently, $\mathbb{P}\!\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)\to F(\mu)$ as $H\to\infty$.
+If $F$ is differentiable at $\mu$ with density $f(\mu)$, then for any $\delta\in(0,1)$, setting
+$\varepsilon=\sqrt{\tfrac{\ln(1/\delta)}{2H}}$ gives
+$$
+\Big|\,\mathbb{P}\!\big(\bar{\rho}_{H+1}\le \bar{\rho}_H\big)-F(\mu)\,\Big|
+\;\le\; f(\mu)\sqrt{\tfrac{\ln(1/\delta)}{2H}} \;+\; 2\delta
+$$
+But the assumptions around the heads (exchangeable with i.i.d.\ anisotropy) still seem either too strong or simply wrong. 
+<sup class="sidenote-ref" data-note="12">12</sup>
+<span class="sidenote" data-note="12" role="note">
+<span class="sidenote-number">12</span>
+Results is shown using <a href="https://en.wikipedia.org/wiki/Hoeffding%27s_inequality">Hoeffding's inequality</a>.
+</span>
+<span class="sidenote-mobile" data-note="12" role="note">
+<span class="sidenote-number">12</span>
+Results is shown using <a href="https://en.wikipedia.org/wiki/Hoeffding%27s_inequality">Hoeffding's inequality</a>.
+</span>
+</p>
+
+<h2 id="exp">Some experiments</h2>
+
+<p>
+However, I still decided to run some experiments with a GAT on the Cora and PubMed datasets.
+</p>
+
+<figure>
+  <img src="imgs/2025-10-06-heads-and-oversmoothing/pm.png" style="width:100%">
+</figure>
+
+<figure>
+  <img src="imgs/2025-10-06-heads-and-oversmoothing/cora.png" style="width:100%">
+    <figcaption>First, it's good to see we find usual results with higher energy with larger latent dimensions. Second, we observe that the average $\rho$ is higher with a lower latent dimension, which is likely related to the results from <a href="https://arxiv.org/pdf/1905.10650">the 16 heads paper</a>. Regarding the number of heads, we can see that for most layers, increasing the number of heads seems to lower the mean $\rho$, which is good. Regarding the energy, it's hard to extract information. For the first three layers, we observe a sharp decrease followed by a plateau in the number of heads, whereas the last layer exhibits the opposite trend. </figcaption>
+</figure>
+
+<h2 id="closing">Closing thoughts</h2>
+
+<p>
+Sadly, head count is not a magic bullet for long-range communication on graphs; that's an <em>oversquashing</em> problem largely governed by mixing budgets and graph geometry.
+But for <em>oversmoothing</em>, head count might be a lever <em>when used to diversify</em>: push heads toward complementary directions (or bands), keep their total power stable, and guard against low-frequency collapse. 
+Can we directly use this to upgrade our usual loss functions? While some papers investigated that a few years back, this has never seen widespread adoption.
+</p>

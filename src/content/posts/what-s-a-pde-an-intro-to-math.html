@@ -1,0 +1,107 @@
+<p>More and more as time goes by, I find myself explaining some basic math concepts while talking about what I do or what I am interested in.
+I'm not here to criticize the knowledge of physics or mathematics of the average person you might meet, but just to take some time to try to explain how very basic math
+concepts work together. And eventually, build important physics concepts. (and eventually rule the world we live in?)</p>
+<p>This is mostly inspired by talks with members of my family. One could not understand what equations and derivatives were. Another had no idea how position and velocity were related.
+Finally, the last one didn't know what a PDE (as if it wasn't complicated enough without acronyms) was, and God forbid what Navier-Stokes could even be.</p>
+<p>I did write some of this down, mostly how I wanted the math to work together. Apart from this, this would be a pretty accurate transcription of how I would explain this
+orally to whoever's climbing next to me during an easy multi-pitch where you join more for the views and the discussion than the climbing itself.</p>
+<h1 id="equations">Equations</h1>
+<p>It's pretty bold to start what I'm calling an intro to mathematics with such an intimidating word as equation. I think that for most people who have grown further and further from math,
+the word equation kind of crystallizes everything they hate about math. Let's change that.</p>
+<p>In its simplest form:</p>
+<p>$$x=2$$</p>
+<p>is an equation. Some will argue with you that it's not (mostly boring and annoying people), but let's say it is. Let's take a step back. In this equation, $x$ is what
+we call the unknown, and we could call $2$ the known part. When solving an equation, you simply want to find what the unknown is, given what you know. Here, it's pretty simple.
+I am sure 99% of you can do it: $x$ must be equal to $2$.</p>
+<p>Another way to look at it would be:</p>
+<p>$$x-2=0$$</p>
+<p>Obviously, if we say that $x=2$, we do have $2-2=0$, so that works. Yeah! In fact, in an equation, we can add the same number to both sides of the equation, and
+the result holds true. For example:</p>
+<p>$$x-2 = 0 \rightarrow x-2 +2 = 0 + 2 \rightarrow x=2$$</p>
+<blockquote>
+<p>I'm writing $\rightarrow$ more to symbolize a chain of thought. Given the audience, I don't want to use other symbols that may have other significations in other contexts.</p>
+</blockquote>
+<p>So, you solved an equation. Yeah again. We can also multiply (or divide) the two sides of our equation (we can't divide by 0 though, you remember that, right?). 
+For example:</p>
+<p>$$3 \times x = 6 \rightarrow \frac{3 \times x}{3} = \frac{6}{3} \rightarrow x=2$$</p>
+<p>$x$ is equal to $2$, again. (Quickly realize in your head that indeed, 3 times 2 does equal 6). </p>
+<p>Let's take it up a notch: </p>
+<p>$$x^2 = x \times x = 4$$ </p>
+<p>Yes, you are right. $x$ is again equal to $2$ (because 2 times 2 equals 4, yeah). But, what is $-2$ times $-2$? 4. Yes. Yeah? Does that mean that some equations
+have more than one solution? Yes, absolutely. A super interesting way to think about equations is to plot them on a graph. For example, let's get back to equation $(2)$:</p>
+<p align="center">
+  <img src="imgs/2024-06-05-whats-a-pde/plot-linear.png">
+</p>
+
+<p>We can see that our line crosses the number 6 at $x=2$, which solves our equation!</p>
+<p>Same for equation $(3)$, we have: </p>
+<p align="center">
+  <img src="imgs/2024-06-05-whats-a-pde/plot-squared.png">
+</p>
+
+<p>Obviously our 2 solutions, at $x = 2$ and $x=-2$. So yeah, equations can have more than one solution. Worse than that, if you take a look at the plot above, you can see that the $-1$ line does not have any solution. It never crosses our equation. So the following equation:</p>
+<p>$$x^2 = -1$$ does not have any solution. </p>
+<blockquote>
+<p>Well, hm, in fact, it does have solutions. But they're not real so they can't hurt you. And it's probably better if we don't talk about them here. </p>
+</blockquote>
+<p>Equations can be as complex as you want them to be. In our case here, we don't want that complexity. We simply want to understand the concept of unknown, and what it means to solve an equation. However, as you may have noticed here, our unknown is a number. It can be equal to 2, or to anything, as long as it solves the problem we were given.</p>
+<p>But what if this unknown was now a function?</p>
+<h1 id="functional-equations">Functional Equations</h1>
+<h2 id="what-the-heck-is-a-function">What the heck is a function?</h2>
+<p>Let's take a box and call it $f$. That box is pretty simple: you give it a number and it returns another number to you. For example, if that box is your government, you give it $x$ your salary, and it returns to you $0.5x$, your new salary! (Yeah?) Let's say that box is a time converter for New York: you give it 10 and it returns 16 (the current time in Paris). 
+Well, those are functions. In the first case, we had $f(x) = 0.5x$.</p>
+<blockquote>
+<p>Notice how I did not write the second one as it would be too complex for any reader actually reading what the heck a function is.</p>
+</blockquote>
+<p>Here, $x$ is not the unknown anymore, it's a <em>variable</em>. It represents any number. You write $f(x) = 0.5x$ so that you can write $f(0) = 0$ or $f(2) = 1$. </p>
+<p>Let's imagine a super simple functional equation. That is, the unknown is now a function itself! </p>
+<p>$$ f(x) -2 = 0$$</p>
+<p>Well, you guessed it. Our function here is very, very, very simple: $f(x) = 2$. That means that this box will always return 2, no matter what we give it.</p>
+<p>A more complex one could be:</p>
+<p>$$f(x+y) = f(x) + f(y)$$</p>
+<p>where $x$ and $y$ are both variables. This means that we have $f(0) = f(0+0) = f(0) + f(0) = 2f(0)$. Or: $f(0) = f(1 + -1) = f(1) + f(-1)$. And so on and so on. Let's keep that in the back of our mind, and talk about something crucial: derivatives.</p>
+<h2 id="deri-what">Deri-what?</h2>
+<p>The derivative of a function is also a function. Yes. More specifically, it's the function that tells us how our original function is "evolving". You remember $x^2 = 4$, right? We had the following plot:</p>
+<p align="center">
+  <img src="imgs/2024-06-05-whats-a-pde/plot-squared.png">
+</p>
+
+<p>Well, on the left of 0, our function seems to decrease. After that, it increases. Well, the derivative of $x^2$ tells us exactly that. </p>
+<p>Let's introduce an almost rigorous definition, just for the sake of simple calculations. We can define the derivative of $f$ by:</p>
+<p>$$\frac{f(x+h) - f(x)}{h}$$</p>
+<p>when $h$ gets super small. Like smaller than the smallest number you can think of. (Yes, it always exists). Let's investigate the function $f(x) = 2x$ and plot it:</p>
+<p align="center">
+  <img src="imgs/2024-06-05-whats-a-pde/plot-derivativ.png">
+</p>
+
+<p>We can see that this function is negative before $0$ and positive after. It actually tells us how our main function $x^2$ is moving: it's decreasing before $0$, and increasing after. Why, you ask? Because $f(x) = 2x$ is the derivative of $x^2$! Let's show it quickly:</p>
+<p>$$\frac{f(x+h) - f(x)}{h} = \frac{(x+h)^2 - x^2}{h} = \frac{x^2+2xh+h^2 - x^2}{h} = \frac{2xh+h^2}{h} = 2x +h$$</p>
+<p>which is equal to $2x$ when $h$ gets closer and closer to 0.</p>
+<p>But why do we have this relationship between the sign of the derivative and how the main function is evolving? One way to look at it is to represent the derivative as a simple linear function. Let's plot the line that goes through $f(x+h)$ and $f(x)$, and let's reduce $h$:</p>
+<p align="center">
+  <img src="imgs/2024-06-05-whats-a-pde/tangent.gif">
+</p>
+
+<p>We can see that as $h$ gets smaller and smaller (and thus B gets closer and closer to A), the line becomes the tangent to our function at point A. This is the best straight-line approximation to our function at that point. Because of that, it makes sense that if our function is decreasing, then our line is decreasing as well. But for such a simple function, one can easily say if it's decreasing or not, thanks to the sign of its director coefficient. But in this case, you may ask what its coefficient is? Well... $$\frac{f(x+h) - f(x)}{h}$$ of course, our derivative! </p>
+<p>And here you are, you see how its sign and the main function shape are related. </p>
+<h2 id="derivatives-in-equations">Derivatives? In equations??</h2>
+<p>Yes, that is also possible. As a side note, we denote the derivative of a function with a prime: $f'$. One of the most famous differential equations is $f' = f$ (and f(0) = 1). Yes, we also add those extra conditions because differential equations can have an infinity of solutions. So by adding a small extra constraint, we can define exactly one solution.</p>
+<p>In this case, it's $f(x) = e^x$ where $e$ is the Euler constant.</p>
+<p>Differential equations can be more complex than regular equations, but they still live (mostly) in the realm where one can find and define solutions. It gets more tricky when we start to be even more challenging:</p>
+<p>One can define a function with more than one variable. For example: $f(x,y) = x^2+3y$. It's a simple 2-variable function, but it can already lead to more complex equations. First of all, how do you define its derivative? What variable do you use? That's why we defined partial derivatives... </p>
+<p>A partial derivative of a function of several variables is its derivative with respect to one of those variables, with the others held constant: $\frac{\partial f}{\partial x}$ is the partial derivative of $f$ with respect to $x$. In the very simple previous case, we had:</p>
+<p>$$\frac{\partial f}{\partial x} = 2x, \frac{\partial f}{\partial y} = 3$$</p>
+<p>and now we have it...</p>
+<h2 id="partial-differential-equation">Partial differential equation</h2>
+<p>You take an equation, you add functions in the mix, you put some of their partial derivatives on the side and there you have it: a proper PDE (partial differential equation). For example:</p>
+<p>$$\frac{\partial f}{\partial x} + \frac{\partial f}{\partial y} = 0$$</p>
+<p>(with some initial conditions as well, of course). </p>
+<p>But you can still be more complex: your function could be 2 or 3 dimensional. That is to say, your function could return a vector (or list of numbers if you want) instead of just a single number. </p>
+<p>That's the case of the velocity in fluid dynamics, for example. Velocity is defined across the $x$, $y$ and $z$ axes, and thus is a 3-dimensional vector. Pressure is not; it's simply a number (still defined in 1, 2, or 3 dimensions depending on our use case). We could define more and more operations such as $\frac{\partial f}{\partial x}$ but it would take a lot of time. You can just keep in mind that any sign you don't recognize is most of the time a mix of additions and partial derivatives. </p>
+<p>Knowing all of that, you can reach the king of all PDEs: the flow motion of incompressible Newtonian fluids is described by the Navier-Stokes (NS) equations: </p>
+<p>$$\rho\ (\frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot \nabla \vec{v}) -\nabla \cdot \left( 2 \eta \vec{\epsilon}(\vec{v}) - p \vec{I} \right)  = \vec{f} $$</p>
+<p>$$\nabla \cdot \vec{v} = 0$$</p>
+<p>where $t \in [0,T]$ is the time, $\vec{v}(x,t)$ the velocity, $p(x,t)$ the pressure, $\rho$ the fluid density, $\eta$ the dynamic viscosity and $\vec{I}$ the identity tensor. </p>
+<p>Even now, we don't always know if a smooth solution to this equation exists. So how do we solve it? How can Formula 1 racing teams make super precise simulations to improve their cars? </p>
+<p>Well... you think outside the box and you don't solve it. You just try to find a solution that is close enough, and that isn't too bad. </p>
+<p>But more on that in the next article.</p>

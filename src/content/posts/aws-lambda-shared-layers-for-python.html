@@ -1,0 +1,52 @@
+<p><img alt="" src="imgs/2021-10-28-serverless-shared-layers/intro.png" /></p>
+<p>At Flaneer, we are working on a new kind of workplace: a digital and remote one. Thanks to Flaneer, everyone can now turn its workstation (be it a laptop, a tablet or even a phone) into a powerful cloud-computer (or DaaS).</p>
+<p>If you’d rather work with teammates, you can join their session and collaborate seamlessly. Talk with each other, annotate each other’s work live, send snapshots… Flaneer is much more than a simple VDI/virtualization service.</p>
+<p>To make our platform as fast and scalable as possible, we built most of it on top of the Serverless Framework, with the help of AWS Lambda. You can find the code related to this article in the following <a href="https://github.com/Flaneer/serverless-layer-builder">Github repository</a>.</p>
+<p><a href="https://aws.amazon.com/fr/lambda/">AWS Lambda</a> lets you run code in response to events and automatically manages the underlying compute resources for you. You can use it to create and deploy application back-ends quickly and seamlessly integrate other AWS services. You won't have to manage any servers, and can simply focus on the code.</p>
+<p>If your lambda functions are written in Python, you may need to use public libraries or private custom package. The goal of this article is to focus on <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/sharing-lambda-layers.html">AWS Lambda Shared Layers</a>, a common place where you can store common functions and libraries for all of your lambda functions. We provide an overview of how to build such layers in this article! Our shared layers will be based on both public libraries, and on custom internal code. Let's start with the architecture of shared layers!</p>
+<h1 id="serverless-shared-layers-architecture">Serverless &amp; Shared Layers Architecture</h1>
+<p>Our shared layer will follow the simple structure:</p>
+<pre><code>python
+│   requirements.txt
+└───internal_lib_1
+│       │    code1.py
+│       │    code2.py
+└───internal_lib_2
+│       │    code1.py
+│       │    code2.py
+└───lib
+│    └───python3.8
+│    │   └───site-packages
+│    │   │    └───package1
+</code></pre>
+<p>We will then package this python folder as a shared layer that each lambda function will be able to use in the following manner:</p>
+<pre><code class="language-python">from internal_lib_1.code1 import f1
+from internal_lib_2.code1 import f1_bis
+
+import package1
+def lambda_handler(event,context):
+     ...
+</code></pre>
+<h2 id="add-external-libraries-to-serverless-projects">Add External Libraries to Serverless Projects</h2>
+<p>Installing the external libraries is pretty easy, you can use 2 methods. The first one is to directly install them in the right location with the following command:</p>
+<pre><code>#pip3 install PACKAGE -t ./python/lib/python3.8/site-packages
+
+#For example with stripe:
+pip3 install stripe -t ./python/lib/python3.8/site-packages
+</code></pre>
+<p>You will have to repeat this operation for each python version your lambda functions will have to use. You can also make this process quicker by building a requirements.txt file like the following one:</p>
+<pre><code>pandas==1.2.4
+stripe==2.56.0
+</code></pre>
+<p>and install them with</p>
+<pre><code>pip3 install -r requirements.txt -t ./python/lib/python3.8/site-packages
+</code></pre>
+<h3 id="add-internal-codes-to-serverless-projects">Add Internal codes to Serverless Projects</h3>
+<p>You can build internal library as you would build any usual python project: simply use the folder "internal_lib" as the root folder of your project. You will then be able to use it in your lambda functions without any troubles.</p>
+<p>This is is something that is super useful when your project starts to get bigger and bigger. Most of your lambda functions will start to reuse the same objects or functions. It can also allow you to make custom class for other AWS services, such as DynamoDB or Cognito for example.</p>
+<h2 id="publish-your-shared-layer">Publish your Shared Layer</h2>
+<p>You can read more about how to publish your shared layer in:
+* the rest of this <a href="https://www.flaneer.com/blog/aws-lambda-shared-layers-for-python">blog post</a>
+* our <a href="https://github.com/Flaneer/serverless-layer-builder">Github repository</a></p>
+<p>If you are interested in working with us at <a href="https://www.flaneer.com">Flaneer</a>, we are looking for talented engineers. Feel free to <a href="https://flaneer.notion.site/Careers-at-Flaneer-add020b854aa4bb498bd4d8455edb16c">drop-by!</a></p>
+<p><img alt="png" src="imgs/2021-10-28-serverless-shared-layers/flaneer.gif" /></p>

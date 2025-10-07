@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 15%;
+
+    --radius: 0.375rem;
+
+    /* Blog-specific tokens */
+    --blog-text: 0 0% 20%;
+    --blog-text-light: 0 0% 40%;
+    --blog-border: 0 0% 92%;
+    --blog-hover: 0 0% 96%;
+    --sidebar-bg: 0 0% 100%;
+    --link-default: 215 91% 35%;
+    --code-bg: 210 40% 97%;
+    --code-border: 211 30% 90%;
+    --code-text: 215 40% 25%;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 85%;
+
+    --blog-text: 0 0% 85%;
+    --blog-text-light: 0 0% 65%;
+    --blog-border: 0 0% 18%;
+    --blog-hover: 0 0% 12%;
+    --sidebar-bg: 0 0% 8%;
+    --link-default: 215 82% 72%;
+    --code-bg: 214 32% 16%;
+    --code-border: 215 35% 24%;
+    --code-text: 0 0% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  }
+
+  a[href] {
+    color: hsl(var(--link-default));
+    transition: color 0.2s ease;
+  }
+
+  a[href]:hover {
+    color: hsl(var(--foreground));
+  }
+
+  /* Blog typography */
+  .blog-content {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: hsl(var(--blog-text));
+    position: relative;
+  }
+
+  .blog-content h1 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content h2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content h3 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content p {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .blog-content a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .blog-content a:hover {
+    opacity: 0.7;
+  }
+
+  .blog-content ul, .blog-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .blog-content li {
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-content strong {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .blog-content code {
+    font-family: 'JetBrains Mono', 'SFMono-Regular', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+    font-size: 0.95em;
+    background: hsl(var(--code-bg));
+    color: hsl(var(--code-text));
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.35rem;
+    border: 1px solid hsl(var(--code-border));
+  }
+
+  .blog-content pre {
+    font-family: 'JetBrains Mono', 'SFMono-Regular', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+    font-size: 0.95em;
+    background: hsl(var(--code-bg));
+    color: hsl(var(--code-text));
+    border: 1px solid hsl(var(--code-border));
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .blog-content pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.6;
+    display: block;
+  }
+
+  .blog-content .sidenote-ref {
+    font-size: 0.85em;
+    margin-left: 0.2rem;
+    cursor: pointer;
+    color: hsl(var(--accent));
+  }
+
+  .blog-content .sidenote {
+    display: none;
+  }
+
+  .blog-content .sidenote-mobile {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background: hsl(var(--muted));
+    color: hsl(var(--blog-text-light));
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .blog-content .sidenote-number {
+    color: hsl(var(--accent));
+    font-weight: 600;
+    margin-right: 0.35rem;
+  }
+
+  .blog-content figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .blog-content figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: hsl(var(--blog-text-light));
+    text-align: center;
+  }
+
+  @media (min-width: 1280px) {
+    .blog-content .sidenote {
+      display: inline;
+      position: absolute;
+      left: calc(100% + 2rem);
+      width: 14rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: hsl(var(--blog-text-light));
+      transform: translateY(var(--note-translate, 0));
+      will-change: transform;
+    }
+
+    .blog-content .sidenote-mobile {
+      display: none;
+    }
+  }
+
+  /* Math typography */
+  .katex {
+    font-size: 1.1em;
+  }
+
+  .katex-display {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Sidenotes positioning */
+  .blog-content p {
+    position: relative;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
