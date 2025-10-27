@@ -12,6 +12,17 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: "20251101-llm-mesh",
+    slug: "draft1",
+    title: "On the usefulness (or not) of using language model to simulate fluids",
+    author: "Paul Garnier",
+    date: "Oct 6, 2025",
+    dateISO: "2025-11-01",
+    excerpt: "This is a small story about an idea I first thought was fun, then dumb, then amazing, then dumb again. Which is probably a great summary of a PhD yay.",
+    readTime: "12 min read",
+    contentFile: "llm-mesh.html",
+  },
+  {
     id: "20251006-heads-and-oversmoothing",
     slug: "heads-and-oversmoothing",
     title: "On the relationship between Attention Heads and Oversmoothing",

@@ -1,0 +1,146 @@
+<h1>A dumb idea</h1>
+<p>Imagine you are given a 3-D turbulent fluid, a protein folding in water, or a galaxy of colliding dark-matter halos. Classical wisdom says: "Mesh it, build a graph, hand-craft Laplacians, pray your inductive bias is not too wrong." Now, how about we do the opposite and do something that seems completely dumb? How about we flatten the universe into a single sentence, just a list of numbers separated by special tokens, and ask a perfectly ordinary Transformer to predict the next word. No edges, no message passing, no geometric priors. Well, actually, we don't precisely predict the next word; instead, we predict something that looks like the next step in our simulation.</p>
+<p>This is a small story about an idea I first thought was fun, then dumb, then amazing, then dumb again. Which is probably a great summary of a PhD yay.</p>
+<h2>Regarding meshes</h2>
+<p>Meshes are actually pretty great. People spent a significant amount of time deciding how to build them, how to ensure they have good properties <sup class="sidenote-ref" data-note="1">1</sup> <span class="sidenote" data-note="1" role="note"><span class="sidenote-number">1</span> This includes a ton of metrics that you compute for each element of the mesh. For example, the element's aspect ratio (e.g. the ratio between the longest and smallest edge), the skewness of the element, its non-orthogonality, etc.</span> <span class="sidenote-mobile" data-note="1" role="note"><span class="sidenote-number">1</span> This includes a ton of metrics that you compute for each element of the mesh. For example, the element's aspect ratio (e.g. the ratio between the longest and smallest edge), the skewness of the element, its non-orthogonality, etc.</span>, and this is one of the reasons (not the only one, obviously) why Graph Neural Networks work so well on them. Usual issues that arise in GNNs, such as oversquashing or message-passing bottlenecks, occur less often with meshes (mainly because, compared to all the other graphs in the world, they are exceptionally well-constructed). <sup class="sidenote-ref" data-note="2">2</sup> <span class="sidenote" data-note="2" role="note"><span class="sidenote-number">2</span> This relation between graph topology and oversquashing is studied in this great paper <a href="https://arxiv.org/pdf/2111.14522">Understanding Over-Squashing And bottlenecks On Graphs Via Curvature</a>. One of the introduced metric can be seen as a sort of Ricci curvature on a discrete space: $$\mathrm{Ric}(i,j) := \frac{2}{d_i} + \frac{2}{d_j} - \\ 2 + 2 \frac{|\#\Delta(i,j)|}{\max\{d_i, d_j\}} + \frac{|\#\Delta(i,j)|}{\min\{d_i, d_j\}} \\ + \frac{(\gamma_{\max})^{-1}}{\max\{d_i, d_j\}} \left( |\#\square^i| + |\#\square^j| \right)$$.</span> <span class="sidenote-mobile" data-note="2" role="note"><span class="sidenote-number">2</span> This relation between graph topology and oversquashing is studied in this great paper <a href="https://arxiv.org/pdf/2111.14522">
+Understanding Over-Squashing And bottlenecks On Graphs Via Curvature</a>. One of the introduced metric can be seen as a sort of Ricci curvature on a discrete space: $$\mathrm{Ric}(i,j) := \frac{2}{d_i} + \frac{2}{d_j} - \\ 2 + 2 \frac{|\#\Delta(i,j)|}{\max\{d_i, d_j\}} + \frac{|\#\Delta(i,j)|}{\min\{d_i, d_j\}} \\ + \frac{(\gamma_{\max})^{-1}}{\max\{d_i, d_j\}} \left( |\#\square^i| + |\#\square^j| \right)$$.</span></p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/ricci.png" style="width:100%">
+    <figcaption>
+        Ricci curvature on a 2D mesh of a flow past a cylinder. The metric is computed as defined in "Understanding Over-Squashing And bottlenecks On Graphs Via Curvature", inspired from the work in "Bochner’s Method for Cell Complexes".
+    </figcaption>
+</figure>
+
+<h2>Attention as Graph</h2>
+<p>Now, when you think about it (not too much; it's fairly easy and often used ), a sentence, or at least an ordered list of tokens, can be seen as a fully connected graph. Even more, you can see the attention operation as a message-passing operation. That's why I talked before <sup class="sidenote-ref" data-note="3">3</sup> <span class="sidenote" data-note="3" role="note"><span class="sidenote-number">3</span> In <a href="https://donsetpg.github.io#/blog/heads-and-oversmoothing"> this article</a>, where I try to study in a graph theory setting a mathematical relation between attention and oversmoothing. </span> <span class="sidenote-mobile" data-note="3" role="note"><span class="sidenote-number">3</span> In <a href="https://donsetpg.github.io#/blog/heads-and-oversmoothing"> this article</a>, where I try to study in a graph theory setting a mathematical relation between attention and oversmoothing. </span> about the relationship between the number of heads and oversmoothing, because I believe this is one of the reasons for the strength of having more heads in a transformer. Let's throw the sentence away and consider something more complex, such as a set or a .json file. When you think about it, you could also see this as a graph: either as the ordered set of tokens extracted from the .json file, or simply by connecting attributes at the same level together, going one level below as the set gets deeper. That's actually it.</p>
+<h3>Regression Language Model</h3>
+<p>This has a nice property: those data structures don't care whether you add an attribute or whether one of the attributes is a list whose length can vary. That's not something you could say if you wanted to represent this set with a fixed-size vector, for example. This is precisely the idea behind several papers from Google <sup class="sidenote-ref" data-note="4">4</sup> <span class="sidenote" data-note="4" role="note"><span class="sidenote-number">4</span> <a href="https://arxiv.org/pdf/2506.21718">Performance Prediction for Large Systems via
+Text-to-Text Regression</a>, <a href="https://arxiv.org/pdf/2501.19383">Decoding-based Regression</a> and <a href="https://arxiv.org/pdf/2402.14547">OmniPred: Language Models as Universal
+Regressors</a></span> <span class="sidenote-mobile" data-note="4" role="note"><span class="sidenote-number">4</span> <a href="https://arxiv.org/pdf/2506.21718">Performance Prediction for Large Systems via
+Text-to-Text Regression</a>, <a href="https://arxiv.org/pdf/2501.19383">Decoding-based Regression</a> and <a href="https://arxiv.org/pdf/2402.14547">OmniPred: Language Models as Universal
+Regressors</a></span>. (i) they train transformers (they call them RLM for Regression Language Model) to predict a float from a .json input (ii) they achieve better performances than tabular models (iii) they have some nice considerations regarding the output prediction, and how to represent it using tokens <sup class="sidenote-ref" data-note="5">5</sup> <span class="sidenote" data-note="5" role="note"><span class="sidenote-number">5</span> Basically writing &lt;+&gt;&lt;7&gt;&lt;2&gt;&lt;5&gt;&lt;E-1&gt; for 72.5 for example.</span> <span class="sidenote-mobile" data-note="5" role="note"><span class="sidenote-number">5</span> Basically writing &lt;+&gt;&lt;7&gt;&lt;2&gt;&lt;5&gt;&lt;E-1&gt; for 72.5 for example.</span></p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/rlm.png" style="width:100%">
+      <figcaption>
+        Figure reproduced from "Performance Prediction for Large Systems via Text-to-Text Regression".
+    </figcaption>
+</figure>
+
+<h2>Meshes and RLM</h2>
+<p>I've been thinking about different data representations for my meshes since I started my PhD, and I've considered writing them as plain tokens for an LLM for a long time. When I dived into Google's papers, I immediately thought about my project. The first iteration was simple: let's take one node from the mesh, write a JSON file for it, and try to predict its velocity at the next time step. This is how one node was encoded:</p>
+<pre><code class="language-json">
+{
+  "metadata": {
+    "simulation": "blood_channel",
+    "time_step": 42,
+    "dt": 0.001,
+    "solver": "navier_stokes",
+    "turbulence": false,
+    "dim": 3
+  },
+  "nodes": [
+    { "id": 0, "pos": [1.2e-03, 2.5e-04, 9.7e-04], "vel": [1.3e-01, 2.1e-01, 0.0] },
+    { "id": 1, "pos": [1.4e-03, 2.8e-04, 1.1e-03], "vel": [1.2e-01, 2.0e-01, 0.0] },
+    { "id": 2, "pos": [1.5e-03, 3.0e-04, 1.3e-03], "vel": [1.1e-01, 1.9e-01, 0.0] },
+    { "id": 3, "pos": [1.7e-03, 3.2e-04, 1.5e-03], "vel": [1.0e-01, 1.8e-01, 0.0] }
+  ],
+  "edges": [
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 0]
+  ],
+  "boundaries": {
+    "inlet": [0],
+    "outlet": [3],
+    "walls": [1, 2]
+  }
+}
+</code></pre>
+<p>I then coded a project to teach a small RLM to do precisely that. And it actually works. The performances are not great, but some would call it a proof of concept. I also tinkered a bit with the hop-size information and tracked how performance would improve (or not) if we added more distant nodes to our JSON encoding.</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/predictability_vs_k_rlm_only.png" style="width:100%">
+      <figcaption>
+        Comparaison of the RLM performances depending on the hop size used in its inputs. I suspect the diminishing return we see might be related to a lack of parameters in comparison to the growing context length.
+    </figcaption>
+</figure>
+
+<h1>The return of the dumb idea</h1>
+<p>However, this still begs the question: how on earth do I scale this to a mesh? Yes, sure, for a mesh with a few hundred nodes, I could batch all nodes' JSONs, make my prediction, and then loop over them to predict a trajectory. Yes, I could. But there are at least two large buts here: (i) how will this scale for a mesh with, say, 100k nodes (let's not even think about a 1M-node mesh<sup class="sidenote-ref" data-note="6">6</sup> <span class="sidenote" data-note="6" role="note"><span class="sidenote-number">6</span> Spoiler: not well</span> <span class="sidenote-mobile" data-note="6" role="note"><span class="sidenote-number">6</span> Spoiler: not well</span>)? (ii) Performances are ok but not great - we probably need to share information between nodes, how do we do that? Well, you can just stack all the inputs together! This is me entering the "this is the worst idea ever" phase. At this point, I stopped working on this project and wrote a short one-pager for students to pick up in January.</p>
+<h2>Applying the same idea but to molecules</h2>
+<p>Enter this paper: <a href="https://arxiv.org/pdf/2510.02259">Transformers Discover molecular structure without Graph Priors</a>, which does exactly what I wanted to try: write a full graph as a list of tokens to predict some molecular attributes. <sup class="sidenote-ref" data-note="7">7</sup> <span class="sidenote" data-note="7" role="note"><span class="sidenote-number">7</span> molecules have much, much, much fewer nodes than meshes though.</span> <span class="sidenote-mobile" data-note="7" role="note"><span class="sidenote-number">7</span> molecules have much, much, much fewer nodes than meshes though.</span> And at first, I really liked this paper. Not only was it exactly the idea I wanted to do in the first place, but also, they obtained (i) great results (ii) at great speed (iii) made some nice analysis (for example, the relation between attention and node's position). Now, when you think about it, the paper actually says: let's take a bunch of nodes, write their attributes in a string, and then compute full attention on all tokens. I must admit that, written like that, except to consider it as a thought process or a fun experiment, I'm not so sure about how great my idea actually was.</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/molecule_fragments.gif" style="width:100%">
+      <figcaption>
+        Figure reproduced from <a href="https://arxiv.org/pdf/2510.02259">Transformers Discover molecular structure without Graph Priors</a>. It highlights the capacity of the transformer to compute attention beyond classical inductive bias such as a neighbour radius cutoff.
+    </figcaption>
+</figure>
+
+<h1>The return of the great idea</h1>
+<p>You guessed it, let's write a mesh and the fields that live on it as tokens! I will spare you the details, but I ended up working with something that looks like:</p>
+<pre><code class="language-json">
+{
+"BEG_OF_POS POS_2 ... POS_1 END_OF_POS"
+"BEG_OF_VEL VEL_21 ... VEL_13 END_OF_VEL"
+"BEG_OF_TYPE TYPE_0 ... TYPE_1 END_OF_TYPE"
+"BEG_OF_NEXTVEL TYPE_0 ... TYPE_1 END_OF_NEXTVEL"
+}
+</code></pre>
+<p>In comparison to the molecule paper, this is a much more challenging task for a few reasons: - we work with much larger graphs, even though I restricted myself here to meshes with 500 to 2000 nodes. - we need to make an autoregressive prediction <sup class="sidenote-ref" data-note="8">8</sup> <span class="sidenote" data-note="8" role="note"><span class="sidenote-number">8</span> After predicting the velocity at the next time step, we reuse this as input to make another prediction. We repeat this process for the required number of timesteps. We track our performance on this task using the following metric: $$\text{All-Rollout}(f) := \frac{1}{TN} \sum _{t=1}^{T} \Bigg(\sum _{i \in V} \big(G_t - \underbrace{f \circ ... \circ f}_\text{t times}(G_0)\big)_i^2 \Bigg)$$</span> <span class="sidenote-mobile" data-note="8" role="note"><span class="sidenote-number">8</span> After predicting the velocity at the next time step, we reuse this as input to make another prediction. We repeat this process for the required number of timesteps. We track our performance on this task using the following metric: $$\text{All-Rollout}(f) := \frac{1}{TN} \sum _{t=1}^{T} \Bigg(\sum _{i \in V} \big(G_t - \underbrace{f \circ ... \circ f}_\text{t times}(G_0)\big)_i^2 \Bigg)$$</span> Regarding the autoregression, it means we need to teach our model to be a bit robust wrt. errors. To this end, we can either add some noise to our inputs (which is something I did), or train it in said autoregressive fashion <sup class="sidenote-ref" data-note="9">9</sup> <span class="sidenote" data-note="9" role="note"><span class="sidenote-number">9</span> During the second half of the training, for each sample, with a probability $p$, we reuse our prediction as input for the next time step, recompute the loss, and average the 2 errors. This process can obviously be extended to more than 2 steps. Here, I went up to 6 steps.</span> <span class="sidenote-mobile" data-note="9" role="note"><span class="sidenote-number">9</span> During the second half of the training, for each sample, with a probability $p$, we reuse our prediction as input for the next time step, recompute the loss, and average the 2 errors. This process can obviously be extended to more than 2 steps. Here, I went up to 6 steps.</span>, or do both (which I did).</p>
+<p>And something great happened: it worked. yay. I trained a transformer with 15 layers of dimension 512, a Gated MLP with an expansion factor of 3, 16 heads per attention layer, and a total of 60M parameters to predict the next-step velocity on 2D meshes representing a flow around a cylinder. Amazing.</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/vidllm.gif" style="width:100%">
+      <figcaption>
+        Fully autoregressive prediction using the trained transformer described above.
+    </figcaption>
+</figure>
+
+<p>Now, just for the sake of comparison, this is what DeepMind <em>add paper</em> was achieving with a simple Message Passing GNN with around 3M parameters in 2021:</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/vidgnn.gif" style="width:100%">
+      <figcaption>
+        Fully autoregressive prediction using a trained Message Passing GNN with 3M parameters. It's important to note that very similar predictions can be obtained with much smaller models, such as a gnn-based transformer with as little as 500k parameters.
+    </figcaption>
+</figure>
+
+<h2>or the not so great idea</h2>
+<p>So you're telling me we have 20x more parameters (or 120x depending on what we compare it to - cf the caption above), and that our results are only 'good enough' (to be nice)? Yes exactly. Let's dive a little bit into the results. First, under a fixed training budget, pretraining never helps. That's not good (I guess).</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/plot1.png" style="width:100%">
+      <figcaption>
+        Here, K is the important parameter: it's the number of epochs we spent on the pretraining phase.
+    </figcaption>
+</figure>
+
+<p>Second, when we remove the continuous features mentioned in the paper <sup class="sidenote-ref" data-note="10">10</sup> <span class="sidenote" data-note="10" role="note"><span class="sidenote-number">10</span> In the original paper, they actually bin the continuous values. My understanding is that this is often done when working with molecules, since distances are naturally binned and not continuous. I also believe this is to allow a pretraining phase using a cross-entropy loss function. Maybe I'm wrong though. <strong>But</strong>, they also add back the continuous values in the embedding space! When I "removed those continuous values", I meant I stopped adding them back.</span> <span class="sidenote-mobile" data-note="10" role="note"><span class="sidenote-number">10</span> In the original paper, they actually bin the continuous values. My understanding is that this is often done when working with molecules, since distances are naturally binned and not continuous. I also believe this is to allow a pretraining phase using a cross-entropy loss function. Maybe I'm wrong though. <strong>But</strong>, they also add back the continuous values in the embedding space! When I "removed those continuous values", I meant I stopped adding them back.</span>, our results now kinda suck <sup class="sidenote-ref" data-note="11">11</sup> <span class="sidenote" data-note="11" role="note"><span class="sidenote-number">11</span> In the original paper, they also see much better results using the continuous values. However, they see less loss without them. I'm wondering whether this is because I trained for less time or because it is system-dependent. Third, if we do something dumb about the paper, and do no pretraining, and replace tokens with the continuous values, we achieve better results. </span> <span class="sidenote-mobile" data-note="11" role="note"><span class="sidenote-number">11</span> In the original paper, they also see much better results using the continuous values. However, they see less loss without them. I'm wondering whether this is because I trained for less time or because it is system-dependent. Third, if we do something dumb about the paper, and do no pretraining, and replace tokens with the continuous values, we achieve better results. </span></p>
+<p> Third, if we do something dumb about the paper, and do no pretraining, and replace tokens with the continuous values, we achieve better results.</p>
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/plot2.png" style="width:100%">
+      <figcaption>
+
+      </figcaption>
+</figure>
+
+<p>And yes, if you do no pretraining, replace tokens with continuous values, and actually concat the tokens along the "node" axis, you get better results.</p>
+
+<figure>
+  <img src="imgs/2025-11-01-llm-mesh/plotfull.png" style="width:100%">
+      <figcaption>
+        
+      </figcaption>
+</figure>
+
+<p>Wait, isn't that like a full attention model on some sort of point cloud? I'd say it is.</p>
+<p>Now, would we achieve the same results if we apply this to the molecule dataset? I don't know. However, could we achieve the same analysis regarding no inductive bias, reach the same argument regarding speed and kernel optimization, by building a model using flash attention on a point cloud? I would say yes. 
+
+In conclusion, I'm really unsure about the real impact of such a strategy. Yes, it's fun and interesting. Yes, it's more optimised that sparse GNN operations. But does it really make sense in comparison to a point cloud architecture, I don't think so.
+As a side note however, this may be a good first project to see if my heads theory on oversmoothing works better on language models than on GNNs directly.
+
+</p>
