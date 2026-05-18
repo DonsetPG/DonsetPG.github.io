@@ -137,6 +137,59 @@ const BlogPost = () => {
   }, [processedHtml]);
 
   useEffect(() => {
+    const container = articleRef.current;
+    if (!container) {
+      return;
+    }
+
+    const cleanupCallbacks: Array<() => void> = [];
+    const viewers = Array.from(container.querySelectorAll<HTMLElement>("[data-image-viewer]"));
+
+    viewers.forEach((viewer) => {
+      const buttons = Array.from(viewer.querySelectorAll<HTMLButtonElement>(".benchmark-thumb"));
+      const previewImage = viewer.querySelector<HTMLImageElement>("[data-viewer-preview] img");
+
+      if (!buttons.length || !previewImage) {
+        return;
+      }
+
+      previewImage.loading = "eager";
+
+      const selectButton = (selectedButton: HTMLButtonElement) => {
+        const thumbnail = selectedButton.querySelector<HTMLImageElement>("img");
+        if (!thumbnail) {
+          return;
+        }
+
+        const nextSrc = thumbnail.currentSrc || thumbnail.getAttribute("src");
+        if (nextSrc) {
+          previewImage.setAttribute("src", nextSrc);
+        }
+        previewImage.setAttribute("alt", thumbnail.getAttribute("alt") ?? "");
+
+        buttons.forEach((button) => {
+          const isSelected = button === selectedButton;
+          button.classList.toggle("is-active", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", "false");
+        const handleClick = () => selectButton(button);
+        button.addEventListener("click", handleClick);
+        cleanupCallbacks.push(() => button.removeEventListener("click", handleClick));
+      });
+
+      selectButton(buttons[0]);
+    });
+
+    return () => {
+      cleanupCallbacks.forEach((cleanup) => cleanup());
+    };
+  }, [processedHtml]);
+
+  useEffect(() => {
     if (sections.length) {
       setActiveSection(sections[0].id);
     } else {
