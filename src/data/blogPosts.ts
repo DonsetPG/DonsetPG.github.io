@@ -12,6 +12,17 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: "20260515-heuristic-learning-for-fluid-dynamics-a-case-study",
+    slug: "heuristic-learning-for-fluid-dynamics-a-case-study",
+    title: "Heuristic Learning for Fluid Dynamics: A Case Study",
+    author: "Paul Garnier",
+    date: "May 15, 2026",
+    dateISO: "2026-05-15",
+    excerpt: "What happens when a coding agent writes interpretable flow-control heuristics instead of training another neural policy? A case study across Beacon and FluidGym, with transfer, stability, and physics-readable controllers.",
+    readTime: "13 min read",
+    contentFile: "heuristic-learning-for-fluid-dynamics-a-case-study.html",
+  },
+  {
     id: "20251101-llm-mesh",
     slug: "llm-mesh",
     title: "On the usefulness (or not) of using language model to simulate fluids",
