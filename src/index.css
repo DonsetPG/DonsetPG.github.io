@@ -492,6 +492,46 @@ All colors MUST be HSL.
     min-width: 0;
   }
 
+  .blog-content .cost-table-wrap {
+    width: min(96vw, 58rem);
+    margin: 1.5rem 0 2rem 50%;
+    transform: translateX(-50%);
+    overflow-x: auto;
+  }
+
+  .blog-content .cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: #fff4bf;
+    color: hsl(var(--foreground));
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .blog-content .cost-table th,
+  .blog-content .cost-table td {
+    padding: 0.68rem 0.9rem;
+    border-bottom: 1px solid rgba(120, 96, 20, 0.16);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .blog-content .cost-table th {
+    font-weight: 650;
+  }
+
+  .blog-content .cost-table th:first-child,
+  .blog-content .cost-table td:first-child {
+    min-width: 15rem;
+    white-space: normal;
+  }
+
+  .blog-content .cost-table td:last-child {
+    font-weight: 700;
+  }
+
   @media (min-width: 768px) {
     .blog-content .benchmark-thumb-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -726,7 +766,8 @@ All colors MUST be HSL.
     .blog-content figure.post-opening-media,
     .blog-content .shape-control-pair,
     .blog-content .environment-grid,
-    .blog-content .benchmark-viewer {
+    .blog-content .benchmark-viewer,
+    .blog-content .cost-table-wrap {
       width: calc(100vw - 2rem);
       margin-left: 50%;
       transform: translateX(-50%);
@@ -835,6 +876,22 @@ All colors MUST be HSL.
     .blog-content .benchmark-thumb img,
     .blog-content .benchmark-preview img {
       border-radius: 0.35rem;
+    }
+
+    .blog-content .cost-table-wrap {
+      margin-top: 1.25rem;
+      margin-bottom: 2.1rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .blog-content .cost-table {
+      min-width: 44rem;
+      font-size: 0.78rem;
+    }
+
+    .blog-content .cost-table th,
+    .blog-content .cost-table td {
+      padding: 0.58rem 0.68rem;
     }
   }
 }

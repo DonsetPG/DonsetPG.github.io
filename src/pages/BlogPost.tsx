@@ -133,6 +133,7 @@ const BlogPost = () => {
         { left: "$", right: "$", display: false },
         { left: "\\(", right: "\\)", display: false },
       ],
+      ignoredClasses: ["cost-table"],
       throwOnError: false,
     });
   }, [processedHtml]);
