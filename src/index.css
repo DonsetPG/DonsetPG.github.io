@@ -112,6 +112,60 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
 
+  .blog-mobile-progress {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    height: 3px;
+    background: hsl(var(--border));
+  }
+
+  .blog-mobile-progress span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, hsl(var(--accent)), hsl(202 88% 42%));
+    transition: width 0.15s ease-out;
+  }
+
+  .blog-mobile-sections {
+    display: flex;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    padding: 0.85rem 0 0.7rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    position: sticky;
+    top: 3px;
+    z-index: 30;
+    background: hsl(var(--background) / 0.96);
+    border-bottom: 1px solid hsl(var(--border));
+    backdrop-filter: blur(14px);
+  }
+
+  .blog-mobile-sections::-webkit-scrollbar {
+    display: none;
+  }
+
+  .blog-mobile-sections button {
+    flex: 0 0 auto;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: hsl(var(--blog-text-light));
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 650;
+    line-height: 1.2;
+    padding: 0.15rem 0 0.45rem;
+    cursor: pointer;
+  }
+
+  .blog-mobile-sections button.is-active {
+    color: hsl(var(--foreground));
+    border-bottom-color: hsl(var(--accent));
+  }
+
   /* Blog typography */
   .blog-content {
     font-family: 'Crimson Text', Georgia, serif;
@@ -306,6 +360,12 @@ All colors MUST be HSL.
     margin: 2rem 0;
   }
 
+  .blog-content img,
+  .blog-content video {
+    max-width: 100%;
+    height: auto;
+  }
+
   .blog-content figure.post-opening-media {
     max-width: 40rem;
     margin: 0 auto 2.25rem;
@@ -494,5 +554,287 @@ All colors MUST be HSL.
   /* Sidenotes positioning */
   .blog-content p {
     position: relative;
+  }
+
+  @media (max-width: 767px) {
+    .blog-post-page {
+      background:
+        linear-gradient(180deg, hsl(210 28% 98%) 0, hsl(var(--background)) 28rem),
+        hsl(var(--background));
+    }
+
+    .blog-post-shell {
+      padding: 1.15rem 1rem 3.5rem;
+    }
+
+    .blog-post-main {
+      padding-top: 0;
+    }
+
+    .blog-post-frame {
+      max-width: none;
+    }
+
+    .blog-return-link {
+      margin-bottom: 1.2rem;
+      min-height: 2.35rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .blog-content {
+      font-size: 1.08rem;
+      line-height: 1.72;
+    }
+
+    .blog-content .blog-post-hero {
+      text-align: left;
+      margin: 0 0 2rem;
+      padding: 1.25rem 0 0;
+      border-top: 2px solid hsl(var(--accent));
+    }
+
+    .blog-content .blog-post-hero h1 {
+      font-size: 2.18rem;
+      line-height: 1.08;
+      font-weight: 760;
+      margin-bottom: 1rem;
+    }
+
+    .blog-content .blog-post-meta {
+      align-items: flex-start;
+      gap: 0.25rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .blog-content h2 {
+      font-size: 1.48rem;
+      line-height: 1.2;
+      margin-top: 3.1rem;
+      margin-bottom: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid hsl(var(--blog-border));
+    }
+
+    .blog-content h3 {
+      font-size: 1.22rem;
+      line-height: 1.28;
+      margin-top: 2.2rem;
+    }
+
+    .blog-content p {
+      margin-bottom: 1.35rem;
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+      padding-left: 1.2rem;
+      margin: 1.2rem 0 1.6rem;
+    }
+
+    .blog-content li {
+      padding-left: 0.15rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .blog-content li::marker {
+      color: hsl(var(--accent));
+      font-weight: 700;
+    }
+
+    .blog-content code {
+      font-size: 0.86em;
+      padding: 0.12rem 0.32rem;
+    }
+
+    .blog-content pre {
+      border-radius: 0.5rem;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      margin: 1.7rem 0;
+      padding: 1rem;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .blog-content .heuristic-code-pair {
+      width: calc(100vw - 2rem);
+      gap: 1rem;
+      margin-top: 1.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .blog-content .heuristic-code-pair pre {
+      font-size: 0.72rem;
+    }
+
+    .blog-content .heuristic-code-notes {
+      padding: 0 0.15rem;
+    }
+
+    .blog-content .sidenote-ref {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1rem;
+      height: 1rem;
+      margin-left: 0.14rem;
+      color: hsl(var(--accent));
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 750;
+      border-radius: 50%;
+      vertical-align: super;
+    }
+
+    .blog-content .sidenote-ref.is-open {
+      background: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
+    }
+
+    .blog-content .sidenote-mobile {
+      display: none;
+      width: 100%;
+      gap: 0.45rem;
+      margin: 0.55rem 0 0.95rem;
+      padding: 0.68rem 0.8rem;
+      border-left: 2px solid hsl(var(--accent));
+      border-radius: 0.5rem;
+      background: hsl(210 30% 97%);
+      color: hsl(var(--blog-text-light));
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .blog-content .sidenote-mobile.is-open {
+      display: flex;
+    }
+
+    .blog-content .sidenote-number {
+      margin-right: 0;
+      font-weight: 750;
+    }
+
+    .blog-content figure {
+      margin: 2rem 0;
+      align-items: stretch;
+    }
+
+    .blog-content figure.post-opening-media,
+    .blog-content .shape-control-pair,
+    .blog-content .environment-grid,
+    .blog-content .benchmark-viewer {
+      width: calc(100vw - 2rem);
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .blog-content figure.post-opening-media {
+      max-width: none;
+      margin-top: 0.5rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .blog-content img,
+    .blog-content video {
+      display: block;
+      border-radius: 0.5rem;
+    }
+
+    .blog-content figure > img,
+    .blog-content figure > video {
+      background: hsl(var(--muted));
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+    }
+
+    .blog-content figcaption {
+      text-align: left;
+      font-size: 0.78rem;
+      line-height: 1.42;
+      margin-top: 0.65rem;
+      padding: 0 0.25rem 0 0.65rem;
+      border-left: 2px solid hsl(var(--border));
+    }
+
+    .blog-content .shape-control-pair {
+      gap: 1.2rem;
+    }
+
+    .blog-content .environment-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(14rem, 78vw);
+      grid-template-columns: none;
+      gap: 0.95rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding: 0.1rem 0 0.8rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .blog-content .environment-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .blog-content .environment-grid figure {
+      overflow: hidden;
+      scroll-snap-align: start;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      background: hsl(var(--background));
+    }
+
+    .blog-content .environment-grid img {
+      aspect-ratio: 16 / 9;
+      border-radius: 0;
+    }
+
+    .blog-content .environment-grid figcaption {
+      margin-top: 0;
+      padding: 0.75rem 0.8rem 0.85rem;
+      border-left: 0;
+    }
+
+    .blog-content .benchmark-viewer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .blog-content .benchmark-preview {
+      order: -1;
+      padding: 0;
+    }
+
+    .blog-content .benchmark-thumb-grid {
+      display: flex;
+      gap: 0.65rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding: 0.1rem 0 0.7rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .blog-content .benchmark-thumb-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .blog-content .benchmark-thumb {
+      flex: 0 0 72%;
+      scroll-snap-align: start;
+      border-radius: 0.5rem;
+      background: hsl(var(--background));
+      padding: 0.2rem;
+    }
+
+    .blog-content .benchmark-thumb img,
+    .blog-content .benchmark-preview img {
+      border-radius: 0.35rem;
+    }
   }
 }
