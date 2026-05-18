@@ -36,6 +36,7 @@ const BlogPost = () => {
   const post = blogPosts.find((entry) => entry.slug === slug);
   const articleRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [readingProgress, setReadingProgress] = useState(0);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -190,6 +191,60 @@ const BlogPost = () => {
   }, [processedHtml]);
 
   useEffect(() => {
+    const container = articleRef.current;
+    if (!container) {
+      return;
+    }
+
+    const cleanupCallbacks: Array<() => void> = [];
+    const references = Array.from(container.querySelectorAll<HTMLElement>(".sidenote-ref"));
+
+    references.forEach((reference) => {
+      const noteId = reference.dataset.note;
+      if (!noteId) {
+        return;
+      }
+
+      const mobileNote = container.querySelector<HTMLElement>(`.sidenote-mobile[data-note="${noteId}"]`);
+      if (!mobileNote) {
+        return;
+      }
+
+      const noteElementId = `sidenote-mobile-${noteId}`;
+      mobileNote.setAttribute("id", noteElementId);
+      reference.setAttribute("role", "button");
+      reference.setAttribute("tabindex", "0");
+      reference.setAttribute("aria-controls", noteElementId);
+      reference.setAttribute("aria-expanded", "false");
+
+      const toggleNote = () => {
+        const isOpen = !mobileNote.classList.contains("is-open");
+        mobileNote.classList.toggle("is-open", isOpen);
+        reference.classList.toggle("is-open", isOpen);
+        reference.setAttribute("aria-expanded", String(isOpen));
+      };
+
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleNote();
+        }
+      };
+
+      reference.addEventListener("click", toggleNote);
+      reference.addEventListener("keydown", handleKeyDown);
+      cleanupCallbacks.push(() => {
+        reference.removeEventListener("click", toggleNote);
+        reference.removeEventListener("keydown", handleKeyDown);
+      });
+    });
+
+    return () => {
+      cleanupCallbacks.forEach((cleanup) => cleanup());
+    };
+  }, [processedHtml]);
+
+  useEffect(() => {
     if (sections.length) {
       setActiveSection(sections[0].id);
     } else {
@@ -232,6 +287,43 @@ const BlogPost = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [sections]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    let frame = 0;
+
+    const updateProgress = () => {
+      const article = articleRef.current;
+      if (!article) {
+        setReadingProgress(0);
+        return;
+      }
+
+      const articleRect = article.getBoundingClientRect();
+      const articleTop = articleRect.top + window.scrollY;
+      const readableDistance = Math.max(1, article.offsetHeight - window.innerHeight);
+      const progress = (window.scrollY - articleTop) / readableDistance;
+      setReadingProgress(Math.min(1, Math.max(0, progress)));
+    };
+
+    const scheduleProgress = () => {
+      cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(updateProgress);
+    };
+
+    scheduleProgress();
+    window.addEventListener("scroll", scheduleProgress, { passive: true });
+    window.addEventListener("resize", scheduleProgress);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleProgress);
+      window.removeEventListener("resize", scheduleProgress);
+    };
+  }, [processedHtml, slug]);
 
   useLayoutEffect(() => {
     if (typeof window === "undefined") {
@@ -350,12 +442,18 @@ const BlogPost = () => {
     }
   };
 
+  const mobileSections = sections.filter((section) => section.level <= 2);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="blog-post-page min-h-screen bg-background">
       <Header isSticky={false} />
 
-      <div className="max-w-6xl mx-auto px-6 xl:px-8 py-12">
-        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,48rem)_minmax(0,1fr)] lg:items-start lg:gap-12">
+      <div className="blog-mobile-progress lg:hidden" aria-hidden="true">
+        <span style={{ width: `${Math.round(readingProgress * 100)}%` }} />
+      </div>
+
+      <div className="blog-post-shell max-w-6xl mx-auto px-6 xl:px-8 py-12">
+        <div className="blog-post-layout lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,48rem)_minmax(0,1fr)] lg:items-start lg:gap-12">
           <Sidebar
             sections={sections}
             activeSection={activeSection}
@@ -363,20 +461,36 @@ const BlogPost = () => {
             className="lg:col-start-1 lg:col-end-2 lg:justify-self-end"
           />
 
-          <main className="pt-6 lg:pt-0 lg:col-start-2 lg:col-end-3">
-            <div className="w-full max-w-3xl mx-auto">
+          <main className="blog-post-main pt-6 lg:pt-0 lg:col-start-2 lg:col-end-3">
+            <div className="blog-post-frame w-full max-w-3xl mx-auto">
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 text-sm text-blog-text-light hover:text-foreground transition-colors mb-8"
+                className="blog-return-link inline-flex items-center gap-2 text-sm text-blog-text-light hover:text-foreground transition-colors mb-8"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Blog
               </Link>
 
+              {mobileSections.length > 1 && (
+                <nav className="blog-mobile-sections lg:hidden" aria-label="Article sections">
+                  {mobileSections.map((section) => (
+                    <button
+                      key={section.id}
+                      type="button"
+                      onClick={() => handleSectionSelect(section.id)}
+                      className={activeSection === section.id ? "is-active" : undefined}
+                      aria-current={activeSection === section.id ? "true" : undefined}
+                    >
+                      {section.title}
+                    </button>
+                  ))}
+                </nav>
+              )}
+
               <article className="blog-content" ref={articleRef}>
-                <header className="mb-10 text-center">
+                <header className="blog-post-hero mb-10 text-center">
                   <h1 className="mb-4">{post.title}</h1>
-                  <div className="flex flex-col items-center gap-1 text-sm text-blog-text-light">
+                  <div className="blog-post-meta flex flex-col items-center gap-1 text-sm text-blog-text-light">
                     <span>{post.author}</span>
                     <span>{post.date} · {post.readTime}</span>
                   </div>
