@@ -12,6 +12,17 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: "20260612-what-s-a-divergence-the-geometry-behind-kl",
+    slug: "what-s-a-divergence-the-geometry-behind-kl",
+    title: "What's a divergence? (the geometry behind KL)",
+    author: "Paul Garnier",
+    date: "Jun 12, 2026",
+    dateISO: "2026-06-12",
+    excerpt: "The KL divergence is everywhere — training losses, RL regularizers, variational bounds — and most of us use it the way we use a microwave: confidently, with no idea what is happening inside. There is a geometric derivation I find far more satisfying: start from a vector field that points home, integrate it, and relative entropy falls out.",
+    readTime: "9 min read",
+    contentFile: "what-s-a-divergence-the-geometry-behind-kl.html",
+  },
+  {
     id: "20260515-heuristic-learning-for-fluid-dynamics-a-case-study",
     slug: "heuristic-learning-for-fluid-dynamics-a-case-study",
     title: "Heuristic Learning for Fluid Dynamics: A Case Study",

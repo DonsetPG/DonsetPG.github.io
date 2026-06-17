@@ -1,0 +1,154 @@
+<figure>
+  <img src="imgs/2026-06-12-what-s-a-divergence-the-geometry-behind-kl/gaussian_mixture_geodesic_bottom_panel.gif" alt="Animated geodesic between two Gaussian mixture distributions, accumulating the Fisher inner-product integral until it matches the KL divergence" width="100%">
+  <figcaption>The KL divergence recovered by integrating the Fisher inner product along a path from $Q$ to $P$.</figcaption>
+</figure>
+
+<p>If you have ever trained a model with a cross-entropy loss<sup class="sidenote-ref" data-note="1">1</sup><span class="sidenote" data-note="1" role="note"><span class="sidenote-number">1</span>Minimizing cross-entropy in $\nu$ is the same as minimizing $D_{KL}(\mu \,\|\, \nu)$: they differ by the entropy of the data distribution $\mu$, which is a constant.</span><span class="sidenote-mobile" data-note="1" role="note"><span class="sidenote-number">1</span>Minimizing cross-entropy in $\nu$ is the same as minimizing $D_{KL}(\mu \,\|\, \nu)$: they differ by the entropy of the data distribution $\mu$, which is a constant.</span>, regularized a policy update in reinforcement learning<sup class="sidenote-ref" data-note="2">2</sup><span class="sidenote" data-note="2" role="note"><span class="sidenote-number">2</span>TRPO constrains it, PPO clips a proxy for it, RLHF pipelines <a href="https://arxiv.org/abs/2203.02155">penalize it explicitly</a>, and the entropy bonus in <a href="https://arxiv.org/abs/1801.01290">SAC</a> is a close neighbor.</span><span class="sidenote-mobile" data-note="2" role="note"><span class="sidenote-number">2</span>TRPO constrains it, PPO clips a proxy for it, RLHF pipelines <a href="https://arxiv.org/abs/2203.02155">penalize it explicitly</a>, and the entropy bonus in <a href="https://arxiv.org/abs/1801.01290">SAC</a> is a close neighbor.</span>, or written down a variational bound, you have already met the Kullback–Leibler divergence:</p>
+
+<p>$$D_{KL}(P \,\|\, Q) = \int_{\Omega} P(x) \log\frac{P(x)}{Q(x)}dx$$</p>
+
+<p>KL is used so often that it can become a reflex: write or implement the formula, optimize it, move on. Sometimes you may wonder about the subtleties between forward and reversed KL, or what exactly is happening to the distribution during the optimization process, but that's about it. What is easier to miss is that the expression has a geometric origin.</p>
+
+<p> In this post, we will see how KL appears as the analogue of $\frac{1}{2}\|p-q\|^2$, but computed on a space whose points are probability distributions and whose straight lines depend on a chosen connection. For more details, and a strong introduction to Information Geometry, see the Information Geometry book by Ay, Jost, Lê and Schwachhöfer<sup class="sidenote-ref" data-note="3">3</sup><span class="sidenote" data-note="3" role="note"><span class="sidenote-number">3</span><a href="https://link.springer.com/book/10.1007/978-3-319-56478-4">Ay, Jost, Lê, Schwachhöfer, <em>Information Geometry</em>, Springer (2017)</a></p>
+
+
+<h1 id="flat-space-first">Flat space first : Introduction in $\mathbb{R}^n$</h1>
+
+<p>We start in $\mathbb{R}^n$, where subtraction between two points is available immediately. We first fix a point $p$, and to every other point $q$, we attach the arrow that starts at $q$ and points toward $p$:</p>
+
+<p>$$q \mapsto p - q$$</p>
+
+<p>This is a vector field. At each location it gives the local instruction "move toward $p$". Far from $p$, the arrow is long. Near $p$, it is short. At $p$, it is zero. More importantly, it also shows the shortest path to use to reach $p$.</p>
+
+<figure>
+  <img src="imgs/2026-06-12-what-s-a-divergence-the-geometry-behind-kl/still-flat-field.png" alt="A vector field of arrows all pointing toward a central point p, with circular level sets" width="100%">
+  <figcaption>The difference field $X(q) = p - q$. Every arrow points at $p$, and the circles are the level sets of the squared distance.</figcaption>
+</figure>
+
+<p>
+
+  We would like to find a relevant distance function $D_p(q)$, whose gradient could be connected to this vector field. The reason to look at gradients is that gradients connect scalar quantities to vector fields. If $D_p(q)$ is supposed to measure how far $q$ is from $p$, then $-\mathrm{grad}_q D_p$ is the direction in which that quantity decreases fastest. In Euclidean space, the direction that most directly decreases distance to $p$ should be the arrow from $q$ to $p$ itself. That is the motivation for the computation below.
+
+</p>
+
+<p>Indeed, in this Euclidean space, we want to use the most natural distance possible, the squared distance:</p>
+
+<p>$$D_p(q) := D(p \,\|\, q) := \frac{1}{2}\|p-q\|^2 = \frac{1}{2}\sum_{i=1}^n (p_i - q_i)^2$$</p>
+
+<p>The factor $\frac{1}{2}$ is only there to remove a factor of $2$ from the derivative. Taking the gradient with respect to $q$ gives $q-p$. Therefore</p>
+
+<p>$$p - q = -\,\mathrm{grad}_q\, D_p$$</p>
+
+<p>The difference field is the negative gradient of the half squared distance. The arrows point downhill, and in this case downhill means toward $p$.</p>
+
+<p>Now reverse the logic. Suppose we no longer know the formula for distance, but we do know how to build an arrow from $q$ to $p$. If that arrow field is the negative gradient of some scalar function, then the scalar function is a distance-like object. It measures how much potential remains before reaching $p$. That scalar function is what we call a <strong>divergence</strong> in Information Geometry.</p>
+
+<h1 id="curved-spaces">What does "p − q" even mean on a curved space?</h1>
+
+<p>On a general curved space $M$, a manifold such as the surface of the Earth or, later, the space of positive measures, the expression $p - q$ has no intrinsic meaning. Points cannot usually be subtracted. There is no canonical operation that takes a point and an arrow and returns another point. That structure belongs to $\mathbb{R}^n$<sup class="sidenote-ref" data-note="4">4</sup><span class="sidenote" data-note="4" role="note"><span class="sidenote-number">4</span>Indeed and just for visualization purposes, imagine a point somewhere on Earth. Following a straight vector would leave you somewhere not on the surface of the Earth anymore. We need to take curvature into account.</span><span class="sidenote-mobile" data-note="4" role="note"><span class="sidenote-number">4</span>Indeed and just for visualization purposes, imagine a point somewhere on Earth. Following a straight vector would leave you somewhere not on the surface of the Earth anymore. We need to take curvature into account.</span>.</p>
+
+<p>What a manifold <em>can</em> have is a rule for what "going straight" means. That rule is called an affine connection, written $\nabla$<sup class="sidenote-ref" data-note="5">5</sup><span class="sidenote" data-note="5" role="note"><span class="sidenote-number">5</span>If the space has a metric, there is a default choice, the Levi-Civita connection. </span><span class="sidenote-mobile" data-note="5" role="note"><span class="sidenote-number">5</span>If the space has a metric, there is a default choice, the Levi-Civita connection.</span>.</p>
+
+<p>One should really see that connection as the geometrical tool that allows you to follow the curvature of the space. Once a connection is chosen, it defines geodesics: the curves traced by starting at $q$ with initial velocity $X$ and then not steering. Call that curve $\gamma_{q,X}(t)$, with $\gamma_{q,X}(0) = q$ and $\dot\gamma_{q,X}(0) = X$.</p>
+
+<p>Geodesics replace the Euclidean operation "point plus arrow". Walking straight for one unit of time defines the <strong>exponential map</strong>:</p>
+
+<p>$$\exp_q : U_q \to M, \qquad X \mapsto \gamma_{q,X}(1)$$</p>
+
+<p>With the exponential map, we can define a replacement for the difference between two points. Given $q$ and $p$, the <strong>difference vector</strong> $X(q,p)$ is the initial velocity such that</p>
+
+<p>$$\exp_q\big(X(q,p)\big) = p$$</p>
+
+<p>In words: $X(q,p)$ is the velocity needed to leave $q$ so that, after moving along the chosen geodesic for one unit of time, the endpoint is $p$. This is the curved-space version of "$p-q$".</p>
+
+<figure>
+  <img src="imgs/2026-06-12-what-s-a-divergence-the-geometry-behind-kl/still-curved-geodesic.png" alt="A warped grid with a geodesic curve connecting a point q to a point p, and the initial velocity vector X(q,p) at q" width="100%">
+  <figcaption>On a curved space, the difference between $p$ and $q$ is not an arrow in the ambient space, it is the initial velocity $X(q,p)$ of the geodesic that connects them.</figcaption>
+</figure>
+
+<h1 id="from-arrows-to-distance">Back to a distance</h1>
+
+<p>We now have the field of difference arrows $q \mapsto X(q,p)$ on our curved space. We should see this vector field as the paths to follow to reach $p$, similar to the role it played in $\mathbb{R}^n$. Following the flat-space recipe, we want a function $D_p$ such that</p>
+
+<p>$$X(q,p) = -\,\mathrm{grad}_q\, D_p$$</p>
+
+<p> 
+
+We still need one last ingredient: a way to compute norms, i.e. an inner product. A Riemannian manifold is defined with $M$, and a Riemannian metric $g$. This metric is a smooth function, defined at every point of the manifold, which defines an inner product at that point exactly. For example, around point $p$, we will write it $g_p$ or $\langle\cdot,\cdot\rangle_p$. In the case of probability distribution, we know that (up to a scaling factor), such metric is unique and is the Fisher Information<sup class="sidenote-ref" data-note="6">6</sup><span class="sidenote" data-note="6" role="note"><span class="sidenote-number">6</span>For a parametric distribution $p_\theta$, the Fisher information is the covariance of the score: $I(\theta)=\mathbb{E}_{x\sim p_\theta}[\nabla_\theta\log p_\theta(x)\nabla_\theta\log p_\theta(x)^\top]$. It measures how strongly the distribution changes under an infinitesimal parameter move.</span><span class="sidenote-mobile" data-note="6" role="note"><span class="sidenote-number">6</span>For a parametric distribution $p_\theta$, the Fisher information is the covariance of the score: $I(\theta)=\mathbb{E}_{x\sim p_\theta}[\nabla_\theta\log p_\theta(x)\nabla_\theta\log p_\theta(x)^\top]$. It measures how strongly the distribution changes under an infinitesimal parameter move.</span>. In our case, this defines an inner product as $\langle a,b\rangle_p = \sum \frac{a_i b_i}{p_i}$
+
+</p>
+
+<p>Let's suppose such a $D_p$ exists, with $D_p(p)=0$. To recover it from the arrow field, we will use the same principle as recovering potential energy from a conservative force field. In mechanics, a force field $F$ is conservative when $F=-\nabla U$ for some potential energy $U$. Near the surface of the Earth, for instance, gravity is approximately $F=-mg\,e_z$ and the potential is $U(z)=mgz$. Moving upward increases $U$; moving downward lets the gravitational force do positive work. If you know the force field, you can recover differences in potential energy by integrating the force along a path.</p>
+
+<p>We use the same approach here. Our arrow field $X$ plays the role of the force, and $D_p$ plays the role of the potential. Pick any smooth curve $\gamma$ from $q$ to $p$ and integrate the inner product of the field with the velocity:</p>
+
+<p>$$\int_0^1 \big\langle X(\gamma(t), p),\, \dot\gamma(t)\big\rangle_{\gamma(t)}\, dt = -\int_0^1 \frac{d (D_p \circ \gamma)}{dt}(t)\, dt = D_p(q) - \underbrace{D_p(p)}_{=\,0} = D_p(q)$$</p>
+
+<figure>
+  <img src="imgs/2026-06-12-what-s-a-divergence-the-geometry-behind-kl/still-integral.png" alt="A path from q to p with a moving point, the field arrow at the point, and a counter accumulating the value of the divergence" width="100%">
+  <figcaption>Integrating the inner product of the difference field with the curve's velocity. Because the field is a gradient field, any path from $q$ to $p$ accumulates the same total.</figcaption>
+</figure>
+
+<h1 id="distributions">Making the points probability distributions</h1>
+
+<p>Now specialize the construction. Let $\mathcal{M}_+(I)$ be the space of positive measures on a finite set $I = \{1, \dots, n\}$. A point $\mu$ is a list of positive numbers $(\mu_1, \dots, \mu_n)$. If the entries sum to $1$, the point is a probability distribution.</p>
+
+<p>For the metric, recall that we use the Fisher metric and that at the point $p$, the inner product of two tangent vectors $a$ and $b$ is</p>
+
+<p>$$\langle a, b\rangle_p = \sum_{i\in I} \frac{a_i\, b_i}{p_i}$$</p>
+
+<p>This is the same Fisher information that appears in the Cramér–Rao bound and in natural gradient methods<sup class="sidenote-ref" data-note="8">8</sup><span class="sidenote" data-note="8" role="note"><span class="sidenote-number">8</span><a href="https://direct.mit.edu/neco/article-abstract/10/2/251/6143/Natural-Gradient-Works-Efficiently-in-Learning">Amari, <em>Natural Gradient Works Efficiently in Learning</em> (1998)</a>. The "natural" in natural gradient means: gradient with respect to this metric.</span><span class="sidenote-mobile" data-note="8" role="note"><span class="sidenote-number">8</span><a href="https://direct.mit.edu/neco/article-abstract/10/2/251/6143/Natural-Gradient-Works-Efficiently-in-Learning">Amari, <em>Natural Gradient Works Efficiently in Learning</em> (1998)</a>. The "natural" in natural gradient means: gradient with respect to this metric.</span>.</p>
+
+<p>Finally, we still have to define the connection we will use. In Information Geometry, this is a large topic, and many different connections (and thus divergences) have been studied. We will use here the easiest to understand: the <strong>m-connection</strong>, where "m" stands for mixture. Its geodesics are ordinary affine segments, so walking straight from $\nu$ in direction $a$ gives</p>
+
+<p>$$\exp^{(m)}_\nu(a) = \nu + a$$</p>
+
+<p>Therefore the inverse problem is immediate. In generic notation, starting at $a$ and adding a tangent displacement $v$ lands at $a+v$; to land at $b$, the inverse displacement is $b-a$. Here the starting point is $\nu$ and the target is $\mu$, so the initial velocity that reaches $\mu$ in one unit of m-time is</p>
+
+<p>$$X^{(m)}(\nu,\mu) = \big(\exp^{(m)}_\nu\big)^{-1}(\mu) = \mu - \nu = \sum_{i\in I} (\mu_i - \nu_i)\delta_i$$</p>
+
+<p>So, for the m-connection, the curved-space difference vector is the literal coordinate difference. The geometry is not hidden in the arrow; it enters through the Fisher metric used to turn that arrow field into a scalar divergence.</p>
+
+<p>Take a smooth curve $\gamma$ with $\gamma(0)=\nu$ and $\gamma(1)=\mu$. The Fisher inner product of the m-arrow with the curve velocity is</p>
+
+<p>$$\big\langle X^{(m)}(\gamma(t), \mu),\, \dot\gamma(t)\big\rangle_{\gamma(t)} = \sum_{i\in I} \frac{\mu_i - \gamma_i(t)}{\gamma_i(t)}\,\dot\gamma_i(t)$$</p>
+
+<p>Integrating gives</p>
+
+<p>$$D^{(m)}(\mu \,\|\, \nu) = \int_0^1 \sum_{i\in I} \frac{\mu_i - \gamma_i(t)}{\gamma_i(t)}\,\dot\gamma_i(t)\,dt = \sum_{i\in I} \Big[\mu_i \log\gamma_i(t) - \gamma_i(t)\Big]_0^1$$</p>
+
+<p>and therefore</p>
+
+<p>$$D^{(m)}(\mu \,\|\, \nu) = \sum_{i\in I} \left(\nu_i - \mu_i + \mu_i \log\frac{\mu_i}{\nu_i}\right)$$</p>
+
+<p>The <strong>e-connection</strong> also exists. It is the connection for which straight motion is linear in log-density coordinates, rather than in mixture coordinates. We do not need its arrow to compute the expression above, but it explains the reversed divergence. Running the same gradient-and-integral construction with the e-connection gives</p>
+
+<p>$$D^{(e)}(\mu \,\|\, \nu) = D^{(m)}(\nu \,\|\, \mu)$$</p>
+
+<p>Thus the two orientations of KL correspond to two dual choices of straightness: mixture straightness gives the usual, or forward, KL, while exponential straightness gives the same divergence with the arguments reversed.</p>
+
+<h1 id="the-kl-divergence">The Kullback–Leibler divergence</h1>
+
+<p>For positive measures:</p>
+
+<p>$$D_{KL}(\mu \,\|\, \nu) := \sum_{i\in I} \nu_i - \sum_{i\in I} \mu_i + \sum_{i\in I} \mu_i \log\frac{\mu_i}{\nu_i}$$</p>
+
+<p>When $\mu$ and $\nu$ are probability distributions, the first two sums are both $1$ and cancel, leaving the familiar formula:</p>
+
+<p>$$D_{KL}(\mu \,\|\, \nu) = \sum_{i\in I} \mu_i \log\frac{\mu_i}{\nu_i}$$</p>
+
+<p>That is the derivation. KL is what the half squared Euclidean distance becomes when the points are positive measures, the metric is Fisher, and the relevant notion of straightness is the mixture connection. The reversed KL is produced by the dual exponential connection. The formula is not imposed from outside; it is recovered by the same arrow-to-potential recipe that recovers squared distance in flat space.</p>
+
+<p>Several familiar properties become less obscure from this perspective:</p>
+
+<ul>
+<li><strong>The asymmetry is structural.</strong> $D_{KL}(\mu\|\nu) \neq D_{KL}(\nu\|\mu)$ because reversing the arguments corresponds to changing the connection used to define the arrows, $D^{(e)}(\mu\|\nu) = D^{(m)}(\nu\|\mu)$. The forward/reverse KL distinction in variational inference is not just a notational choice.</li>
+<li><strong>The first argument determines where the expectation is taken.</strong> In $D_{KL}(\mu\|\nu)$, the average is over samples from $\mu$. Errors in regions where $\mu$ has mass are expensive. Regions where $\mu$ has little or no mass contribute little, even if $\nu$ assigns them probability.</li>
+<li><strong>It behaves like a squared distance near the diagonal.</strong> Taylor-expand for $\nu$ close to $\mu$ and the leading term is $\frac{1}{2}\langle \delta, \delta\rangle_\mu$, half the Fisher norm of the perturbation. This is why trust-region and natural-gradient methods treat a KL ball as the right local neighborhood of a policy.</li>
+</ul>
+
+<p>For LLM fine-tuning, the orientation matters because the two arguments correspond to different sampling procedures. In supervised fine-tuning, cross-entropy on demonstrations minimizes $D_{KL}(p_{data}\|\pi_\theta)$ up to an additive constant. The expectation is over the demonstration distribution. If a demonstration token or completion has probability under $p_{data}$, the model is penalized for assigning it low probability. This is the forward-KL, mode-covering pressure: imitate all observed modes of the data, at least to the extent that they appear in the dataset.</p>
+
+<p>In DRL for LLMs, the common objective is different. The policy $\pi_\theta$ is optimized for reward while being kept close to a reference model $\pi_{ref}$, often through a term of the form $D_{KL}(\pi_\theta\|\pi_{ref})$ or a sampled approximation to it. Now the expectation is over the model's own completions. The penalty is large when the current policy puts mass on sequences or tokens that the reference model considers unlikely. This is the reverse-KL pressure: it discourages excursions away from the reference distribution, but it does not force the policy to preserve every behavior that the reference model could have produced.</p>
+
+<p>This distinction is one reason SFT and RL fine-tuning can feel qualitatively different. SFT mainly punishes missing the demonstrations. Reverse-KL-regularized RL mainly punishes the model for generating behavior that the reference would find implausible, while the reward term can still concentrate probability on a narrower set of high-reward responses.</p>
