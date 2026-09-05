@@ -15,4 +15,12 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        blog: path.resolve(__dirname, "index.html"),
+        research: path.resolve(__dirname, "labs/heuristic-learning/index.html"),
+      },
+    },
+  },
 }));
