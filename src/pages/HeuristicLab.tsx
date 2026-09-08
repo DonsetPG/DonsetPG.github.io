@@ -30,6 +30,7 @@ import gnnPlateVideo from "@/assets/imgs/hiverge-gnn-gallery/plate-predictions-w
 import aneurysmFlowWss from "@/assets/imgs/hiverge-gnn-gallery/aneurysm-flow-wss.png";
 
 import CylinderJetSandbox from "./CylinderJetSandbox";
+import BenchmarkCaseGuide from "./BenchmarkCaseGuide";
 import "./HeuristicLab.css";
 
 type EnvironmentId = "cylinder" | "tcf" | "shkadov" | "lorenz";
@@ -315,6 +316,7 @@ const linePath = (points: LorenzPoint[], key: "x" | "action", width: number, hei
 };
 
 const LAB_SECTIONS = [
+  ["benchmark-cases", "All cases"],
   ["gnn-rollouts", "GNN rollouts"],
   ["policy-microscope", "Policies"],
   ["method", "Protocol"],
@@ -523,10 +525,12 @@ const HeuristicLab = () => {
           <a href="#/labs/heuristic-learning" onClick={scrollToSection("cylinder-sandbox")}><span>03</span> Control the wake <ChevronRight size={15} /></a>
         </aside>
 
+        <BenchmarkCaseGuide />
+
         <section className="hl-gnn-gallery" id="gnn-rollouts">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">01</span>
+              <span className="hl-section-index">02</span>
               <p>Learned physics rollouts</p>
             </div>
             <h2>Before the control law, the models had to learn how physical state moves across a mesh.</h2>
@@ -587,7 +591,7 @@ const HeuristicLab = () => {
         <section className="hl-microscope" id="policy-microscope">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">02</span>
+              <span className="hl-section-index">03</span>
               <p>Policy microscope</p>
             </div>
             <h2>The result stays connected to the code that produced it.</h2>
@@ -677,7 +681,7 @@ const HeuristicLab = () => {
         <section className="hl-method" id="method">
           <div className="hl-section-heading is-light">
             <div>
-              <span className="hl-section-index">03</span>
+              <span className="hl-section-index">04</span>
               <p>Search protocol</p>
             </div>
             <h2>Each candidate has to survive the simulator and leave evidence behind.</h2>
@@ -702,7 +706,7 @@ const HeuristicLab = () => {
         <section className="hl-live" id="live-benchmark">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">04</span>
+              <span className="hl-section-index">05</span>
               <p>Live benchmark</p>
             </div>
             <h2>Edit the discovered Lorenz controller. The equations rerun in your browser.</h2>
@@ -789,7 +793,7 @@ const HeuristicLab = () => {
 
         <section className="hl-transfer" id="transfer">
           <div className="hl-transfer-copy">
-            <span className="hl-section-index">06</span>
+            <span className="hl-section-index">07</span>
             <p>Transfer as a code diff</p>
             <h2>Five jets become ten. Four constants move.</h2>
             <p className="hl-transfer-lead">
@@ -814,7 +818,7 @@ const HeuristicLab = () => {
         <section className="hl-failures" id="failure-museum">
           <div className="hl-section-heading is-light">
             <div>
-              <span className="hl-section-index">07</span>
+              <span className="hl-section-index">08</span>
               <p>Failure museum</p>
             </div>
             <h2>The rejected candidates define the real scientific boundary.</h2>
@@ -862,7 +866,7 @@ const HeuristicLab = () => {
 
         <section className="hl-vision" id="vision">
           <div className="hl-vision-title">
-            <span className="hl-section-index">08</span>
+            <span className="hl-section-index">09</span>
             <p>Where CFD goes next</p>
             <h2>Scientific agents become experimentalists. Physics becomes an executable test suite.</h2>
           </div>

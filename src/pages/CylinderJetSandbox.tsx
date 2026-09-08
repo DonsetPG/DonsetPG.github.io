@@ -827,7 +827,7 @@ const CylinderJetSandbox = () => {
     <section ref={sandboxRef} className="hl-cylinder-lab" id="cylinder-sandbox" tabIndex={-1} aria-label="Interactive cylinder flow sandbox">
       <div className="hl-section-heading">
         <div>
-          <span className="hl-section-index">05</span>
+          <span className="hl-section-index">06</span>
           <p>Browser CFD sandbox</p>
         </div>
         <h2>Take over the wake at step 7,000. Control it to 8,500.</h2>
