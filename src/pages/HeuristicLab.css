@@ -746,3 +746,82 @@
   .heuristic-lab-page *::before,
   .heuristic-lab-page *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
+
+/* Compact demo edition: media and controls lead the page. */
+.hl-header { height: 64px; }
+.hl-demo-intro {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 32px clamp(24px, 5vw, 84px) 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.hl-demo-intro h1 { margin: 0; font-size: clamp(28px, 3.5vw, 46px); letter-spacing: -.045em; line-height: 1.1; font-weight: 600; }
+.hl-demo-intro .hl-primary-action { padding: 12px 16px; font-size: 12px; white-space: nowrap; }
+.hl-gnn-gallery,
+.hl-microscope,
+.hl-live,
+.hl-cylinder-lab { padding-top: 54px; padding-bottom: 54px; }
+.hl-gnn-gallery { padding-top: 14px; }
+.hl-gnn-gallery::before { content: none; }
+.hl-section-heading { display: flex; flex-direction: row-reverse; align-items: center; gap: 20px; margin-bottom: 24px; }
+.hl-section-heading > div { gap: 12px; flex-shrink: 0; }
+.hl-section-heading h2 { font-size: clamp(25px, 3vw, 36px); line-height: 1.15; letter-spacing: -.035em; }
+.hl-section-heading p { font-size: 10px; }
+.hl-media-preferences { margin: -8px 0 16px; gap: 14px; }
+.hl-media-preferences > span { color: var(--hl-muted); font: 11px 'DM Mono', monospace; }
+.hl-media-preferences button { min-height: 36px; padding: 6px 11px; }
+.hl-gnn-selector button { min-height: 61px; padding: 12px 16px; }
+.hl-gnn-viewer { display: block; min-height: 0; }
+.hl-gnn-media { border-right: 0; }
+.hl-gnn-media > video { width: 100%; height: min(52vw, 500px); max-height: 500px; aspect-ratio: 16 / 9; }
+.hl-gnn-media img { max-height: 500px; }
+.hl-media-provenance { padding: 9px 16px; font-size: 10px; }
+.hl-environment-tabs button { padding: 17px 18px; min-height: 52px; }
+.hl-instrument { grid-template-columns: minmax(0, 1.3fr) minmax(350px, .8fr); }
+.hl-media-stage { height: 470px; }
+.hl-media-stage::before { content: none; }
+.hl-console-caption { padding: 10px 16px; }
+.hl-policy-code-details { border-bottom: 1px solid var(--hl-line); }
+.hl-policy-code-details summary { padding: 17px 24px; color: var(--hl-cyan); cursor: pointer; font: 12px 'DM Mono', monospace; }
+.hl-policy-code-details summary:hover { background: rgba(88, 229, 238, .05); }
+.hl-policy-code-details .hl-code { border-bottom: 0; padding-top: 5px; }
+.hl-score-heading { margin-top: 24px; }
+.hl-score-note { margin: 20px 28px; color: #a6b5bc; font: 11px/1.65 'DM Mono', monospace; }
+.hl-footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 30px; padding-bottom: 30px; }
+.hl-footer-links { display: flex; gap: 24px; }
+.hl-footer-links a { display: inline-flex; gap: 7px; align-items: center; color: var(--hl-muted); font-size: 12px; }
+.hl-footer-links a:hover { color: var(--hl-cyan); }
+
+@media (max-width: 900px) {
+  .hl-instrument { grid-template-columns: 1fr; }
+  .hl-policy-console { border-top: 1px solid var(--hl-line); }
+  .hl-media-console { border-right: 0; }
+  .hl-media-stage { height: clamp(330px, 60vw, 540px); }
+}
+@media (max-width: 760px) {
+  .hl-header { height: 56px; }
+  .hl-demo-intro { padding: 26px 20px 20px; flex-wrap: wrap; gap: 16px; }
+  .hl-demo-intro .hl-primary-action { font-size: 11px; padding: 10px 12px; }
+  .hl-gnn-gallery,
+  .hl-microscope,
+  .hl-live,
+  .hl-cylinder-lab { padding: 32px 20px; }
+  .hl-gnn-gallery { padding-top: 8px; }
+  .hl-section-heading { align-items: flex-start; flex-direction: column-reverse; gap: 10px; margin-bottom: 20px; }
+  .hl-section-heading > div { gap: 8px; }
+  .hl-section-heading p { font-size: 9px; }
+  .hl-gnn-selector { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hl-gnn-selector button { min-height: 58px; padding: 10px 12px; }
+  .hl-gnn-selector button:nth-child(2) { border-right: 0; }
+  .hl-gnn-selector button:nth-child(-n+2) { border-bottom: 1px solid var(--hl-line); }
+  .hl-gnn-media > video { height: auto; min-height: 180px; aspect-ratio: 16 / 9; }
+  .hl-gnn-media img { max-height: 400px; }
+  .hl-media-preferences { align-items: center; }
+  .hl-media-preferences > span { font-size: 9px; }
+  .hl-environment-tabs button { min-height: 48px; padding: 12px; }
+  .hl-score-note { margin: 16px 22px; font-size: 10px; }
+  .hl-footer { align-items: flex-start; flex-wrap: wrap; }
+}

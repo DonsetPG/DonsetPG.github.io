@@ -485,7 +485,7 @@ const RewardHistory = ({ history, endStep }: { history: HistorySample[]; endStep
   const zeroY = 118 - ((0 - domain[0]) / (domain[1] - domain[0])) * 96;
   return (
     <div className="hl-reward-history">
-      <div className="hl-reward-history-heading"><strong>Reward through the run</strong><span><i className="is-reward" /> instant <i className="is-mean" /> mean</span></div>
+      <div className="hl-reward-history-heading"><strong>Reward ↑ better</strong><span><i className="is-reward" /> instant <i className="is-mean" /> mean</span></div>
       <svg viewBox="0 0 580 154" role="img" aria-label={`Instant reward and cumulative mean reward from step 7000 to ${endStep}. Both curves use the same vertical scale.`}>
         {[domain[1], 0, domain[0]].map((value, index) => {
           const y = 118 - ((value - domain[0]) / (domain[1] - domain[0])) * 96;
@@ -502,7 +502,6 @@ const RewardHistory = ({ history, endStep }: { history: HistorySample[]; endStep
         <text x="44" y="12" textAnchor="end">+1</text><text x="44" y="44" textAnchor="end">−1</text>
         <path className="is-action" transform="translate(0 1.67) scale(1 .3333)" d={historyPath(history, "action", [-1, 1], endStep)} />
       </svg>
-      <p>Higher reward is better. The mean includes every control step; the trace samples every 10 steps.</p>
     </div>
   );
 };
@@ -827,15 +826,15 @@ const CylinderJetSandbox = () => {
     <section ref={sandboxRef} className="hl-cylinder-lab" id="cylinder-sandbox" tabIndex={-1} aria-label="Interactive cylinder flow sandbox">
       <div className="hl-section-heading">
         <div>
-          <span className="hl-section-index">06</span>
+          <span className="hl-section-index">04</span>
           <p>Browser CFD sandbox</p>
         </div>
-        <h2>Take over the wake at step 7,000. Control it to 8,500.</h2>
+        <h2>Cylinder sandbox</h2>
       </div>
 
       <div className="hl-solver-truth">
         <span>LIVE · BROWSER COMPUTED</span>
-        <p>D2Q9 cylinder wake with paired synthetic jets and a synchronized no-control reference. Reward uses cylinder force proxies and actuation cost. This browser demonstration uses its own grid, forcing, and reward; FluidGym results are reported separately above.</p>
+        <p>Independent browser demo. Its scores aren’t comparable with FluidGym.</p>
       </div>
 
       <div className="hl-cylinder-grid">
@@ -885,9 +884,6 @@ const CylinderJetSandbox = () => {
             </figure>
           </div>
           <div className="hl-vorticity-key"><span>−0.045</span><i /><span>+0.045</span><small>vorticity · shared lattice scale</small></div>
-          <div className="hl-sandbox-quick-guide">
-            <span><b>01</b> Choose a controller</span><span><b>02</b> Start at 7,000</span><span><b>03</b> Compare the wake and reward</span>
-          </div>
           <div className="hl-cylinder-metrics">
             <div><span>Jet command</span><strong>{stats.action.toFixed(2)}</strong></div>
             <div className="is-reward">
@@ -895,13 +891,13 @@ const CylinderJetSandbox = () => {
               <strong>{stats.rewardSteps ? formatSigned(stats.reward, 4) : "···"}</strong>
             </div>
             <div className="is-mean-reward">
-              <span>Control mean / step</span>
+              <span>Mean reward</span>
               <strong>{stats.rewardSteps ? formatSigned(stats.meanReward, 4) : "···"}</strong>
               <small>{stats.rewardSteps.toLocaleString()} control samples · ref drag {stats.referenceDrag.toFixed(2)}</small>
             </div>
             <div><span>Drag proxy</span><strong>{stats.drag.toFixed(2)}</strong></div>
             <div><span>Lift proxy</span><strong>{stats.lift.toFixed(2)}</strong></div>
-            <div><span>Mean improvement vs no control</span><strong>{stats.rewardSteps ? formatSigned(stats.meanReward - stats.referenceMeanReward, 4) : "···"}</strong><small>reference mean {stats.rewardSteps ? formatSigned(stats.referenceMeanReward, 4) : "···"}</small></div>
+            <div><span>Mean gain vs jets off</span><strong>{stats.rewardSteps ? formatSigned(stats.meanReward - stats.referenceMeanReward, 4) : "···"}</strong><small>reference mean {stats.rewardSteps ? formatSigned(stats.referenceMeanReward, 4) : "···"}</small></div>
           </div>
           <RewardHistory history={history} endStep={historyEndStep} />
         </div>
@@ -941,14 +937,14 @@ const CylinderJetSandbox = () => {
             )}
             <p className="hl-challenge-note">
               {!prepared
-                ? "Building the starting flow with jets off. Control will wait for you at step 7,000."
-                : "Scored runs restore the same uncontrolled checkpoint and stop at 8,500. Only the next 1,500 steps count."}
+                ? "Jets off until step 7,000. Control starts when you’re ready."
+                : "Same starting flow. 1,500 scored steps. Auto-stop at 8,500."}
             </p>
             {challengeState === "running" && (
               <p className="hl-challenge-note">
                 {mode === "manual"
-                  ? "Human control is live. Hold ↑ or ↓ to actuate; release to return to zero."
-                  : "Settings are locked for this run. Pause and resume without losing progress."}
+                  ? "Hold ↑ / ↓ to control. Release to center."
+                  : "Settings locked. Pause or resume anytime."}
               </p>
             )}
             {challengeState === "complete" && (
@@ -971,18 +967,13 @@ const CylinderJetSandbox = () => {
             {challengeState === "saved" && (
               <p className="hl-challenge-note is-saved"><Trophy size={13} /> Saved to this device.</p>
             )}
-            {storageStatus === "error" && <p className="hl-challenge-note is-error">Local storage could not be reached. Your completed score stays here so you can retry.</p>}
-            {stats.numericalCorrections > 0 && <p className="hl-challenge-note is-error" role="alert">Numerical corrections were needed in this flow. This run is excluded from the leaderboard; reset or lower Reynolds to retry.</p>}
+            {storageStatus === "error" && <p className="hl-challenge-note is-error">Device storage unavailable. Completed scores stay here for retry.</p>}
+            {stats.numericalCorrections > 0 && <p className="hl-challenge-note is-error" role="alert">Numerical corrections detected. Score excluded. Reset or lower Reynolds to retry.</p>}
           </div>
-
-          <p className="hl-controller-help">
-            {mode === "manual"
-              ? "Hold ↑ or ↓ while focused in this sandbox, or use the touch controls below. Keyboard control remains live during a scored run."
-              : "Set the controller first, then start a scored run. Positive and negative commands reverse the paired jets."}
-          </p>
 
           {mode === "manual" && (
             <>
+              <p className="hl-controller-help">Focus this panel, then hold ↑ / ↓. Touch controls work too.</p>
               <div className="hl-keyboard-jet" aria-label="Manual keyboard controls">
                 <button
                   type="button"
@@ -1008,7 +999,7 @@ const CylinderJetSandbox = () => {
                 >
                   <kbd>↓</kbd><span>hold · − jet</span>
                 </button>
-                <small>Both arrows together cancel. Release all arrows to center. Space zeros the jets when the sandbox has focus.</small>
+                <small>Release to center. Both arrows cancel. Space centers jets while the panel has focus.</small>
               </div>
               <label className="hl-slider">
                 <span><b>Jet command</b><output>{manual.toFixed(2)}</output></span>
@@ -1049,31 +1040,26 @@ const CylinderJetSandbox = () => {
               resetSandbox();
             }} />
           </label>
-          <p className="hl-controller-help">
-            Re {DEFAULT_REYNOLDS} by default · inlet {inlet.toFixed(3)} · viscosity {LATTICE_VISCOSITY.toFixed(3)}.
-            {" "}Each Reynolds setting gets its own 7,000-step uncontrolled warm-up. Reset reuses its cached starting flow.
-            {" "}Preview allows free exploration beyond the scored window.
-            {" "}Computation rests while the sandbox is off screen or the tab is hidden.
-          </p>
-
           <details className="hl-score-details">
-            <summary>Controller and reward equations</summary>
+            <summary>Equations & simulation details</summary>
             <div className="hl-live-code">
               {modeCode.map((line) => <code key={line}>{line}</code>)}
               <code>reward = drag_ref − drag − 0.04|lift| − 0.05 command²</code>
               <code>control_step = step − 7000; scored mean uses steps 7001…8500</code>
             </div>
-            <p className="hl-controller-help">Drag and lift are smoothed momentum-exchange proxies measured on the cylinder. The zero-control reward can be negative because lift is still penalized. These values have no validated Cd or Cl interpretation.</p>
+            <p className="hl-controller-help">D2Q9 lattice model with paired jets. Inlet {inlet.toFixed(3)} · viscosity {LATTICE_VISCOSITY.toFixed(3)}. Each Reynolds setting uses its own cached 7,000-step warm-up.</p>
+            <p className="hl-controller-help">Drag and lift are cylinder-force proxies, with no validated Cd or Cl interpretation. Lift penalties can make the no-control reward negative.</p>
+            <p className="hl-controller-help">Mean reward includes every controlled step. Charts sample every 10 steps. Preview has no end limit.</p>
           </details>
         </aside>
       </div>
 
       <section className="hl-sandbox-leaderboard" aria-labelledby="sandbox-leaderboard-title">
         <div className="hl-leaderboard-intro">
-          <div className="hl-leaderboard-kicker"><Database size={14} /> IndexedDB · this device</div>
+          <div className="hl-leaderboard-kicker"><Database size={14} /> Saved on this device</div>
           <h3 id="sandbox-leaderboard-title">Sandbox leaderboard</h3>
           <p>
-            Showing Re {reynoldsProxy}: {SCORED_RUN_STEPS.toLocaleString()} controlled steps from the same step-7,000 checkpoint. Scores persist on this device. This board uses the corrected cylinder-only force measurement; earlier scores remain in storage.
+            Re {reynoldsProxy} · steps 7,000–8,500 · ranked by mean reward
           </p>
           <small>LOCAL DEMO SCORE · NON-COMPARABLE WITH FLUIDGYM</small>
         </div>
@@ -1108,7 +1094,7 @@ const CylinderJetSandbox = () => {
             <div className="hl-leaderboard-empty">
               <Trophy size={24} />
               <strong>No recorded runs yet.</strong>
-              <span>Complete a 7,000–8,500 run at Re {reynoldsProxy} to enter this board.</span>
+              <span>Finish a scored run at Re {reynoldsProxy} to enter.</span>
             </div>
           )}
         </div>

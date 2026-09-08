@@ -2,16 +2,12 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEve
 import {
   ArrowDownRight,
   ArrowLeft,
-  BookOpen,
-  Check,
   ChevronRight,
-  FlaskConical,
   Github,
   Maximize2,
   Pause,
   Play,
   RotateCcw,
-  Sparkles,
   X,
 } from "lucide-react";
 
@@ -23,14 +19,12 @@ import cylinderPlot from "@/assets/imgs/2026-05-15-heuristic-learning-for-fluid-
 import tcfPlot from "@/assets/imgs/2026-05-15-heuristic-learning-for-fluid-dynamics-a-case-study/per-env/TCFSmall3D-both-easy-v0_all_methods.png";
 import shkadovPlot from "@/assets/imgs/2026-05-15-heuristic-learning-for-fluid-dynamics-a-case-study/per-env/shkadov-v0_all_methods.png";
 import lorenzPlot from "@/assets/imgs/2026-05-15-heuristic-learning-for-fluid-dynamics-a-case-study/per-env/lorenz-v0_all_methods.png";
-import transferPlot from "@/assets/imgs/2026-05-15-heuristic-learning-for-fluid-dynamics-a-case-study/10jets.png";
 import gnnCylinderVideo from "@/assets/imgs/hiverge-gnn-gallery/cylinder-predictions-web.mp4";
 import gnnBezierVideo from "@/assets/imgs/hiverge-gnn-gallery/bezier-predictions-web.mp4";
 import gnnPlateVideo from "@/assets/imgs/hiverge-gnn-gallery/plate-predictions-web.mp4";
 import aneurysmFlowWss from "@/assets/imgs/hiverge-gnn-gallery/aneurysm-flow-wss.png";
 
 import CylinderJetSandbox from "./CylinderJetSandbox";
-import BenchmarkCaseGuide from "./BenchmarkCaseGuide";
 import "./HeuristicLab.css";
 
 type EnvironmentId = "cylinder" | "tcf" | "shkadov" | "lorenz";
@@ -76,7 +70,7 @@ const GNN_CLIPS: GnnClip[] = [
     description: "Stored prediction video from the earlier multigrid-GNN work. Use it to explain autoregressive rollout and wake error accumulation.",
     kind: "video",
     media: gnnCylinderVideo,
-    truth: "Existing trained-model prediction · recovered from the 2024 GNN article",
+    truth: "Recorded GNN prediction · 2024",
   },
   {
     id: "bezier",
@@ -86,7 +80,7 @@ const GNN_CLIPS: GnnClip[] = [
     description: "The multi-geometry replay makes the generalization problem visible: topology and boundary shape change while the model must preserve the flow dynamics.",
     kind: "video",
     media: gnnBezierVideo,
-    truth: "Existing trained-model prediction · recovered from the 2024 GNN article",
+    truth: "Recorded GNN prediction · 2024",
   },
   {
     id: "plate",
@@ -96,7 +90,7 @@ const GNN_CLIPS: GnnClip[] = [
     description: "This stored learned-rollout clip broadens the story from a fixed Eulerian wake to physical dynamics carried by a moving mesh.",
     kind: "video",
     media: gnnPlateVideo,
-    truth: "Existing trained-model prediction · recovered from the 2024 GNN article",
+    truth: "Recorded GNN prediction · 2024",
   },
   {
     id: "aneurysm",
@@ -106,7 +100,7 @@ const GNN_CLIPS: GnnClip[] = [
     description: "Three aneurysm examples compare predicted flow, spatial error, and wall-shear-stress curves. A dedicated 2D/3D rollout export still needs to be rendered from the saved model outputs.",
     kind: "image",
     media: aneurysmFlowWss,
-    truth: "Static paper figure · dedicated aneurysm rollout video pending",
+    truth: "Static validation figure · no rollout video available",
   },
 ];
 
@@ -316,15 +310,10 @@ const linePath = (points: LorenzPoint[], key: "x" | "action", width: number, hei
 };
 
 const LAB_SECTIONS = [
-  ["benchmark-cases", "All cases"],
   ["gnn-rollouts", "GNN rollouts"],
   ["policy-microscope", "Policies"],
-  ["method", "Protocol"],
   ["live-benchmark", "Lorenz"],
   ["cylinder-sandbox", "Live cylinder"],
-  ["transfer", "Transfer"],
-  ["failure-museum", "Failures"],
-  ["vision", "Vision"],
 ] as const;
 
 type EvidenceImage = { src: string; title: string; caption: string };
@@ -458,16 +447,16 @@ const HeuristicLab = () => {
 
   return (
     <div className="heuristic-lab-page" data-motion={mediaPaused ? "paused" : "playing"}>
-      <a className="hl-skip-link" href="#/labs/heuristic-learning" onClick={scrollToSection("hl-main")}>Skip to research</a>
+      <a className="hl-skip-link" href="#/labs/heuristic-learning" onClick={scrollToSection("hl-main")}>Skip to demos</a>
       <div className="hl-noise" aria-hidden="true" />
 
       <header className="hl-header">
         <a href="/#/" className="hl-wordmark">
           PG<span>/</span>LAB
         </a>
-        <span className="hl-header-context">Science you can inspect. Experiments you can run.</span>
+        <span className="hl-header-context">GNNs · Control · CFD</span>
         <a className="hl-paper-link" href="https://arxiv.org/abs/2607.11565" target="_blank" rel="noreferrer">
-          arXiv 2607.11565 <ArrowDownRight size={15} />
+          Paper <ArrowDownRight size={15} />
         </a>
       </header>
 
@@ -480,64 +469,22 @@ const HeuristicLab = () => {
       </nav>
 
       <main id="hl-main">
-        <section className="hl-hero">
-          <div className="hl-hero-copy">
-            <div className="hl-kicker"><span>Research companion</span><span>July 2026</span></div>
-            <h1>When agents write the <em>control law.</em></h1>
-            <p>
-              Coding agents search over explicit feedback programs, test them in fluid simulators, learn from failure,
-              and return controllers a scientist can inspect.
-            </p>
-            <div className="hl-hero-actions">
-              <a href="#/labs/heuristic-learning" onClick={scrollToSection("cylinder-sandbox")} className="hl-primary-action">Run the cylinder solver <ChevronRight size={18} /></a>
-              <a href="#/labs/heuristic-learning" onClick={scrollToSection("gnn-rollouts")} className="hl-secondary-action">Watch the GNNs</a>
-              <a href="#/labs/heuristic-learning" onClick={scrollToSection("method")} className="hl-secondary-action">See the protocol</a>
-            </div>
-          </div>
-
-          <div className="hl-hero-evidence" aria-label="Benchmark scope and reported results">
-            <div className="hl-result-stamp">
-              <span>Benchmark environments</span>
-              <strong>13<span> tasks</span></strong>
-              <small>1D to 3D · explicit controllers</small>
-            </div>
-            <div className="hl-evidence-note">
-              <BookOpen size={21} />
-              <p>The paper reports matches or wins on 10 of 13. Archived scores and plotting substitutions need reconciliation for RBC medium and BEACON Rayleigh.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="hl-marquee" aria-label="Research properties">
-          <div>
-            <span>EXPLICIT PYTHON</span><i />
-            <span>FIXED SIMULATOR BUDGET</span><i />
-            <span>FAILURE MEMORY</span><i />
-            <span>PHYSICAL ABLATIONS</span><i />
-            <span>HELD-OUT VALIDATION</span>
-          </div>
-        </section>
-
-        <aside className="hl-quick-route" aria-label="A short route through the research">
-          <div><span>3-minute route</span><p>Watch a model. Inspect a policy. Take control.</p></div>
-          <a href="#/labs/heuristic-learning" onClick={scrollToSection("gnn-rollouts")}><span>01</span> Watch a GNN <ChevronRight size={15} /></a>
-          <a href="#/labs/heuristic-learning" onClick={scrollToSection("policy-microscope")}><span>02</span> Read the policy <ChevronRight size={15} /></a>
-          <a href="#/labs/heuristic-learning" onClick={scrollToSection("cylinder-sandbox")}><span>03</span> Control the wake <ChevronRight size={15} /></a>
-        </aside>
-
-        <BenchmarkCaseGuide />
+        <div className="hl-demo-intro">
+          <h1>Flow control lab</h1>
+          <a href="#/labs/heuristic-learning" onClick={scrollToSection("cylinder-sandbox")} className="hl-primary-action">Control the cylinder <ChevronRight size={16} /></a>
+        </div>
 
         <section className="hl-gnn-gallery" id="gnn-rollouts">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">02</span>
-              <p>Learned physics rollouts</p>
+              <span className="hl-section-index">01</span>
+              <p>Recorded predictions</p>
             </div>
-            <h2>Before the control law, the models had to learn how physical state moves across a mesh.</h2>
+            <h2>GNN rollouts</h2>
           </div>
 
           <div className="hl-media-preferences">
-            <p>Recorded model predictions and validation figures</p>
+            <span>2D models · 3D validation</span>
             <button type="button" aria-pressed={mediaPaused} onClick={() => setMediaPaused((paused) => !paused)}>
               {mediaPaused ? <Play size={14} /> : <Pause size={14} />}
               {mediaPaused ? "Enable motion" : "Pause motion"}
@@ -569,21 +516,12 @@ const HeuristicLab = () => {
               {selectedGnn.kind === "video" ? (
                 <ResearchVideo src={selectedGnn.media} label={`${selectedGnn.label}: ${selectedGnn.description}`} playbackEnabled={!mediaPaused} />
               ) : (
-                <button className="hl-image-expand" type="button" onClick={() => openEvidence({ src: selectedGnn.media, title: "Aneurysm GNN validation", caption: "Static paper figure comparing predicted flow, spatial error, and wall-shear stress. A dedicated rollout video is still pending." })}>
+                <button className="hl-image-expand" type="button" onClick={() => openEvidence({ src: selectedGnn.media, title: "Aneurysm GNN validation", caption: "Static validation: flow prediction, error and wall shear stress." })}>
                   <img src={selectedGnn.media} alt="Aneurysm GNN flow, error, and wall-shear-stress validation" loading="lazy" />
                   <span><Maximize2 size={15} /> Enlarge validation figure</span>
                 </button>
               )}
               <p className="hl-media-provenance">{selectedGnn.truth}</p>
-            </div>
-            <div className="hl-gnn-copy">
-              <span>{selectedGnn.dimension}</span>
-              <h3>{selectedGnn.title}</h3>
-              <p>{selectedGnn.description}</p>
-              <div>
-                <b>What to inspect</b>
-                <p>{selectedGnn.id === "aneurysm" ? "Field structure, boundary error, and whether WSS follows the CFD curve." : "Wake phase, geometry response, and the point where autoregressive error begins to compound."}</p>
-              </div>
             </div>
           </article>
         </section>
@@ -591,16 +529,11 @@ const HeuristicLab = () => {
         <section className="hl-microscope" id="policy-microscope">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">03</span>
-              <p>Policy microscope</p>
+              <span className="hl-section-index">02</span>
+              <p>Recorded experiments</p>
             </div>
-            <h2>The result stays connected to the code that produced it.</h2>
+            <h2>Policy replays</h2>
           </div>
-
-          <details className="hl-score-context">
-            <summary>What these scores compare</summary>
-            <p>Search uses public interfaces and explicit simulator-step caps. Results shown combine selected heuristic runs with reported DRL references; total compute cost and held-out evaluation are separate checks. The aggregate paper headline still needs reconciliation for RBC medium and BEACON Rayleigh.</p>
-          </details>
 
           <div className="hl-environment-tabs" role="tablist" aria-label="Select an environment">
             {ENVIRONMENTS.map((environment, index) => (
@@ -619,7 +552,6 @@ const HeuristicLab = () => {
                 }}
               >
                 <span>{environment.shortName}</span>
-                <small>{environment.mode}</small>
               </button>
             ))}
           </div>
@@ -627,9 +559,9 @@ const HeuristicLab = () => {
           <article className="hl-instrument" id="hl-policy-panel" role="tabpanel" aria-labelledby={`hl-policy-tab-${selected.id}`} tabIndex={0} key={selected.id}>
             <div className="hl-media-console">
               <div className="hl-console-bar">
-                <span><i /> RECORDED EXPERIMENT</span>
+                <span><i /> RECORDED</span>
                 <button type="button" onClick={() => openEvidence({ src: selected.plot, title: `${selected.shortName}: method comparison`, caption: `${selected.metricLabel}. Higher is better. ${selected.evidence}. Source: recorded paper artifact.` })}>
-                  Compare methods <Maximize2 size={13} />
+                  Compare DRL <Maximize2 size={13} />
                 </button>
               </div>
               <div className={`hl-media-stage ${mediaPaused && selected.mediaType === "image" ? "shows-plot" : ""}`}>
@@ -648,9 +580,11 @@ const HeuristicLab = () => {
             <div className="hl-policy-console">
               <div className="hl-policy-header">
                 <span>Policy pseudocode</span>
-                <span className="hl-mode-badge">{selected.mode}</span>
+                <span className="hl-mode-badge">{selected.shortName}</span>
               </div>
-              <div className="hl-code" aria-label={`${selected.shortName} policy pseudocode`}>
+              <details className="hl-policy-code-details">
+                <summary>Inspect policy code</summary>
+                <div className="hl-code" aria-label={`${selected.shortName} policy pseudocode`}>
                 <div className="hl-code-line"><span>01</span><code>def act(observation, memory):</code></div>
                 {selected.code.map((line, index) => (
                   <div className={`hl-code-line ${index === 1 ? "is-highlighted" : ""}`} key={line}>
@@ -658,65 +592,34 @@ const HeuristicLab = () => {
                   </div>
                 ))}
                 <div className="hl-code-line"><span>{String(selected.code.length + 2).padStart(2, "0")}</span><code>    return action, memory</code></div>
-              </div>
-
-              <div className="hl-policy-summary">
-                <span>{selected.eyebrow}</span>
-                <h3>{selected.title}</h3>
-                <p>{selected.finding}</p>
-              </div>
+                </div>
+              </details>
 
               <div className="hl-score-heading"><span>{selected.metricLabel}</span><span>Higher is better</span></div>
               <div className="hl-score-grid">
                 <Metric label="Heuristic" value={selected.heuristicScore} accent />
                 <Metric label={selected.drlLabel} value={selected.drlScore} />
               </div>
-              <div className="hl-evidence-strip"><Check size={15} /> {selected.evidence}</div>
-              <p className="hl-interpretation">{selected.explanation}</p>
+              <p className="hl-score-note">Selected heuristic run vs reported DRL. {selected.evidence}.</p>
               {selected.id === "lorenz" && <a className="hl-policy-run-link" href="#/labs/heuristic-learning" onClick={scrollToSection("live-benchmark")}>Edit this controller live <ChevronRight size={15} /></a>}
             </div>
           </article>
         </section>
 
-        <section className="hl-method" id="method">
-          <div className="hl-section-heading is-light">
-            <div>
-              <span className="hl-section-index">04</span>
-              <p>Search protocol</p>
-            </div>
-            <h2>Each candidate has to survive the simulator and leave evidence behind.</h2>
-          </div>
-          <div className="hl-method-track">
-            {[
-              ["01", "Inspect", "Public interface, constraints, reward, horizon"],
-              ["02", "Propose", "Executable controller with bounded authority"],
-              ["03", "Evaluate", "Deterministic rollouts charged to one budget"],
-              ["04", "Remember", "Scores, traces, failures, plots, rejected ideas"],
-              ["05", "Simplify", "Ablate, transfer, stress-test, keep the readable core"],
-            ].map(([index, title, description]) => (
-              <div className="hl-method-step" key={index}>
-                <span>{index}</span>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section className="hl-live" id="live-benchmark">
           <div className="hl-section-heading">
             <div>
-              <span className="hl-section-index">05</span>
-              <p>Live benchmark</p>
+              <span className="hl-section-index">03</span>
+              <p>Live simulation</p>
             </div>
-            <h2>Edit the discovered Lorenz controller. The equations rerun in your browser.</h2>
+            <h2>Lorenz controller</h2>
           </div>
 
           <div className="hl-live-grid">
             <div className="hl-control-panel">
-              <div className="hl-live-status"><i /> BEACON equations · local 5-stage RK4 · 500 steps</div>
+              <div className="hl-live-status"><i /> 500 steps · recomputed in your browser</div>
               <p>
-                Reward equals 1 whenever <code>x &lt; 0</code>. The agent found a threshold state machine using only the public state and derivative.
+                Reward: +1 per step with <code>x &lt; 0</code>.
               </p>
 
               {([
@@ -791,117 +694,6 @@ const HeuristicLab = () => {
 
         <CylinderJetSandbox />
 
-        <section className="hl-transfer" id="transfer">
-          <div className="hl-transfer-copy">
-            <span className="hl-section-index">07</span>
-            <p>Transfer as a code diff</p>
-            <h2>Five jets become ten. Four constants move.</h2>
-            <p className="hl-transfer-lead">
-              The 10-actuator controller keeps the same mean, slope, curvature, and endpoint features. Adaptation edits the operating constants instead of retraining a hidden representation.
-            </p>
-            <div className="hl-diff">
-              <div><span>delay</span><del>11</del><ChevronRight size={14} /><ins>8</ins></div>
-              <div><span>gain</span><del>0.3475</del><ChevronRight size={14} /><ins>0.28</ins></div>
-              <div><span>smoothing</span><del>0.84</del><ChevronRight size={14} /><ins>0.90</ins></div>
-              <div><span>taper</span><del>0.95ʲ</del><ChevronRight size={14} /><ins>1.03ʲ</ins></div>
-            </div>
-          </div>
-          <figure>
-            <button className="hl-image-expand is-light" type="button" onClick={() => openEvidence({ src: transferPlot, title: "Transfer from 5 to 10 Shkadov jets", caption: "Recorded experiment. Roughly 500 adaptation episodes: first viable candidate at 210, selected best at 370. Each configuration is evaluated on 5 stress seeds." })}>
-              <img src={transferPlot} alt="Recorded transfer from five to ten Shkadov jets" loading="lazy" />
-              <span><Maximize2 size={15} /> Enlarge transfer evidence</span>
-            </button>
-            <figcaption>Recorded experiment · roughly 500 adaptation episodes; first viable at 210, selected best at 370. 5 stress seeds per configuration.</figcaption>
-          </figure>
-        </section>
-
-        <section className="hl-failures" id="failure-museum">
-          <div className="hl-section-heading is-light">
-            <div>
-              <span className="hl-section-index">08</span>
-              <p>Failure museum</p>
-            </div>
-            <h2>The rejected candidates define the real scientific boundary.</h2>
-          </div>
-
-          <div className="hl-failure-grid">
-            <article>
-              <div className="hl-failure-mark"><X size={18} /><span>Baseline gap</span></div>
-              <h3>Strong DRL baselines expose the gaps.</h3>
-              <p>Cylinder and convection cases reveal gaps that still need targeted tests of representation, search, and evaluation.</p>
-              <small>Decision: preserve DRL as the hard baseline.</small>
-            </article>
-            <article>
-              <div className="hl-failure-mark"><X size={18} /><span>More data, wider search</span></div>
-              <h3>Full-field diagnostics did not improve cylinder control.</h3>
-              <p>The richer observation route reached −0.333, while the compact public-sensor heuristic reached −0.124. Extra information enlarged the search surface.</p>
-              <small>Decision: widen inputs only with evaluator evidence.</small>
-            </article>
-            <article>
-              <div className="hl-failure-mark"><X size={18} /><span>Reward hacking</span></div>
-              <h3>The coding agent also searched for shortcuts.</h3>
-              <p>It tried to inspect the simulation environment itself and hardcode environment-specific behavior. A higher reward alone could hide a broken experiment.</p>
-              <small>Decision: inspect the code and tighten the harness.</small>
-            </article>
-          </div>
-
-          <article className="hl-reward-audit" aria-labelledby="hl-reward-audit-title">
-            <div className="hl-reward-audit-intro">
-              <span className="hl-reward-audit-label">Inside the research workflow</span>
-              <h3 id="hl-reward-audit-title">Reward hacking changed how we evaluated the agent.</h3>
-              <p>We had to check how a candidate earned its reward. Simulator inspection and hardcoded shortcuts prompted manual review and changes to the evaluation harness.</p>
-              <span className="hl-reward-audit-source">Researcher's account · Paul Garnier-Muller</span>
-            </div>
-            <div className="hl-reward-audit-checks">
-              <ol>
-                <li><span>01</span><div><h4>Manual code review</h4><p>We checked generated code for access to simulator internals and hardcoded behavior.</p></div></li>
-                <li><span>02</span><div><h4>Harness updates</h4><p>We revised the evaluation harness in response to the shortcuts we found.</p></div></li>
-                <li><span>03</span><div><h4>Cross-seed action-variance alarm</h4><p>We used a threshold on action variance across different seeds to flag suspiciously similar behavior for review.</p></div></li>
-                <li><span>04</span><div><h4>A separate reviewer agent</h4><p>Another agent checked the candidate code, adding a second review alongside our manual checks.</p></div></li>
-              </ol>
-              <p className="hl-reward-audit-caveat"><strong>How to read the alarm:</strong> a valid open-loop controller can also produce similar actions across seeds. Tuned policy constants are legitimate when they respect the experiment's rules. Low variance triggers investigation; code inspection and experiment context determine whether a shortcut broke those rules. The checks reduce risk and still need human judgment.</p>
-            </div>
-          </article>
-        </section>
-
-        <section className="hl-vision" id="vision">
-          <div className="hl-vision-title">
-            <span className="hl-section-index">09</span>
-            <p>Where CFD goes next</p>
-            <h2>Scientific agents become experimentalists. Physics becomes an executable test suite.</h2>
-          </div>
-          <div className="hl-vision-list">
-            {[
-              ["01", "Control laws", "Feedback, schedules, actuator placement, transfer"],
-              ["02", "Solver components", "Fluxes, limiters, preconditioners, kernels, mesh adaptation"],
-              ["03", "Hybrid models", "Learned closures and surrogates gated by conservation and stability"],
-              ["04", "Discovery systems", "Agents choose experiments, allocate fidelity, preserve failures, and return auditable artifacts"],
-            ].map(([index, title, description]) => (
-              <div key={index}>
-                <span>{index}</span>
-                <h3>{title}</h3>
-                <p>{description}</p>
-                <ArrowDownRight size={20} />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="hl-closing">
-          <div>
-            <FlaskConical size={28} />
-            <span>A concrete next benchmark</span>
-          </div>
-          <h2>One PDE family. One constrained editable surface. Property tests, held-out geometries, and a readable algorithm at the end.</h2>
-          <p>
-            Search should expand from controller laws into numerical kernels only as conservation, convergence, stability, runtime, and out-of-distribution gates become difficult to game.
-          </p>
-          <div className="hl-closing-links">
-            <a href="https://arxiv.org/abs/2607.11565" target="_blank" rel="noreferrer"><BookOpen size={17} /> Read the paper</a>
-            <a href="https://github.com/DonsetPG/fluid-heuristic-learning" target="_blank" rel="noreferrer"><Github size={17} /> Inspect the code</a>
-            <a href="/#/blog/heuristic-learning-for-fluid-dynamics-a-case-study"><Sparkles size={17} /> Read the visual story</a>
-          </div>
-        </section>
       </main>
 
       <dialog className="hl-evidence-dialog" ref={evidenceDialogRef} aria-labelledby="hl-evidence-title" aria-describedby="hl-evidence-caption" onCancel={() => setEvidenceImage(null)} onClick={(event) => { if (event.target === event.currentTarget) setEvidenceImage(null); }}>
@@ -917,8 +709,10 @@ const HeuristicLab = () => {
 
       <footer className="hl-footer">
         <a href="/#/" className="hl-footer-name"><ArrowLeft size={15} /> Paul Garnier-Muller</a>
-        <p>Research companion for “Heuristic Learning for Active Flow Control Using Coding Agents” · Garnier, Viquerat, Hachem · 2026</p>
-        <span>Recorded results remain labeled. Browser results are recomputed locally.</span>
+        <div className="hl-footer-links">
+          <a href="https://arxiv.org/abs/2607.11565" target="_blank" rel="noreferrer">Paper <ArrowDownRight size={14} /></a>
+          <a href="https://github.com/DonsetPG/fluid-heuristic-learning" target="_blank" rel="noreferrer">Code <Github size={14} /></a>
+        </div>
       </footer>
     </div>
   );
