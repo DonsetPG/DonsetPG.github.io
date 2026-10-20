@@ -1,59 +1,100 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Anna</title>
-    <style>
-      body {
-        margin: 0;
-        min-height: 100vh;
-        min-height: 100dvh;
-        display: grid;
-        place-items: center;
-        background: #fff;
-        color: #000;
-        font-family: Arial, sans-serif;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 2rem;
-        font-weight: 400;
-      }
-
-      .secret-button {
-        position: fixed;
-        right: 24px;
-        bottom: 24px;
-        display: grid;
-        place-items: center;
-        width: 64px;
-        height: 48px;
-        border: 1px solid #fff;
-        border-radius: 2px;
-        background: #fff;
-        color: #fff;
-        text-decoration: none;
-        font-size: 24px;
-        cursor: pointer;
-      }
-
-      .secret-button:hover {
-        border-color: #ededed;
-        color: #d6d6d6;
-      }
-
-      .secret-button:focus-visible {
-        outline: 1px solid #000;
-        outline-offset: 4px;
-        color: #000;
-      }
-    </style>
-  </head>
-  <body>
-    <main><h1>WIP</h1></main>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#edf2df" />
+  <meta name="description" content="A little world for Anna. A place to wander, and a room for every memory." />
+  <title>Our little world · Anna</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%236a8546' d='M0 4 8 0l8 4v8l-8 4-8-4z'/%3E%3Cpath fill='%23b9cf78' d='m0 4 8 4 8-4-8-4z'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="anna-world/style.css" />
+  <script type="module" src="anna-world/app.js"></script>
+</head>
+<body>
+  <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></symbol>
+    <symbol id="icon-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16" /></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4Z" /><circle cx="12" cy="13" r="4" /></symbol>
+    <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></symbol>
+  </svg>
+  <main id="gate" class="gate">
+    <div class="gate-vignette" aria-hidden="true"></div>
+    <a href="/" class="gate-home" aria-label="Back to Paul's website">PG<span> / </span>A little side quest</a>
+    <div class="gate-card">
+      <div class="pixel-cube" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="eyebrow">PAUL + ANNA · WORLD 01</p>
+      <h1>A little world.<br /><em>Just for us.</em></h1>
+      <p class="gate-description">A place to get a little lost.<br />And find all our favourite moments.</p>
+      <form id="password-form" class="password-form">
+        <label for="password">Our secret word</label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="You know the one…" required aria-describedby="password-error" />
+          <button id="show-password" class="eye-button" type="button" aria-label="Show password" aria-pressed="false"><svg><use href="#icon-eye" /></svg></button>
+        </div>
+        <p id="password-error" class="form-error" role="alert"></p>
+        <button id="enter-button" class="primary-button" type="submit"><span>Enter our world</span><svg><use href="#icon-arrow" /></svg></button>
+      </form>
+      <p class="gate-note"><span class="tiny-heart" aria-hidden="true">♥</span> Built one memory at a time</p>
+    </div>
+    <div class="gate-footer"><span>A small world. A very big story.</span><span>WALK · WANDER · REMEMBER</span></div>
     <a class="secret-button" href="anna-boutique.html" aria-label="Suivre le vent" title="Suivre le vent">↗</a>
-  </body>
+    <noscript><p class="noscript">Turn on JavaScript to open this little world.</p></noscript>
+  </main>
+  <section id="game" class="game" aria-label="Anna's memory world" hidden>
+    <canvas id="world-canvas" tabindex="0" aria-label="3D memory world. Move with W A S D or arrow keys. Drag to look. Press E near a photo to open it."></canvas>
+    <header class="world-header">
+      <div class="world-brand"><span class="brand-block" aria-hidden="true">a.</span><div><strong>Our little world</strong><span>Somewhere just for us</span></div></div>
+      <div class="world-tools">
+        <button id="map-button" class="tool-button" aria-label="Open room map"><svg><use href="#icon-map" /></svg><span>Map</span><kbd>M</kbd></button>
+        <button id="view-button" class="tool-button icon-button" aria-label="Switch to first-person view" title="Change camera (V)"><svg><use href="#icon-camera" /></svg></button>
+        <button id="fullscreen-button" class="tool-button icon-button" aria-label="Enter fullscreen" title="Fullscreen"><svg><use href="#icon-expand" /></svg></button>
+        <button id="pause-button" class="tool-button icon-button" aria-label="Pause game" title="Pause (Esc)"><svg><use href="#icon-pause" /></svg></button>
+      </div>
+    </header>
+    <div class="world-tag"><span class="live-dot"></span> OUR WORLD <span class="tag-divider">/</span> <span id="discovery-count">0 / 4 memories</span></div>
+    <div id="crosshair" class="crosshair" aria-hidden="true" hidden>+</div>
+    <div id="room-announcement" class="room-announcement" aria-live="polite"></div>
+    <div class="world-bottom">
+      <div class="location-card"><span class="eyebrow" id="location-label">THE GARDEN</span><h2 id="location-title">A world of our own</h2><p id="objective">Follow the path. A little story waits inside.</p></div>
+      <div class="chapter-bar" id="chapter-bar" aria-label="Memory chapters"></div>
+      <button id="help-button" class="help-button" aria-label="Show game controls">?<span>How to play</span></button>
+    </div>
+    <button id="interact-button" class="interact-button" hidden><kbd>E</kbd><span>Open this memory</span><svg><use href="#icon-arrow" /></svg></button>
+    <div class="desktop-hint"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span><span>drag to look</span><span><kbd>SPACE</kbd> jump</span><span><kbd>E</kbd> remember</span></div>
+    <div class="touch-controls" aria-label="Touch game controls">
+      <div class="dpad"><button data-move="forward" aria-label="Move forward">▲</button><button data-move="left" aria-label="Move left">◀</button><span aria-hidden="true">·</span><button data-move="right" aria-label="Move right">▶</button><button data-move="back" aria-label="Move backward">▼</button></div>
+      <button id="jump-button" class="jump-button" aria-label="Jump">↑<span>JUMP</span></button>
+      <span class="touch-look-hint">Drag the world to look around</span>
+    </div>
+  </section>
+  <div id="loading" class="loading-screen" role="status" hidden><div class="loading-cube" aria-hidden="true"></div><p>Growing a little world…</p><span>A few blocks, a lot of possibilities.</span></div>
+  <dialog id="help-dialog" class="panel-dialog" aria-labelledby="help-title">
+    <button class="dialog-close" data-close aria-label="Close controls"><svg><use href="#icon-close" /></svg></button>
+    <p class="eyebrow">A LITTLE FIELD GUIDE</p><h2 id="help-title">Make yourself at home.</h2><p>Follow the stone path into the house. Our photos hang in 4 rooms. Walk up to a main frame and open its album to see every picture.</p>
+    <div class="control-list"><div><span>Walk</span><b>W A S D / arrows</b></div><div><span>Look around</span><b>Click + drag</b></div><div><span>Run / jump</span><b>Shift / Space</b></div><div><span>Open a nearby memory</span><b>E / tap the prompt</b></div><div><span>Change camera</span><b>V</b></div><div><span>Map / pause</span><b>M / Esc</b></div></div>
+    <p class="small-note">On a phone, use the arrows to walk, drag to look, and tap ↑ to jump. ZQSD works too.</p><button class="primary-button" data-close>Let's wander <svg><use href="#icon-arrow" /></svg></button>
+  </dialog>
+  <dialog id="map-dialog" class="panel-dialog map-dialog" aria-labelledby="map-title">
+    <button class="dialog-close" data-close aria-label="Close map"><svg><use href="#icon-close" /></svg></button>
+    <p class="eyebrow">THE MEMORY HOUSE</p><h2 id="map-title">Room for our story.</h2><p>4 chapters, connected by a little hallway. Choose a room to see where to find it.</p><div id="room-map" class="room-map"></div><div class="map-entrance">↑ THE GARDEN & ENTRANCE</div><p class="small-note" id="map-progress">Walk up to each frame and open it to collect a memory.</p>
+  </dialog>
+  <dialog id="memory-dialog" class="memory-dialog" aria-labelledby="memory-title">
+    <button class="dialog-close" data-close aria-label="Close memory"><svg><use href="#icon-close" /></svg></button>
+    <div class="memory-picture">
+      <div class="photo-stage" id="photo-stage"><img id="memory-image" alt="" decoding="async" /></div>
+      <div id="album-controls" class="album-controls" hidden><button id="previous-photo" class="album-arrow" aria-label="Previous photo"><svg><use href="#icon-arrow" /></svg></button><span id="memory-photo-count" role="status" aria-live="polite"></span><button id="next-photo" class="album-arrow" aria-label="Next photo"><svg><use href="#icon-arrow" /></svg></button></div>
+      <div id="memory-thumbnails" class="memory-thumbnails" role="group" aria-label="Photos in this room" hidden></div>
+      <span id="memory-image-note">A little illustration, until our photo goes here.</span>
+    </div>
+    <div class="memory-copy"><p id="memory-chapter" class="eyebrow"></p><h2 id="memory-title"></h2><p id="memory-date" class="memory-date"></p><p id="memory-description"></p><div class="memory-divider"><span>♥</span></div><p class="small-note" id="memory-placeholder">There’s room here for a photograph, a date, and the story behind them.</p><p id="album-help" class="small-note album-help" hidden>Use ← and → to browse, or swipe the photo.<br />Each picture has a little place in our world.</p><a id="memory-full-size" class="photo-full-size" target="_blank" rel="noopener noreferrer" hidden>Open full-size image ↗</a><button class="primary-button" data-close>Back to our world <svg><use href="#icon-arrow" /></svg></button></div>
+  </dialog>
+  <dialog id="pause-dialog" class="panel-dialog pause-dialog" aria-labelledby="pause-title">
+    <p class="eyebrow">TAKE YOUR TIME</p><h2 id="pause-title">The world can wait.</h2><p>Your little adventure is right where you left it.</p><button class="primary-button" data-close>Keep exploring <svg><use href="#icon-arrow" /></svg></button><div class="pause-actions"><button id="reset-button">Back to the garden</button><button id="lock-button">Close our world</button></div><button id="restart-button" class="restart-button">Start over with 0 memories</button>
+  </dialog>
+  <dialog id="error-dialog" class="panel-dialog" aria-labelledby="error-title"><p class="eyebrow">A SMALL HICCUP</p><h2 id="error-title">Our world couldn't open.</h2><p id="world-error">Try a browser with WebGL enabled, such as a recent Chrome, Firefox, or Safari.</p><button id="retry-button" class="primary-button">Try again <svg><use href="#icon-arrow" /></svg></button></dialog>
+</body>
 </html>
