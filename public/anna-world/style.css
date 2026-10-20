@@ -106,6 +106,7 @@ kbd { display: inline-flex; align-items: center; justify-content: center; min-wi
 .interact-button:hover { background: #fffef5; }
 .room-announcement { position: absolute; z-index: 4; top: 22%; left: 50%; width: max-content; max-width: calc(100% - 48px); transform: translate(-50%, -9px); color: #fffbe9; font: 400 31px/1.2 Georgia, serif; letter-spacing: -.02em; text-align: center; text-shadow: 0 2px 12px #243f3566; opacity: 0; transition: opacity .5s, transform .5s; pointer-events: none; }
 .room-announcement.show { transform: translate(-50%, 0); opacity: 1; }
+.room-announcement small { display: block; margin-bottom: 8px; font: 9px/1.4 Arial, sans-serif; letter-spacing: .18em; }
 .touch-controls { display: none; position: absolute; z-index: 6; inset: 0; pointer-events: none; }
 .dpad { position: absolute; bottom: max(35px, calc(env(safe-area-inset-bottom) + 22px)); left: max(22px, env(safe-area-inset-left)); display: grid; grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); gap: 3px; }
 .dpad button, .dpad > span { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #fff8; border-radius: 4px; background: #faf8ede0; color: #637b4a; font-size: 14px; box-shadow: 0 3px 14px #253b241c; touch-action: none; }

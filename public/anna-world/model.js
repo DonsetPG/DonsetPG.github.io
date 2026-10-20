@@ -1,16 +1,17 @@
 import { getRoomPhotos } from './photo-library.js';
+import { layoutRoomFrames } from './gallery-layout.js';
 
 // Dates and stories belong here; individual photos live in photo-library.js.
 // Keep room IDs stable so saved discoveries continue to work.
 export const WORLD = {
   spawn: { x: 0, z: 16 },
-  bounds: { minX: -42, maxX: 42, minZ: -48, maxZ: 34 },
+  bounds: { minX: -48, maxX: 48, minZ: -65, maxZ: 34 },
 };
 
 const room = (id, index, title, subtitle, description, color, bounds, { date = '', coverPhotoId = null } = {}) => {
   const photos = getRoomPhotos(id);
   const cover = photos.find((photo) => photo.id === coverPhotoId) ?? photos[0] ?? null;
-  return {
+  const memoryRoom = {
     id,
     index,
     title,
@@ -22,34 +23,37 @@ const room = (id, index, title, subtitle, description, color, bounds, { date = '
     coverPhotoId: cover?.id ?? null,
     image: cover?.src ?? null,
     bounds,
-    frame: { x: (bounds.minX + bounds.maxX) / 2, z: bounds.minZ + 0.6, rotation: 0 },
     door: { x: bounds.maxX < 0 ? bounds.maxX : bounds.minX, z: (bounds.minZ + bounds.maxZ) / 2 },
   };
+  memoryRoom.frames = layoutRoomFrames(memoryRoom);
+  const coverFrame = memoryRoom.frames.find(({ photoId }) => photoId === cover?.id) ?? memoryRoom.frames[0];
+  memoryRoom.frame = { x: coverFrame.x, z: coverFrame.z, rotation: coverFrame.rotation };
+  return memoryRoom;
 };
 
 export const ROOMS = [
   room(
     'the-beginning', 0, 'The beginning', 'A place for our first chapter',
-    'A collection of us, kept together. Open the album and take your time with the photographs.',
-    '#edba78', { minX: -17, maxX: -3, minZ: -16, maxZ: 0 },
+    'A collection of us, kept together. Follow the photographs around the walls and open any one for a closer look.',
+    '#edba78', { minX: -23, maxX: -3, minZ: -24, maxZ: 0 },
     { date: '', coverPhotoId: 'img-7929' },
   ),
   room(
     'little-adventures', 1, 'Little adventures', 'A place for the days we went exploring',
     'A few more moments to wander through together. Each photograph has a place in this room.',
-    '#9abc91', { minX: 3, maxX: 17, minZ: -16, maxZ: 0 },
+    '#9abc91', { minX: 3, maxX: 23, minZ: -24, maxZ: 0 },
     { date: '', coverPhotoId: 'img-7964' },
   ),
   room(
     'the-everyday', 2, 'The everyday', 'A place for the small things',
-    'The small moments deserve a room too. Stay a little while and browse the album.',
-    '#b4a1c9', { minX: -17, maxX: -3, minZ: -34, maxZ: -18 },
+    'The small moments deserve a room too. Stay a little while and walk through the photographs.',
+    '#b4a1c9', { minX: -23, maxX: -3, minZ: -50, maxZ: -26 },
     { date: '', coverPhotoId: 'img-7996' },
   ),
   room(
     'still-to-come', 3, 'More of us', 'A place for more shared moments',
     'More photographs of us, with room for the stories behind them whenever we want to add them.',
-    '#92c8cf', { minX: 3, maxX: 17, minZ: -34, maxZ: -18 },
+    '#92c8cf', { minX: 3, maxX: 23, minZ: -50, maxZ: -26 },
     { date: '', coverPhotoId: 'img-8036' },
   ),
 ];
@@ -78,7 +82,12 @@ function roomWalls({ bounds, door }) {
 
 export const WALLS = [
   ...ROOMS.flatMap(roomWalls),
-  { minX: -3, maxX: 3, minZ: -34, maxZ: -33.5, height: ROOM_HEIGHT },
+  {
+    minX: -3, maxX: 3,
+    minZ: Math.min(...ROOMS.map(({ bounds }) => bounds.minZ)),
+    maxZ: Math.min(...ROOMS.map(({ bounds }) => bounds.minZ)) + WALL_THICKNESS,
+    height: ROOM_HEIGHT,
+  },
 ];
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -121,12 +130,28 @@ export function roomAt(position) {
   return ROOMS.find(({ bounds }) => inside(position, bounds)) ?? null;
 }
 
-/** Only a frame inside the player's current room can open its memory card. */
-export function nearestMemory(position, maxDistance = 3.5) {
+/** Pick the closest photograph on the player's side of their room's walls. */
+export function nearestPhotoFrame(position, maxDistance = 2.8) {
   const currentRoom = roomAt(position);
   if (!currentRoom || !Number.isFinite(maxDistance) || maxDistance < 0) return null;
-  const distance = Math.hypot(position.x - currentRoom.frame.x, position.z - currentRoom.frame.z);
-  return distance <= maxDistance ? currentRoom : null;
+  let closest = null;
+  let closestDistance = maxDistance;
+  for (const frame of currentRoom.frames) {
+    const dx = position.x - frame.x;
+    const dz = position.z - frame.z;
+    const inwardDistance = dx * Math.sin(frame.rotation) + dz * Math.cos(frame.rotation);
+    const distance = Math.hypot(dx, dz);
+    if (inwardDistance >= 0 && distance <= closestDistance) {
+      closest = { room: currentRoom, frame, photo: frame.photo };
+      closestDistance = distance;
+    }
+  }
+  return closest;
+}
+
+/** Retained for callers that only need the nearby frame's room. */
+export function nearestMemory(position, maxDistance = 2.8) {
+  return nearestPhotoFrame(position, maxDistance)?.room ?? null;
 }
 
 // This is a playful static-page gate. It does not protect published files.

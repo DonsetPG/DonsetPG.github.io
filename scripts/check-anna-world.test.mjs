@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import {
-  WORLD, ROOMS, WALLS, isCorrectPassword, moveWithCollisions, nearestMemory, roomAt,
+  WORLD, ROOMS, WALLS, isCorrectPassword, moveWithCollisions, nearestMemory, nearestPhotoFrame, roomAt,
 } from '../public/anna-world/model.js';
+import { layoutRoomFrames } from '../public/anna-world/gallery-layout.js';
 import { PHOTO_LIBRARY, getRoomPhotos } from '../public/anna-world/photo-library.js';
 
 const assetBase = new URL('../public/anna-world/', import.meta.url);
@@ -40,6 +41,12 @@ const near = (actual, expected, tolerance = 1e-8) =>
 function travel(position, target) {
   return moveWithCollisions(position, { x: target.x - position.x, z: target.z - position.z });
 }
+
+const centerOf = ({ bounds }) => ({ x: (bounds.minX + bounds.maxX) / 2, z: (bounds.minZ + bounds.maxZ) / 2 });
+const approach = (frame, distance = 1.8) => ({
+  x: frame.x + Math.sin(frame.rotation) * distance,
+  z: frame.z + Math.cos(frame.rotation) * distance,
+});
 
 test('accepts the chosen password with surrounding space and rejects wrong values', () => {
   for (const value of ['tesco', ' tesco ', '\ttesco\n']) assert.equal(isCorrectPassword(value), true);
@@ -103,12 +110,60 @@ test('every album photograph and thumbnail exists with matching image dimensions
   }
 });
 
-test('each room wall frame uses a photograph from its own album', () => {
+test('every image has its own permanent eye-level wall frame in album order', () => {
+  const frames = ROOMS.flatMap(({ frames }) => frames);
+  assert.equal(frames.length, 126);
+  assert.equal(new Set(frames.map(({ id }) => id)).size, 126);
+  assert.equal(new Set(frames.map(({ photoId }) => photoId)).size, 126);
+  assert.deepEqual(frames.map(({ photoId }) => photoId), PHOTO_LIBRARY.map(({ id }) => id));
   for (const room of ROOMS) {
     const cover = room.photos.find(({ id }) => id === room.coverPhotoId);
     assert.ok(cover, `${room.title} has a cover in its album`);
     assert.equal(room.image, cover.src);
+    assert.deepEqual(room.frames, layoutRoomFrames(room));
+    const coverFrame = room.frames.find(({ photoId }) => photoId === cover.id);
+    assert.deepEqual(room.frame, { x: coverFrame.x, z: coverFrame.z, rotation: coverFrame.rotation });
+    for (const [index, frame] of room.frames.entries()) {
+      assert.equal(frame.id, `${room.id}:${room.photos[index].id}`);
+      assert.equal(frame.roomId, room.id);
+      assert.equal(frame.photoId, room.photos[index].id);
+      assert.equal(frame.photo, room.photos[index]);
+      assert.equal(frame.index, index);
+      assert.equal(frame.y, 2.15);
+      assert.equal(frame.width, 1.75);
+      assert.equal(frame.height, 2.25);
+    }
   }
+});
+
+test('wall frames leave space at corners, between neighbours, and across every doorway', () => {
+  for (const room of ROOMS) {
+    const { minX, maxX, minZ, maxZ } = room.bounds;
+    for (const frame of room.frames) {
+      const horizontal = Math.abs(Math.sin(frame.rotation)) < 1e-8;
+      const coordinate = horizontal ? frame.x : frame.z;
+      const minimum = horizontal ? minX : minZ;
+      const maximum = horizontal ? maxX : maxZ;
+      assert.ok(coordinate - frame.width / 2 >= minimum + 1.2, `${frame.id} clears the first corner`);
+      assert.ok(coordinate + frame.width / 2 <= maximum - 1.2, `${frame.id} clears the second corner`);
+      if (horizontal) {
+        near(frame.z, frame.rotation === 0 ? minZ + 0.64 : maxZ - 0.64);
+      } else {
+        near(frame.x, Math.sin(frame.rotation) > 0 ? minX + 0.64 : maxX - 0.64);
+        if (Math.abs(frame.x - room.door.x) < 1) {
+          assert.ok(frame.z + frame.width / 2 <= room.door.z - 2 - 1.2
+            || frame.z - frame.width / 2 >= room.door.z + 2 + 1.2, `${frame.id} clears the doorway`);
+        }
+      }
+      assert.equal(roomAt(approach(frame)), room);
+      for (const neighbour of room.frames) {
+        if (neighbour.index <= frame.index || neighbour.rotation !== frame.rotation) continue;
+        const gap = Math.hypot(frame.x - neighbour.x, frame.z - neighbour.z) - frame.width;
+        assert.ok(gap >= 0.25, `${frame.id} and ${neighbour.id} have space between them`);
+      }
+    }
+  }
+  assert.throws(() => layoutRoomFrames({ ...ROOMS[0], photos: Array(33).fill(ROOMS[0].photos[0]) }), RangeError);
 });
 
 test('all four doorways connect the central hall to their rooms in both directions', () => {
@@ -124,27 +179,33 @@ test('all four doorways connect the central hall to their rooms in both directio
 });
 
 test('large movements cannot tunnel through exterior walls or the closed hall end', () => {
-  const left = moveWithCollisions({ x: -10, z: -8 }, { x: -200, z: 0 });
-  assert.ok(left.x >= -16.18 && left.x < -15.9);
-  const right = moveWithCollisions({ x: 10, z: -8 }, { x: 200, z: 0 });
-  assert.ok(right.x <= 16.18 && right.x > 15.9);
-  const back = moveWithCollisions({ x: 0, z: -30 }, { x: 0, z: -200 });
-  assert.ok(back.z >= -33.18 && back.z < -33);
+  for (const room of ROOMS) {
+    const isLeft = room.bounds.maxX < 0;
+    const position = moveWithCollisions(centerOf(room), { x: isLeft ? -200 : 200, z: 0 });
+    const limit = isLeft ? room.bounds.minX + 0.82 : room.bounds.maxX - 0.82;
+    assert.ok(isLeft ? position.x >= limit : position.x <= limit);
+    assert.ok(Math.abs(position.x - limit) < 0.16);
+  }
+  const endZ = Math.min(...ROOMS.map(({ bounds }) => bounds.minZ));
+  const back = moveWithCollisions({ x: 0, z: endZ + 4 }, { x: 0, z: -200 });
+  assert.ok(back.z >= endZ + 0.82 && back.z < endZ + 0.98);
 });
 
 test('inner room walls stop movement outside the door openings', () => {
   for (const room of ROOMS) {
     const z = room.door.z + 4;
-    const position = travel({ x: 0, z }, { x: room.frame.x, z });
+    const position = travel({ x: 0, z }, { x: centerOf(room).x, z });
     assert.equal(roomAt(position), null);
     assert.ok(Math.abs(position.x) < 2.7);
   }
 });
 
 test('diagonal movement slides along walls without clipping their corners', () => {
-  const position = moveWithCollisions({ x: -10, z: -8 }, { x: -30, z: 4 });
-  assert.ok(position.x >= -16.18);
-  near(position.z, -4);
+  const room = ROOMS[0];
+  const center = centerOf(room);
+  const position = moveWithCollisions(center, { x: -30, z: 4 });
+  assert.ok(position.x >= room.bounds.minX + 0.82);
+  near(position.z, center.z + 4);
   for (const wall of WALLS) {
     const x = Math.max(wall.minX, Math.min(wall.maxX, position.x));
     const z = Math.max(wall.minZ, Math.min(wall.maxZ, position.z));
@@ -157,23 +218,25 @@ test('the player stays inside the outdoor boundary including its radius', () => 
   const bottomRight = moveWithCollisions({ x: 30, z: 25 }, { x: 1e9, z: 1e9 });
   near(bottomRight.x, maxX - 0.32);
   near(bottomRight.z, maxZ - 0.32);
-  const topLeft = moveWithCollisions({ x: -30, z: -40 }, { x: -1e9, z: -1e9 });
+  const topLeft = moveWithCollisions({ x: -30, z: minZ + 4 }, { x: -1e9, z: -1e9 });
   near(topLeft.x, minX + 0.32);
   near(topLeft.z, minZ + 0.32);
 });
 
-test('every memory can be reached from spawn through its doorway and inspected', () => {
+test('all 126 photographs can be reached from spawn through their doorway and inspected', () => {
   for (const room of ROOMS) {
-    let position = { ...WORLD.spawn };
-    for (const target of [
-      { x: 0, z: room.door.z },
-      { x: room.frame.x, z: room.door.z },
-      { x: room.frame.x, z: room.frame.z + 2 },
-    ]) position = travel(position, target);
-    assert.equal(roomAt(position), room);
-    assert.equal(nearestMemory(position), room);
-    near(position.x, room.frame.x);
-    near(position.z, room.frame.z + 2);
+    for (const frame of room.frames) {
+      let position = { ...WORLD.spawn };
+      const targetPosition = approach(frame);
+      for (const target of [{ x: 0, z: room.door.z }, centerOf(room), targetPosition]) {
+        position = travel(position, target);
+      }
+      assert.equal(roomAt(position), room);
+      assert.equal(nearestMemory(position), room);
+      assert.deepEqual(nearestPhotoFrame(position), { room, frame, photo: frame.photo });
+      near(position.x, targetPosition.x);
+      near(position.z, targetPosition.z);
+    }
   }
 });
 
@@ -181,11 +244,16 @@ test('room and memory detection avoid interactions from the hall or through wall
   assert.equal(roomAt(WORLD.spawn), null);
   assert.equal(nearestMemory(WORLD.spawn), null);
   for (const room of ROOMS) {
-    assert.equal(roomAt({ x: room.frame.x, z: room.door.z }), room);
+    assert.equal(roomAt(centerOf(room)), room);
     assert.equal(roomAt({ x: room.door.x, z: room.door.z }), null);
-    assert.equal(nearestMemory({ x: room.frame.x, z: room.bounds.minZ - 0.1 }), null);
-    assert.equal(nearestMemory({ x: room.frame.x, z: room.frame.z + 3.6 }), null);
-    assert.equal(nearestMemory({ x: room.frame.x, z: room.frame.z + 2 }, 1), null);
+    assert.equal(nearestPhotoFrame(centerOf(room)), null);
+    assert.equal(nearestPhotoFrame({ x: 0, z: room.door.z }), null);
+    for (const frame of room.frames) {
+      assert.equal(nearestPhotoFrame(approach(frame, -1)), null, `${frame.id} cannot open through its wall`);
+      assert.equal(nearestPhotoFrame(approach(frame, -0.1), 0.2), null, `${frame.id} only opens from its face`);
+      assert.equal(nearestPhotoFrame(approach(frame), 1), null);
+      for (const distance of [-1, NaN, Infinity]) assert.equal(nearestPhotoFrame(approach(frame), distance), null);
+    }
   }
 });
 

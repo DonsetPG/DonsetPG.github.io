@@ -7,6 +7,7 @@ const canvas = $('world-canvas');
 const password = $('password');
 const dialogs = [...document.querySelectorAll('dialog')];
 const STORAGE_KEY = 'anna-world-memories-v1';
+const PHOTO_STORAGE_KEY = 'anna-world-discovered-photos-v1';
 const symbols = ['✿', '⛰', '⌂', '✦'];
 let world = null;
 let starting = false;
@@ -20,6 +21,7 @@ let albumRoom = null;
 let albumIndex = 0;
 const selectedPhotos = new Map();
 const totalPhotos = ROOMS.reduce((count, room) => count + (room.photos?.length || 0), 0);
+const photoIds = new Set(ROOMS.flatMap((room) => room.photos.map((photo) => photo.id)));
 const heldDirections = new Map();
 
 function readProgress() {
@@ -31,29 +33,45 @@ function readProgress() {
   }
 }
 const visited = readProgress();
+const discoveredPhotos = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PHOTO_STORAGE_KEY) || '[]');
+    return new Set(Array.isArray(saved) ? saved.filter((id) => photoIds.has(id)) : []);
+  } catch { return new Set(); }
+})();
 const chapter = (room) => String(room.index + 1).padStart(2, '0');
 
 function saveProgress() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited])); }
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...visited]));
+    localStorage.setItem(PHOTO_STORAGE_KEY, JSON.stringify([...discoveredPhotos]));
+  }
   catch { /* Exploration still works when browser storage is disabled. */ }
 }
 
 function updateProgress() {
-  $('discovery-count').textContent = `${visited.size} / ${ROOMS.length} rooms${totalPhotos ? ` · ${totalPhotos} photos` : ''}`;
+  $('discovery-count').textContent = `${discoveredPhotos.size} / ${totalPhotos} pictures found`;
   document.querySelectorAll('[data-room]').forEach((button) => {
     const room = ROOMS.find((entry) => entry.id === button.dataset.room);
     const isCurrent = room.id === currentRoom?.id;
-    button.classList.toggle('is-visited', visited.has(room.id));
+    const found = room.photos.filter((photo) => discoveredPhotos.has(photo.id)).length;
+    button.classList.toggle('is-visited', found === room.photos.length);
     button.classList.toggle('is-current', isCurrent);
     if (isCurrent) button.setAttribute('aria-current', 'location');
     else button.removeAttribute('aria-current');
     const status = button.querySelector('small');
-    if (status) status.textContent = `${room.photos?.length || 0} photos${visited.has(room.id) ? ' · explored ✓' : ' · explore'}`;
-    button.title = `${room.title}${visited.has(room.id) ? ' · memory collected' : ''}`;
+    if (status) status.textContent = `${found} / ${room.photos.length} found${found === room.photos.length ? ' ✓' : ''}`;
+    button.title = `${room.title} · ${found} of ${room.photos.length} pictures found`;
   });
-  $('map-progress').textContent = visited.size === ROOMS.length
-    ? 'Every room visited. There’s always room for another chapter.'
-    : `${visited.size} of ${ROOMS.length} rooms explored. Walk up to a main frame to open its album.`;
+  $('map-progress').textContent = discoveredPhotos.size === totalPhotos
+    ? 'Every picture found. There’s always room for another chapter.'
+    : `${discoveredPhotos.size} of ${totalPhotos} pictures found. Explore all 4 walls in each room.`;
+}
+
+function discoverPhoto(room, photo) {
+  if (!photo || discoveredPhotos.has(photo.id)) return;
+  discoveredPhotos.add(photo.id); visited.add(room.id);
+  saveProgress(); updateProgress();
 }
 
 function updateView() {
@@ -69,7 +87,7 @@ function updateLocation(room) {
   $('location-label').textContent = room ? `CHAPTER ${chapter(room)}` : inHall ? 'THE HALLWAY' : 'THE GARDEN';
   $('location-title').textContent = room?.title || (inHall ? 'Pick a little chapter' : 'A world of our own');
   $('objective').textContent = room
-    ? 'Find the picture frame. A memory is waiting.'
+    ? `${room.photos.length} pictures on these walls. Walk up to a frame.`
     : destination
       ? directionTo(destination)
       : inHall ? 'The rooms on either side hold our story.' : 'Follow the path. A little story waits inside.';
@@ -201,14 +219,13 @@ function showPhoto(index) {
     const strip = $('memory-thumbnails');
     strip.scrollTo({ left: active.offsetLeft - strip.offsetLeft - strip.clientWidth / 2 + active.clientWidth / 2, behavior: 'instant' });
   }
-  if (photo) world?.setMemoryPhoto?.(room.id, photo);
 }
 
-function openMemory(room) {
+function openMemory(room, wallPhoto = null) {
   if (!room || dialogs.some((dialog) => dialog.open)) return;
   albumRoom = room;
   const photos = albumPhotos(room);
-  const selected = selectedPhotos.get(room.id) || room.coverPhotoId;
+  const selected = wallPhoto?.id || selectedPhotos.get(room.id) || room.coverPhotoId;
   albumIndex = Math.max(0, photos.findIndex((photo) => photo.id === selected));
   $('memory-chapter').textContent = `CHAPTER ${chapter(room)} · OUR PHOTO ALBUM`;
   $('memory-title').textContent = room.title;
@@ -226,6 +243,7 @@ function openMemory(room) {
     $('memory-thumbnails').append(button);
   });
   visited.add(room.id); saveProgress(); updateProgress();
+  if (wallPhoto) discoverPhoto(room, wallPhoto);
   showDialog($('memory-dialog'));
   showPhoto(albumIndex);
 }
@@ -275,7 +293,15 @@ async function enterWorld() {
     world = await createWorld({
       canvas,
       onRoomChange: updateLocation,
-      onNearbyMemory(room) { nearbyRoom = room; $('interact-button').hidden = !room; },
+      onNearbyMemory(room, photo) {
+        nearbyRoom = room;
+        $('interact-button').hidden = !room || !photo;
+        if (room && photo) {
+          const index = room.photos.findIndex((entry) => entry.id === photo.id) + 1;
+          $('interact-button').querySelector('span').textContent = `View picture ${index} of ${room.photos.length}`;
+          discoverPhoto(room, photo);
+        }
+      },
       onInteract: openMemory,
       onError: worldError,
     });
@@ -317,7 +343,7 @@ $('interact-button').addEventListener('click', () => { if (nearbyRoom) world?.in
 $('jump-button').addEventListener('pointerdown', (event) => { event.preventDefault(); world?.jump(); });
 $('reset-button').addEventListener('click', () => { destination = null; world?.reset(); $('pause-dialog').close(); updateLocation(null); updateView(); });
 $('restart-button').addEventListener('click', () => {
-  visited.clear(); saveProgress(); destination = null;
+  visited.clear(); discoveredPhotos.clear(); selectedPhotos.clear(); saveProgress(); destination = null;
   world?.reset(); updateProgress(); updateLocation(null); updateView();
   $('pause-dialog').close();
 });

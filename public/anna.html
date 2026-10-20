@@ -55,7 +55,7 @@
         <button id="pause-button" class="tool-button icon-button" aria-label="Pause game" title="Pause (Esc)"><svg><use href="#icon-pause" /></svg></button>
       </div>
     </header>
-    <div class="world-tag"><span class="live-dot"></span> OUR WORLD <span class="tag-divider">/</span> <span id="discovery-count">0 / 4 memories</span></div>
+    <div class="world-tag"><span class="live-dot"></span> OUR WORLD <span class="tag-divider">/</span> <span id="discovery-count">0 / 126 pictures found</span></div>
     <div id="crosshair" class="crosshair" aria-hidden="true" hidden>+</div>
     <div id="room-announcement" class="room-announcement" aria-live="polite"></div>
     <div class="world-bottom">
@@ -74,13 +74,13 @@
   <div id="loading" class="loading-screen" role="status" hidden><div class="loading-cube" aria-hidden="true"></div><p>Growing a little world…</p><span>A few blocks, a lot of possibilities.</span></div>
   <dialog id="help-dialog" class="panel-dialog" aria-labelledby="help-title">
     <button class="dialog-close" data-close aria-label="Close controls"><svg><use href="#icon-close" /></svg></button>
-    <p class="eyebrow">A LITTLE FIELD GUIDE</p><h2 id="help-title">Make yourself at home.</h2><p>Follow the stone path into the house. Our photos hang in 4 rooms. Walk up to a main frame and open its album to see every picture.</p>
+    <p class="eyebrow">A LITTLE FIELD GUIDE</p><h2 id="help-title">Make yourself at home.</h2><p>All 125 photos and our chart have their own frames across 4 rooms. Follow the walls to discover them. Walk up to any picture and press E to see it up close.</p>
     <div class="control-list"><div><span>Walk</span><b>W A S D / arrows</b></div><div><span>Look around</span><b>Click + drag</b></div><div><span>Run / jump</span><b>Shift / Space</b></div><div><span>Open a nearby memory</span><b>E / tap the prompt</b></div><div><span>Change camera</span><b>V</b></div><div><span>Map / pause</span><b>M / Esc</b></div></div>
     <p class="small-note">On a phone, use the arrows to walk, drag to look, and tap ↑ to jump. ZQSD works too.</p><button class="primary-button" data-close>Let's wander <svg><use href="#icon-arrow" /></svg></button>
   </dialog>
   <dialog id="map-dialog" class="panel-dialog map-dialog" aria-labelledby="map-title">
     <button class="dialog-close" data-close aria-label="Close map"><svg><use href="#icon-close" /></svg></button>
-    <p class="eyebrow">THE MEMORY HOUSE</p><h2 id="map-title">Room for our story.</h2><p>4 chapters, connected by a little hallway. Choose a room to see where to find it.</p><div id="room-map" class="room-map"></div><div class="map-entrance">↑ THE GARDEN & ENTRANCE</div><p class="small-note" id="map-progress">Walk up to each frame and open it to collect a memory.</p>
+    <p class="eyebrow">THE MEMORY HOUSE</p><h2 id="map-title">Room for our story.</h2><p>Every picture has a place on the walls. Choose a room to see where to find it and track your discoveries.</p><div id="room-map" class="room-map"></div><div class="map-entrance">↑ THE GARDEN & ENTRANCE</div><p class="small-note" id="map-progress">Walk along the walls to discover every picture.</p>
   </dialog>
   <dialog id="memory-dialog" class="memory-dialog" aria-labelledby="memory-title">
     <button class="dialog-close" data-close aria-label="Close memory"><svg><use href="#icon-close" /></svg></button>
@@ -93,7 +93,7 @@
     <div class="memory-copy"><p id="memory-chapter" class="eyebrow"></p><h2 id="memory-title"></h2><p id="memory-date" class="memory-date"></p><p id="memory-description"></p><div class="memory-divider"><span>♥</span></div><p class="small-note" id="memory-placeholder">There’s room here for a photograph, a date, and the story behind them.</p><p id="album-help" class="small-note album-help" hidden>Use ← and → to browse, or swipe the photo.<br />Each picture has a little place in our world.</p><a id="memory-full-size" class="photo-full-size" target="_blank" rel="noopener noreferrer" hidden>Open full-size image ↗</a><button class="primary-button" data-close>Back to our world <svg><use href="#icon-arrow" /></svg></button></div>
   </dialog>
   <dialog id="pause-dialog" class="panel-dialog pause-dialog" aria-labelledby="pause-title">
-    <p class="eyebrow">TAKE YOUR TIME</p><h2 id="pause-title">The world can wait.</h2><p>Your little adventure is right where you left it.</p><button class="primary-button" data-close>Keep exploring <svg><use href="#icon-arrow" /></svg></button><div class="pause-actions"><button id="reset-button">Back to the garden</button><button id="lock-button">Close our world</button></div><button id="restart-button" class="restart-button">Start over with 0 memories</button>
+    <p class="eyebrow">TAKE YOUR TIME</p><h2 id="pause-title">The world can wait.</h2><p>Your little adventure is right where you left it.</p><button class="primary-button" data-close>Keep exploring <svg><use href="#icon-arrow" /></svg></button><div class="pause-actions"><button id="reset-button">Back to the garden</button><button id="lock-button">Close our world</button></div><button id="restart-button" class="restart-button">Start over with 0 pictures found</button>
   </dialog>
   <dialog id="error-dialog" class="panel-dialog" aria-labelledby="error-title"><p class="eyebrow">A SMALL HICCUP</p><h2 id="error-title">Our world couldn't open.</h2><p id="world-error">Try a browser with WebGL enabled, such as a recent Chrome, Firefox, or Safari.</p><button id="retry-button" class="primary-button">Try again <svg><use href="#icon-arrow" /></svg></button></dialog>
 </body>

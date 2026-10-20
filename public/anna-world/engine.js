@@ -1,5 +1,5 @@
 import * as THREE from './vendor/three.module.min.js';
-import { ROOMS, WALLS, WORLD, moveWithCollisions, roomAt, nearestMemory } from './model.js';
+import { ROOMS, WALLS, WORLD, moveWithCollisions, roomAt, nearestPhotoFrame } from './model.js';
 
 // Scenery is made locally. Personal photographs use small gallery thumbnails;
 // the full-size originals are reserved for the album outside the 3D scene.
@@ -186,6 +186,7 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   const temporaryPosition = new THREE.Vector3();
   const temporaryScale = new THREE.Vector3();
   const temporaryQuaternion = new THREE.Quaternion();
+  const upAxis = new THREE.Vector3(0, 1, 0);
 
   function box(width, height, depth, material, x, y, z, parent = scene) {
     const mesh = new THREE.Mesh(unitBox, material);
@@ -199,6 +200,7 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     items.forEach((item, i) => {
       temporaryPosition.set(item.x, item.y, item.z);
       temporaryScale.set(item.w || 1, item.h || 1, item.d || 1);
+      temporaryQuaternion.setFromAxisAngle(upAxis, item.rotation || 0);
       temporaryMatrix.compose(temporaryPosition, temporaryQuaternion, temporaryScale);
       mesh.setMatrixAt(i, temporaryMatrix);
       if (item.color) mesh.setColorAt(i, new THREE.Color(item.color));
@@ -222,10 +224,10 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     (bounds.minX + bounds.maxX) / 2, -1.12, (bounds.minZ + bounds.maxZ) / 2);
 
   // Sandstone path and a small arrival plaza lead into the four rooms.
-  box(5.9, 0.14, 48, mats.path, 0, 0.025, -9);
+  box(5.9, 0.14, 73, mats.path, 0, 0.025, -13.5);
   box(15, 0.16, 11, mats.path, 0, 0.04, 18);
   const edging = [];
-  for (let z = -34; z <= 22; z += 2) {
+  for (let z = -50; z <= 22; z += 2) {
     edging.push({ x: -3.08, y: 0.13, z, w: 0.18, h: 0.27, d: 1.9 });
     edging.push({ x: 3.08, y: 0.13, z, w: 0.18, h: 0.27, d: 1.9 });
   }
@@ -252,7 +254,10 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     [23, 9], [29, -4], [24, -19], [27, -35], [17, -43], [5, -43],
     [-27, 26], [-15, 28], [19, 27], [31, 22], [-36, -11], [36, -26],
   ];
-  treePoints.forEach(([x, z], i) => {
+  const insideGalleryGround = (x, z, margin = 0) => ROOMS.some(({ bounds: b }) =>
+    x > b.minX - margin && x < b.maxX + margin && z > b.minZ - margin && z < b.maxZ + margin)
+    || (Math.abs(x) < 3.3 + margin && z > -51 - margin && z < 25 + margin);
+  treePoints.filter(([x, z]) => !insideGalleryGround(x, z, 2)).forEach(([x, z], i) => {
     const height = 3.4 + (i % 3) * 0.4;
     worldObstacles.push({ minX: x - 0.43, maxX: x + 0.43, minZ: z - 0.43, maxZ: z + 0.43, height });
     trunks.push({ x, y: height / 2, z, w: 0.85, h: height, d: 0.85 });
@@ -265,7 +270,7 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   const flowerColors = ['#e9c267', '#d89595', '#e5d8b3', '#a796c7'];
   for (let i = 0; i < 115; i++) {
     const x = (random() - 0.5) * 71, z = (random() - 0.5) * 68 - 4;
-    if (Math.abs(x) < 20 && z < 25 && z > -37) continue;
+    if (insideGalleryGround(x, z, 0.5)) continue;
     if (x > 8 && x < 21 && z > 5 && z < 18) continue;
     littleFlowers.push({ x, y: 0.31, z, w: 0.11, h: 0.5, d: 0.11, color: '#5f8247' });
     littleFlowers.push({ x, y: 0.58, z, w: 0.37, h: 0.18, d: 0.37, color: flowerColors[i % 4] });
@@ -302,7 +307,7 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   sign(['OUR LITTLE WORLD', 'Four rooms. A story still growing.'], 0, 3.1, 24.5, 8.2, 1.6, 0,
     { titleSize: 54, bodySize: 27 });
   // A little trail of lanterns gives the corridor a warm rhythm.
-  const lanternCenters = [-35, -17, 1, 10];
+  const lanternCenters = [-48, -25, 1, 10];
   lanternCenters.forEach((z, i) => {
     const x = i % 2 ? 2.4 : -2.4;
     worldObstacles.push({ minX: x - 0.12, maxX: x + 0.12, minZ: z - 0.12, maxZ: z + 0.12, height: 2.7 });
@@ -313,9 +318,8 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   });
 
   const memoryFrames = [];
-  const frameGeometry = new THREE.PlaneGeometry(5.2, 3.45);
-  const smallFrameGeometry = new THREE.PlaneGeometry(2.2, 2.55);
-  const cornerGeometry = new THREE.BoxGeometry(0.13, 0.13, 0.12);
+  const frameGeometry = new THREE.PlaneGeometry(1, 1);
+  const timberFrames = [], creamMats = [];
   const roomPhotoFrames = new Map();
   const photoQueue = [];
   const livePhotoTextures = new Set();
@@ -323,12 +327,21 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   const photoLoader = new THREE.TextureLoader();
   let activePhotoLoads = 0;
 
+  // One outline follows the closest photograph; frames share their timber and
+  // mat draw calls, and never cast 126 separate shadows.
+  const outlineGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+  const frameOutline = new THREE.LineSegments(outlineGeometry, new THREE.LineBasicMaterial({
+    color: '#fff2a7', transparent: true, opacity: 0.98,
+  }));
+  frameOutline.visible = false;
+  scene.add(frameOutline);
+
   function fitPhoto(frame, width, height) {
     if (!(width > 0 && height > 0)) return;
     const aspect = width / height;
-    const openingAspect = frame.width / frame.height;
+    const heightFit = Math.min(frame.height, frame.width / aspect);
     // Fit the complete photograph into the opening and expose the cream mat.
-    frame.picture.scale.set(Math.min(1, aspect / openingAspect), Math.min(1, openingAspect / aspect), 1);
+    frame.picture.scale.set(heightFit * aspect, heightFit, 1);
   }
 
   function pumpPhotoQueue() {
@@ -365,13 +378,12 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     }
   }
 
-  function requestFramePhoto(frame, photo) {
-    const source = photo?.thumbnail || photo?.src;
+  function requestFramePhoto(frame) {
+    const source = frame.photo?.thumbnail;
     if (!source || frame.requestedSrc === source || destroyed) return false;
     let url;
     try { url = new URL(source, import.meta.url).href; }
     catch { return false; }
-    frame.photo = photo;
     frame.requestedSrc = source;
     frame.revision += 1;
     photoQueue.push({ frame, url, revision: frame.revision });
@@ -379,15 +391,51 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     return true;
   }
 
+  function unloadGallery(gallery) {
+    if (!gallery.loaded) return;
+    gallery.loaded = false;
+    gallery.frames.forEach((frame) => {
+      frame.revision += 1;
+      frame.requestedSrc = null;
+      frame.picture.material.map = frame.placeholder;
+      frame.picture.material.needsUpdate = true;
+      fitPhoto(frame, 1, 1);
+      if (frame.texture) {
+        livePhotoTextures.delete(frame.texture);
+        frame.texture.dispose();
+        frame.texture = null;
+      }
+    });
+  }
+
   function prepareNearbyPhotos() {
-    for (const gallery of roomPhotoFrames.values()) {
-      if (gallery.loaded) continue;
+    const galleries = [...roomPhotoFrames.values()].map((gallery) => {
       const b = gallery.room.bounds;
       const dx = Math.max(b.minX - player.x, 0, player.x - b.maxX);
       const dz = Math.max(b.minZ - player.z, 0, player.z - b.maxZ);
-      if (Math.hypot(dx, dz) > 4) continue;
+      return { gallery, distance: Math.hypot(dx, dz) };
+    }).sort((a, b) => a.distance - b.distance || a.gallery.room.index - b.gallery.room.index);
+    const wanted = galleries.filter(({ distance }) => distance <= 4).slice(0, 2);
+    const wantedIds = new Set(wanted.map(({ gallery }) => gallery.room.id));
+    // Retain nearby textures while walking around a room; evict them when
+    // another gallery needs the space. Only two rooms (at most 64 photos) live
+    // on the GPU, including where all four room corners meet.
+    galleries.forEach(({ gallery, distance }) => {
+      if (distance > 12) unloadGallery(gallery);
+    });
+    for (const { gallery } of wanted) {
+      if (gallery.loaded) continue;
+      let residentCount = [...roomPhotoFrames.values()].reduce((total, current) =>
+        total + (current.loaded ? current.frames.length : 0), 0);
+      for (const candidate of [...galleries].reverse()) {
+        if (residentCount + gallery.frames.length <= 64) break;
+        if (!candidate.gallery.loaded || wantedIds.has(candidate.gallery.room.id)) continue;
+        residentCount -= candidate.gallery.frames.length;
+        unloadGallery(candidate.gallery);
+      }
+      if (residentCount + gallery.frames.length > 64) continue;
       gallery.loaded = true;
-      gallery.frames.forEach((frame) => requestFramePhoto(frame, frame.photo));
+      gallery.frames.forEach((frame) => requestFramePhoto(frame));
     }
   }
 
@@ -425,84 +473,57 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     sign([`${String(i + 1).padStart(2, '0')} / ${room.title}`, room.subtitle || 'A memory to make your own'],
       room.door.x - side * 0.35, 2.83, room.door.z + 0.02, 3.1, 0.83, -side * Math.PI / 2,
       { titleSize: 45, bodySize: 28 });
-    // Wall photograph, thick timber frame, and small brass corner details.
-    const frameGroup = new THREE.Group();
-    frameGroup.position.set(room.frame.x, 2.46, room.frame.z);
-    frameGroup.rotation.y = room.frame.rotation || 0;
-    box(5.65, 3.9, 0.18, mats.darkWood, 0, 0, -0.025, frameGroup);
-    box(5.38, 3.63, 0.07, mats.cream, 0, 0, 0.085, frameGroup);
+    // Every photo owns one permanent physical wall frame. Album navigation
+    // leaves these photographs in place so the walk is a complete gallery.
     const placeholder = remember(pixelPicture(i));
-    const imageMat = new THREE.MeshBasicMaterial({ map: placeholder });
-    const picture = new THREE.Mesh(frameGeometry, imageMat);
-    picture.position.z = 0.135; frameGroup.add(picture);
-    const brassMat = basicMaterial('#d5b37a');
-    [[-2.69, -1.81], [2.69, -1.81], [-2.69, 1.81], [2.69, 1.81]].forEach(([x, y]) => {
-      const corner = new THREE.Mesh(cornerGeometry, brassMat); corner.position.set(x, y, 0.1); frameGroup.add(corner);
-    });
-    scene.add(frameGroup);
-    const coverPhoto = room.photos?.find((photo) => photo.src === room.image) || room.photos?.[0]
-      || (room.image ? { src: room.image } : null);
-    const mainFrame = { room, group: frameGroup, picture, trimMaterial, baseColor: color.clone(),
-      photo: coverPhoto, width: 5.2, height: 3.45, texture: null, revision: 0, requestedSrc: null };
-    memoryFrames.push(mainFrame);
-    const gallery = { room, mainFrame, frames: [mainFrame], loaded: false };
+    const gallery = { room, frames: [], loaded: false };
     roomPhotoFrames.set(room.id, gallery);
-
-    // A few evenly spaced album photographs turn the side walls into a gallery.
-    // Four frames sit along the outside wall; two leave the doorway clear.
-    const otherPhotos = (room.photos || []).filter((photo) => photo.src !== coverPhoto?.src);
-    const smallCount = Math.min(6, otherPhotos.length);
-    const outerLeft = room.door.x > cx;
-    const outerX = outerLeft ? b.minX + 0.64 : b.maxX - 0.64;
-    const innerX = outerLeft ? b.maxX - 0.64 : b.minX + 0.64;
-    const placements = [
-      ...[3, 6.35, 9.7, 13.05].map((offset) => ({
-        x: outerX, z: b.minZ + offset, rotation: outerLeft ? Math.PI / 2 : -Math.PI / 2,
-      })),
-      ...[3, 13].map((offset) => ({
-        x: innerX, z: b.minZ + offset, rotation: outerLeft ? -Math.PI / 2 : Math.PI / 2,
-      })),
-    ];
-    for (let j = 0; j < smallCount; j++) {
-      const photoIndex = smallCount === 1 ? 0 : Math.round(j * (otherPhotos.length - 1) / (smallCount - 1));
-      const photo = otherPhotos[photoIndex];
-      const placement = placements[j];
-      const group = new THREE.Group();
-      group.position.set(placement.x, 2.52, placement.z);
-      group.rotation.y = placement.rotation;
-      box(2.47, 2.82, 0.15, mats.darkWood, 0, 0, -0.025, group);
-      box(2.29, 2.64, 0.06, mats.cream, 0, 0, 0.08, group);
-      const material = new THREE.MeshBasicMaterial({ map: placeholder });
-      const smallPicture = new THREE.Mesh(smallFrameGeometry, material);
-      smallPicture.position.z = 0.12;
-      group.add(smallPicture); scene.add(group);
-      gallery.frames.push({ picture: smallPicture, photo, width: 2.2, height: 2.55,
-        texture: null, revision: 0, requestedSrc: null });
+    room.frames.forEach((placement) => {
+      const rotation = placement.rotation || 0;
+      const normalX = Math.sin(rotation), normalZ = Math.cos(rotation);
+      const { x, y, z } = placement;
+      timberFrames.push({ x: x - normalX * 0.025, y, z: z - normalZ * 0.025,
+        w: placement.width, h: placement.height, d: 0.12, rotation });
+      creamMats.push({ x: x + normalX * 0.055, y, z: z + normalZ * 0.055,
+        w: placement.width - 0.14, h: placement.height - 0.14, d: 0.035, rotation });
+      const picture = new THREE.Mesh(frameGeometry, new THREE.MeshBasicMaterial({ map: placeholder }));
+      picture.position.set(x + normalX * 0.09, y, z + normalZ * 0.09);
+      picture.rotation.y = rotation;
+      picture.userData.photoId = placement.photoId;
+      scene.add(picture);
+      const frame = { placement, room, picture, photo: placement.photo,
+        width: placement.width - 0.28, height: placement.height - 0.28,
+        placeholder, texture: null, revision: 0, requestedSrc: null };
+      fitPhoto(frame, 1, 1);
+      memoryFrames.push(frame);
+      gallery.frames.push(frame);
+    });
+    // The date plaque sits above the doorway, leaving all wall photos clear.
+    if (room.date) {
+      sign([room.date], room.door.x - side * 0.35, 3.85, room.door.z, 2.85, 0.38,
+        -side * Math.PI / 2, { titleSize: 42, height: 192 });
     }
-    const plaque = sign([room.date || 'A DATE TO REMEMBER', room.title],
-      room.frame.x, 0.4, room.frame.z + 0.18, 4.45, 0.4, room.frame.rotation || 0,
-      { titleSize: 42, bodySize: 28, height: 192 });
-    // Keep plaque below the photo and offset forward along the frame normal.
-    plaque.position.x = room.frame.x + Math.sin(room.frame.rotation || 0) * 0.18;
-    plaque.position.z = room.frame.z + Math.cos(room.frame.rotation || 0) * 0.18;
     // Two benches and a plant make each room a place to linger.
     [-1, 1].forEach((direction) => {
-      const x = cx + direction * 4.8, z = cz + 2.6;
+      const x = cx + direction * 3.2, z = cz + 2.6;
       worldObstacles.push({ minX: x - 0.63, maxX: x + 0.63, minZ: z - 1.4, maxZ: z + 1.4, height: 1.5 });
       box(1.25, 0.2, 2.8, mats.planks, x, 0.73, z);
       box(0.16, 0.65, 0.16, mats.darkWood, x - 0.4, 0.36, z - 0.95);
       box(0.16, 0.65, 0.16, mats.darkWood, x + 0.4, 0.36, z + 0.95);
       box(0.18, 0.84, 2.8, mats.darkWood, x + direction * 0.48, 1.06, z);
     });
-    const potX = cx + (i % 2 ? -5.4 : 5.4), potZ = b.minZ + 1.4;
+    const potX = cx + (i % 2 ? -3.2 : 3.2), potZ = cz - 3.2;
     worldObstacles.push({ minX: potX - 0.45, maxX: potX + 0.45, minZ: potZ - 0.45, maxZ: potZ + 0.45, height: 2.5 });
     box(0.8, 0.7, 0.8, basicMaterial('#b78366'), potX, 0.47, potZ);
     box(0.12, 1.1, 0.12, mats.bark, potX, 1.2, potZ);
     box(1.15, 0.8, 1.15, mats.leaves, potX, 1.6, potZ);
     box(0.7, 0.65, 0.7, mats.leaves, potX, 2.12, potZ);
-    box(0.45, 0.09, 0.45, mats.warm, cx - 4.8, 2.7, b.minZ + 0.49);
-    box(0.45, 0.09, 0.45, mats.warm, cx + 4.8, 2.7, b.minZ + 0.49);
+    box(0.45, 0.09, 0.45, mats.warm, cx - 4.8, 3.75, b.minZ + 0.55);
+    box(0.45, 0.09, 0.45, mats.warm, cx + 4.8, 3.75, b.minZ + 0.55);
   });
+
+  instances(timberFrames, mats.darkWood, false);
+  instances(creamMats, mats.cream, false);
 
   for (const wall of WALLS) {
     if (renderedWalls.has(wall)) continue;
@@ -573,7 +594,7 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   let yaw = 0, pitch = 0.45, view = 'third-person';
   let paused = false, destroyed = false, grounded = true, dragging = null;
   let animationId = 0, lastTime = performance.now(), walkPhase = 0;
-  let activeRoomId, activeZone, nearbyRoomId, lastNearRoom = null;
+  let activeRoomId, activeZone, nearbyFrameId, nearbyPhotoId = null;
   let lastQaUpdate = -Infinity;
   let cameraInitialized = false, errorReported = false;
   const cameraTarget = new THREE.Vector3(), desiredCamera = new THREE.Vector3();
@@ -589,19 +610,27 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   function updateRoomState(force = false) {
     prepareNearbyPhotos();
     const room = roomAt(player);
-    const near = nearestMemory(player, 4.3);
+    const near = nearestPhotoFrame(player);
     const roomId = room?.id ?? null;
-    const nearId = near?.id ?? null;
+    const nearId = near?.frame.id ?? null;
     const zone = roomId || (player.z < 0 ? 'hallway' : 'garden');
     if (force || roomId !== activeRoomId || zone !== activeZone) {
       activeRoomId = roomId;
       activeZone = zone;
       onRoomChange?.(room || null);
     }
-    if (force || nearId !== nearbyRoomId) {
-      nearbyRoomId = nearId;
-      lastNearRoom = near || null;
-      onNearbyMemory?.(lastNearRoom);
+    if (force || nearId !== nearbyFrameId) {
+      nearbyFrameId = nearId;
+      nearbyPhotoId = near?.photo.id ?? null;
+      frameOutline.visible = Boolean(near);
+      if (near) {
+        const frame = near.frame, rotation = frame.rotation || 0;
+        frameOutline.position.set(frame.x + Math.sin(rotation) * 0.09, frame.y,
+          frame.z + Math.cos(rotation) * 0.09);
+        frameOutline.rotation.y = rotation;
+        frameOutline.scale.set(frame.width + 0.1, frame.height + 0.1, 0.14);
+      }
+      onNearbyMemory?.(near?.room ?? null, near?.photo ?? null);
     }
   }
 
@@ -612,6 +641,13 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
     if (canvas.dataset.playerX !== x) canvas.dataset.playerX = x;
     if (canvas.dataset.playerZ !== z) canvas.dataset.playerZ = z;
     if (canvas.dataset.view !== view) canvas.dataset.view = view;
+    const nearbyId = nearbyPhotoId || '';
+    if (canvas.dataset.nearbyPhotoId !== nearbyId) canvas.dataset.nearbyPhotoId = nearbyId;
+    if (canvas.dataset.nearPhotoId !== nearbyId) canvas.dataset.nearPhotoId = nearbyId;
+    canvas.dataset.wallFrameCount = String(memoryFrames.length);
+    canvas.dataset.frameCount = String(memoryFrames.length);
+    canvas.dataset.loadedPhotoCount = String(livePhotoTextures.size);
+    canvas.dataset.activePhotoLoads = String(activePhotoLoads);
   }
 
   function resize() {
@@ -683,9 +719,9 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
 
   function interact() {
     if (paused || destroyed) return null;
-    const room = nearestMemory(player, 4.3);
-    if (room) onInteract?.(room);
-    return room || null;
+    const near = nearestPhotoFrame(player);
+    if (near) onInteract?.(near.room, near.photo);
+    return near?.room ?? null;
   }
 
   function setView(mode) {
@@ -843,12 +879,6 @@ export async function createWorld({ canvas, onRoomChange, onNearbyMemory, onInte
   onReady?.(); resume();
   return {
     pause, resume, destroy, reset, setView, look, jump, interact,
-    setMemoryPhoto(roomId, photo) {
-      const gallery = roomPhotoFrames.get(roomId);
-      if (!gallery || destroyed || !(photo?.thumbnail || photo?.src)) return false;
-      requestFramePhoto(gallery.mainFrame, photo);
-      return true;
-    },
     setMovement(value = {}) {
       if (paused || destroyed) return;
       movement.x = clamp(Number(value.x) || 0, -1, 1);
